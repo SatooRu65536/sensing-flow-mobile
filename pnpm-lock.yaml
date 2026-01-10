@@ -57,6 +57,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.2
+      '@satooru65536/tauri-plugin-sensorkit':
+        specifier: ./tauri-plugin-sensorkit
+        version: link:tauri-plugin-sensorkit
       '@tanstack/devtools-event-client':
         specifier: ^0.4.0
         version: 0.4.0
