@@ -15,10 +15,10 @@ val tauriProperties = Properties().apply {
 
 android {
     compileSdk = 36
-    namespace = "me.satooru.sensing_flow_mobile"
+    namespace = "dev.satooru.sensing_flow_mobile"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
-        applicationId = "me.satooru.sensing_flow_mobile"
+        applicationId = "dev.satooru.sensing_flow_mobile"
         minSdk = 24
         targetSdk = 36
         versionCode = tauriProperties.getProperty("tauri.android.versionCode", "1").toInt()

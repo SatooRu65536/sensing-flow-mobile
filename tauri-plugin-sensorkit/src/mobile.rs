@@ -15,7 +15,8 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     api: PluginApi<R, C>,
 ) -> crate::Result<Sensorkit<R>> {
     #[cfg(target_os = "android")]
-    let handle = api.register_android_plugin("", "ExamplePlugin")?;
+    let handle =
+        api.register_android_plugin("dev.satooru.tauripluginsensorkit", "ExamplePlugin")?;
     #[cfg(target_os = "ios")]
     let handle = api.register_ios_plugin(init_plugin_sensorkit)?;
     Ok(Sensorkit(handle))
