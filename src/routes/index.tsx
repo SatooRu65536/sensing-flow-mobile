@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
+import AccelerometerPanel from '../components/Accelerometer';
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -30,6 +31,7 @@ function App() {
         <button type="submit">Greet</button>
       </form>
       <p>{greetMsg}</p>
+      <AccelerometerPanel />
     </main>
   );
 }

@@ -31,4 +31,21 @@ impl<R: Runtime> Sensorkit<R> {
             .run_mobile_plugin("ping", payload)
             .map_err(Into::into)
     }
+
+    pub fn start_accelerometer(
+        &self,
+        payload: StartAccelerometerRequest,
+    ) -> crate::Result<()> {
+        self.0
+            .run_mobile_plugin("startAccelerometer", payload)
+            .map(|_: ()| ())
+            .map_err(Into::into)
+    }
+
+    pub fn stop_accelerometer(&self) -> crate::Result<()> {
+        self.0
+            .run_mobile_plugin("stopAccelerometer", StopAccelerometerRequest {})
+            .map(|_: ()| ())
+            .map_err(Into::into)
+    }
 }

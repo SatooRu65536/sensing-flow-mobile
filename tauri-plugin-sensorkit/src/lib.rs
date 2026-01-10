@@ -35,7 +35,11 @@ impl<R: Runtime, T: Manager<R>> crate::SensorkitExt<R> for T {
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("sensorkit")
-        .invoke_handler(tauri::generate_handler![commands::ping])
+        .invoke_handler(tauri::generate_handler![
+            commands::ping,
+            commands::start_accelerometer,
+            commands::stop_accelerometer
+        ])
         .setup(|app, api| {
             #[cfg(mobile)]
             let sensorkit = mobile::init(app, api)?;

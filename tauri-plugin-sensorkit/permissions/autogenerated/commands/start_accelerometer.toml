@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-start-accelerometer"
+description = "Enables the start_accelerometer command without any pre-configured scope."
+commands.allow = ["start_accelerometer"]
+
+[[permission]]
+identifier = "deny-start-accelerometer"
+description = "Denies the start_accelerometer command without any pre-configured scope."
+commands.deny = ["start_accelerometer"]
