@@ -295,16 +295,16 @@
       "type": "string",
       "oneOf": [
         {
-          "description": "Enables the ping command without any pre-configured scope.",
+          "description": "Enables the get_available_sensors command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-ping",
-          "markdownDescription": "Enables the ping command without any pre-configured scope."
+          "const": "allow-get-available-sensors",
+          "markdownDescription": "Enables the get_available_sensors command without any pre-configured scope."
         },
         {
-          "description": "Denies the ping command without any pre-configured scope.",
+          "description": "Denies the get_available_sensors command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-ping",
-          "markdownDescription": "Denies the ping command without any pre-configured scope."
+          "const": "deny-get-available-sensors",
+          "markdownDescription": "Denies the get_available_sensors command without any pre-configured scope."
         },
         {
           "description": "Enables the registerListener command without any pre-configured scope.",
@@ -319,34 +319,34 @@
           "markdownDescription": "Denies the registerListener command without any pre-configured scope."
         },
         {
-          "description": "Enables the start_accelerometer command without any pre-configured scope.",
+          "description": "Enables the start_sensors command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-start-accelerometer",
-          "markdownDescription": "Enables the start_accelerometer command without any pre-configured scope."
+          "const": "allow-start-sensors",
+          "markdownDescription": "Enables the start_sensors command without any pre-configured scope."
         },
         {
-          "description": "Denies the start_accelerometer command without any pre-configured scope.",
+          "description": "Denies the start_sensors command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-start-accelerometer",
-          "markdownDescription": "Denies the start_accelerometer command without any pre-configured scope."
+          "const": "deny-start-sensors",
+          "markdownDescription": "Denies the start_sensors command without any pre-configured scope."
         },
         {
-          "description": "Enables the stop_accelerometer command without any pre-configured scope.",
+          "description": "Enables the stop_sensors command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-stop-accelerometer",
-          "markdownDescription": "Enables the stop_accelerometer command without any pre-configured scope."
+          "const": "allow-stop-sensors",
+          "markdownDescription": "Enables the stop_sensors command without any pre-configured scope."
         },
         {
-          "description": "Denies the stop_accelerometer command without any pre-configured scope.",
+          "description": "Denies the stop_sensors command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-stop-accelerometer",
-          "markdownDescription": "Denies the stop_accelerometer command without any pre-configured scope."
+          "const": "deny-stop-sensors",
+          "markdownDescription": "Denies the stop_sensors command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-ping`\n- `allow-start-accelerometer`\n- `allow-stop-accelerometer`\n- `allow-registerListener`",
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-ping`\n- `allow-start-accelerometer`\n- `allow-stop-accelerometer`\n- `allow-registerListener`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`"
         }
       ]
     }

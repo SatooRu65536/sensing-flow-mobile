@@ -1,3 +1,8 @@
 [default]
 description = "Default permissions for the plugin"
-permissions = ["allow-ping", "allow-start-accelerometer", "allow-stop-accelerometer", "allow-registerListener"]
+permissions = [
+    "allow-get-available-sensors",
+    "allow-start-sensors",
+    "allow-stop-sensors",
+    "allow-registerListener",
+]

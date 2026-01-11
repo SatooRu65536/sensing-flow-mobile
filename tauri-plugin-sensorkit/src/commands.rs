@@ -1,28 +1,25 @@
-use tauri::{AppHandle, command, Runtime};
+use tauri::{command, AppHandle, Runtime};
 
 use crate::models::*;
 use crate::Result;
 use crate::SensorkitExt;
 
 #[command]
-pub(crate) async fn ping<R: Runtime>(
+pub(crate) async fn get_available_sensors<R: Runtime>(
     app: AppHandle<R>,
-    payload: PingRequest,
-) -> Result<PingResponse> {
-    app.sensorkit().ping(payload)
+) -> Result<GetAvailableSensorsResponse> {
+    app.sensorkit().get_available_sensors()
 }
 
 #[command]
-pub(crate) async fn start_accelerometer<R: Runtime>(
+pub(crate) async fn start_sensors<R: Runtime>(
     app: AppHandle<R>,
-    payload: StartAccelerometerRequest,
+    payload: StartSensorsRequest,
 ) -> Result<()> {
-    app.sensorkit().start_accelerometer(payload)
+    app.sensorkit().start_sensors(payload)
 }
 
 #[command]
-pub(crate) async fn stop_accelerometer<R: Runtime>(
-    app: AppHandle<R>,
-) -> Result<()> {
-    app.sensorkit().stop_accelerometer()
+pub(crate) async fn stop_sensors<R: Runtime>(app: AppHandle<R>) -> Result<()> {
+    app.sensorkit().stop_sensors()
 }

@@ -1,24 +1,19 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PingRequest {
-    pub value: Option<String>,
-}
+// getAvailableSensors
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PingResponse {
-    pub value: Option<String>,
-}
+pub struct GetAvailableSensorsRequest {}
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct StartAccelerometerRequest {
-    /// Androidの`SensorManager.registerListener`に渡す遅延(ms)相当。未指定なら標準速度。
-    pub delay_ms: Option<u32>,
-}
+pub struct GetAvailableSensorsResponse(pub std::collections::HashMap<String, bool>); // センサー名と利用可能フラグのマッピング
+
+// startSensors
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct StopAccelerometerRequest {}
+pub struct StartSensorsRequest(pub HashMap<String, i32>); // センサー名とFPSのマッピング

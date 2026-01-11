@@ -4,9 +4,9 @@ Default permissions for the plugin
 
 #### This default permission set includes the following:
 
-- `allow-ping`
-- `allow-start-accelerometer`
-- `allow-stop-accelerometer`
+- `allow-get-available-sensors`
+- `allow-start-sensors`
+- `allow-stop-sensors`
 - `allow-registerListener`
 
 ## Permission Table
@@ -21,12 +21,12 @@ Default permissions for the plugin
 <tr>
 <td>
 
-`sensorkit:allow-ping`
+`sensorkit:allow-get-available-sensors`
 
 </td>
 <td>
 
-Enables the ping command without any pre-configured scope.
+Enables the get_available_sensors command without any pre-configured scope.
 
 </td>
 </tr>
@@ -34,12 +34,12 @@ Enables the ping command without any pre-configured scope.
 <tr>
 <td>
 
-`sensorkit:deny-ping`
+`sensorkit:deny-get-available-sensors`
 
 </td>
 <td>
 
-Denies the ping command without any pre-configured scope.
+Denies the get_available_sensors command without any pre-configured scope.
 
 </td>
 </tr>
@@ -73,25 +73,12 @@ Denies the registerListener command without any pre-configured scope.
 <tr>
 <td>
 
-`sensorkit:allow-start-accelerometer`
+`sensorkit:allow-start-sensors`
 
 </td>
 <td>
 
-Enables the start_accelerometer command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`sensorkit:deny-start-accelerometer`
-
-</td>
-<td>
-
-Denies the start_accelerometer command without any pre-configured scope.
+Enables the start_sensors command without any pre-configured scope.
 
 </td>
 </tr>
@@ -99,12 +86,12 @@ Denies the start_accelerometer command without any pre-configured scope.
 <tr>
 <td>
 
-`sensorkit:allow-stop-accelerometer`
+`sensorkit:deny-start-sensors`
 
 </td>
 <td>
 
-Enables the stop_accelerometer command without any pre-configured scope.
+Denies the start_sensors command without any pre-configured scope.
 
 </td>
 </tr>
@@ -112,12 +99,25 @@ Enables the stop_accelerometer command without any pre-configured scope.
 <tr>
 <td>
 
-`sensorkit:deny-stop-accelerometer`
+`sensorkit:allow-stop-sensors`
 
 </td>
 <td>
 
-Denies the stop_accelerometer command without any pre-configured scope.
+Enables the stop_sensors command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-stop-sensors`
+
+</td>
+<td>
+
+Denies the stop_sensors command without any pre-configured scope.
 
 </td>
 </tr>

@@ -1,37 +1,41 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
-import { invoke } from '@tauri-apps/api/core';
-import AccelerometerPanel from '../components/Accelerometer';
+import { useEffect, useState } from 'react';
+import { getAvailableSensors, type GetAvailableSensorsResponse } from '@satooru65536/tauri-plugin-sensorkit';
+import AccelerometerPanel from '@/components/Accelerometer';
 
 export const Route = createFileRoute('/')({
   component: App,
 });
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState('');
-  const [name, setName] = useState('');
+  const [availableSensors, setAvailableSensors] = useState<GetAvailableSensorsResponse>({});
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    const msg = await invoke<string>('greet', { name });
-    setGreetMsg(msg);
-  }
+  useEffect(() => {
+    void (async () => {
+      if (Object.keys(availableSensors).length > 0) return;
+
+      console.log('fetching available sensors...');
+      const sensors = await getAvailableSensors().catch((err) => {
+        console.error('Error fetching available sensors:', err);
+        return {};
+      });
+      setAvailableSensors(sensors);
+    })();
+  }, []);
 
   return (
     <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input id="greet-input" onChange={(e) => setName(e.currentTarget.value)} placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-      <AccelerometerPanel />
+      <h1>Available Sensors</h1>
+
+      <div>
+        {Object.entries(availableSensors).map(([sensor, isAvailable]) => (
+          <div key={sensor}>
+            {sensor}: {isAvailable ? 'Available' : 'Not Available'}
+          </div>
+        ))}
+      </div>
+
+      {availableSensors.accelerometer && <AccelerometerPanel />}
     </main>
   );
 }

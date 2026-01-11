@@ -23,7 +23,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     #[cfg(target_os = "android")]
     {
         let handle =
-            api.register_android_plugin("dev.satooru.tauripluginsensorkit", "ExamplePlugin")?;
+            api.register_android_plugin("dev.satooru.tauripluginsensorkit", "SensorKitPlugin")?;
         Ok(Sensorkit(handle))
     }
 
@@ -38,22 +38,23 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 pub struct Sensorkit<R: Runtime>(PluginHandle<R>);
 
 impl<R: Runtime> Sensorkit<R> {
-    pub fn ping(&self, payload: PingRequest) -> crate::Result<PingResponse> {
+    pub fn get_available_sensors(&self) -> crate::Result<GetAvailableSensorsResponse> {
         self.0
-            .run_mobile_plugin("ping", payload)
+            .run_mobile_plugin("getAvailableSensors", GetAvailableSensorsRequest {})
+            .map(|res: GetAvailableSensorsResponse| res)
             .map_err(Into::into)
     }
 
-    pub fn start_accelerometer(&self, payload: StartAccelerometerRequest) -> crate::Result<()> {
+    pub fn start_sensors(&self, payload: StartSensorsRequest) -> crate::Result<()> {
         self.0
-            .run_mobile_plugin("startAccelerometer", payload)
+            .run_mobile_plugin("startSensors", payload)
             .map(|_: ()| ())
             .map_err(Into::into)
     }
 
-    pub fn stop_accelerometer(&self) -> crate::Result<()> {
+    pub fn stop_sensors(&self) -> crate::Result<()> {
         self.0
-            .run_mobile_plugin("stopAccelerometer", StopAccelerometerRequest {})
+            .run_mobile_plugin("stopSensors", ())
             .map(|_: ()| ())
             .map_err(Into::into)
     }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { startAccelerometer, stopAccelerometer, listenAccelerometer } from '@satooru65536/tauri-plugin-sensorkit';
+import { startSensors, stopSensors, listenAccelerometer } from '@satooru65536/tauri-plugin-sensorkit';
 
 export default function AccelerometerPanel() {
   const [acc, setAcc] = useState<{ x: number; y: number; z: number } | null>(null);
@@ -7,7 +7,7 @@ export default function AccelerometerPanel() {
   useEffect(() => {
     let mounted = true;
 
-    startAccelerometer(1).catch(console.error);
+    startSensors({ accelerometer: 1 }).catch(console.error);
     listenAccelerometer((e) => {
       if (!mounted) return;
       setAcc(e);
@@ -15,7 +15,7 @@ export default function AccelerometerPanel() {
 
     return () => {
       mounted = false;
-      stopAccelerometer().catch(console.error);
+      stopSensors().catch(console.error);
     };
   }, []);
 
