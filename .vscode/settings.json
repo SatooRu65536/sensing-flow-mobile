@@ -1,0 +1,27 @@
+{
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.story.ts,${capture}.mock.ts,${capture}.test.ts,${capture}.spec.ts,${capture}.unit.spec.ts,${capture}.js,${capture}.module.scss,${capture}.module.css",
+        "tsconfig.json": "tsconfig.*.json",
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+        ".env.example": ".env.*",
+    },
+    "files.exclude": {},
+    "settings.cycle": [
+        {
+            "id": "rust-target",
+            "values": [
+                {
+                    "rust-analyzer.cargo.target": "aarch64-apple-ios"
+                },
+                {
+                    "rust-analyzer.cargo.target": "aarch64-linux-android"
+                },
+                {
+                    "rust-analyzer.cargo.target": null
+                }
+            ]
+        }
+    ],
+    "settings.cycle.warnOnWorkspaceSettingsCollisions": true
+}

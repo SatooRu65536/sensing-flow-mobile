@@ -9,17 +9,29 @@ use crate::models::*;
 #[cfg(target_os = "ios")]
 tauri::ios_plugin_binding!(init_plugin_sensorkit);
 
-// initializes the Kotlin or Swift plugin classes
+// initializes the Swift or Kotlin plugin classes
 pub fn init<R: Runtime, C: DeserializeOwned>(
     _app: &AppHandle<R>,
     api: PluginApi<R, C>,
 ) -> crate::Result<Sensorkit<R>> {
-    #[cfg(target_os = "android")]
-    let handle =
-        api.register_android_plugin("dev.satooru.tauripluginsensorkit", "ExamplePlugin")?;
     #[cfg(target_os = "ios")]
-    let handle = api.register_ios_plugin(init_plugin_sensorkit)?;
-    Ok(Sensorkit(handle))
+    {
+        let handle = api.register_ios_plugin(init_plugin_sensorkit)?;
+        Ok(Sensorkit(handle))
+    }
+
+    #[cfg(target_os = "android")]
+    {
+        let handle =
+            api.register_android_plugin("dev.satooru.tauripluginsensorkit", "ExamplePlugin")?;
+        Ok(Sensorkit(handle))
+    }
+
+    #[cfg(not(any(target_os = "ios", target_os = "android")))]
+    #[allow(unreachable_code)]
+    {
+        unreachable!("The process should have exited already");
+    }
 }
 
 /// Access to the sensorkit APIs.
@@ -32,10 +44,7 @@ impl<R: Runtime> Sensorkit<R> {
             .map_err(Into::into)
     }
 
-    pub fn start_accelerometer(
-        &self,
-        payload: StartAccelerometerRequest,
-    ) -> crate::Result<()> {
+    pub fn start_accelerometer(&self, payload: StartAccelerometerRequest) -> crate::Result<()> {
         self.0
             .run_mobile_plugin("startAccelerometer", payload)
             .map(|_: ()| ())

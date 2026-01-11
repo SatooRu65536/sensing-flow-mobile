@@ -5,9 +5,6 @@ use tauri::{
 
 pub use models::*;
 
-#[cfg(desktop)]
-mod desktop;
-#[cfg(mobile)]
 mod mobile;
 
 mod commands;
@@ -16,9 +13,6 @@ mod models;
 
 pub use error::{Error, Result};
 
-#[cfg(desktop)]
-use desktop::Sensorkit;
-#[cfg(mobile)]
 use mobile::Sensorkit;
 
 /// Extensions to [`tauri::App`], [`tauri::AppHandle`] and [`tauri::Window`] to access the sensorkit APIs.
@@ -41,10 +35,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::stop_accelerometer
         ])
         .setup(|app, api| {
-            #[cfg(mobile)]
             let sensorkit = mobile::init(app, api)?;
-            #[cfg(desktop)]
-            let sensorkit = desktop::init(app, api)?;
             app.manage(sensorkit);
             Ok(())
         })
