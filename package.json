@@ -8,6 +8,8 @@
     "dev:desktop": "tauri dev",
     "dev:android": "tauri android dev",
     "dev:ios": "tauri ios dev",
+    "dev:ios:16": "tauri ios dev \"iPhone 16\"",
+    "dev:ios:open": "tauri ios dev --open",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",

@@ -75,7 +75,7 @@ class ExamplePlugin(private val activity: Activity) : Plugin(activity) {
                     payload.put("z", zVal)
                     payload.put("timestamp", ts)
                     
-                    trigger("accelerometer", payload)
+                    ˘("accelerometer", payload)
                 }
             }
             
