@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { TanStackQueryProvider, getTanStackQueryContext } from './root-provider';
 import { routeTree } from './routeTree.gen';
 import './styles.css';
+import './i18n';
 
 const TanStackQueryProviderContext = getTanStackQueryContext();
 const router = createRouter({
