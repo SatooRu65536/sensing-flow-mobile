@@ -32,7 +32,7 @@ pub(crate) async fn start_sensors<R: Runtime>(
 
 #[command]
 pub(crate) async fn stop_sensors<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
-    let file_service: State<'_, FileService> = app.state();
+    let file_service: State<'_, Arc<FileService>> = app.state();
     file_service.stop_writer();
     app.sensorkit().stop_sensors()
 }

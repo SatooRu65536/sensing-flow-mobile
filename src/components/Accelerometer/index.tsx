@@ -1,19 +1,17 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
+  startSensors,
   stopSensors,
   listenTo,
   type AccelerometerEvent,
   type UnlistenFn,
-  startSensors,
 } from '@satooru65536/tauri-plugin-sensorkit';
 
 export default function AccelerometerPanel() {
   const [data, setData] = useState<AccelerometerEvent | null>(null);
-  const unlisten = use(listenTo('accelerometer', (e) => setData(e)));
 
   const stop = () => {
     stopSensors().catch(console.error);
-    unlisten();
   };
 
   useEffect(() => {

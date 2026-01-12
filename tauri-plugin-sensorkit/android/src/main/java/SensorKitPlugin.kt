@@ -29,8 +29,6 @@ class SetEventHandlerArgs {
 class SensorKitPlugin(
     private val activity: Activity,
 ) : Plugin(activity) {
-    private var channel: Channel? = null
-
     private val accelerometer =
         AccelerometerService(activity)
 
@@ -42,7 +40,7 @@ class SensorKitPlugin(
     @Command
     fun setEventHandler(invoke: Invoke) {
         val args = invoke.parseArgs(SetEventHandlerArgs::class.java)
-        this.channel = args.handler
+        this.registry.setChannel(args.handler)
         invoke.resolve()
     }
 
