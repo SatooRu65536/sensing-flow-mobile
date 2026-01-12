@@ -9,41 +9,45 @@ import {
 
 export default function AccelerometerPanel() {
   const [data, setData] = useState<AccelerometerEvent | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
 
-  const stop = () => {
-    stopSensors().catch(console.error);
+  const stop = async () => {
+    await stopSensors();
+    setIsRunning(false);
+  };
+
+  const start = async () => {
+    await startSensors({ accelerometer: 1 });
+    setIsRunning(true);
   };
 
   useEffect(() => {
     let unlisten: UnlistenFn | null = null;
 
-    const start = async () => {
-      await startSensors({ accelerometer: 1 });
+    const listenStart = async () => {
       unlisten = await listenTo('accelerometer', (event) => setData(event));
     };
 
-    void start();
+    void listenStart();
 
     return () => {
       if (unlisten) void unlisten();
       stopSensors().catch(console.error);
     };
-  }, []);
+  }, [setData]);
 
   return (
-    <section style={{ marginTop: 16 }}>
+    <section>
       <h2>Accelerometer</h2>
-      {data ? (
-        <div style={{ display: 'flex', gap: 12 }}>
-          <div>X: {data.x.toFixed(3)}</div>
-          <div>Y: {data.y.toFixed(3)}</div>
-          <div>Z: {data.z.toFixed(3)}</div>
+      <div>
+        <div>{isRunning ? <button onClick={void stop}>Stop</button> : <button onClick={void start}>Start</button>}</div>
 
-          <button onClick={stop}>Stop</button>
+        <div>
+          <div>X: {data?.x.toFixed(3) ?? 0}</div>
+          <div>Y: {data?.y.toFixed(3) ?? 0}</div>
+          <div>Z: {data?.z.toFixed(3) ?? 0}</div>
         </div>
-      ) : (
-        <div>Waiting for sensor...</div>
-      )}
+      </div>
     </section>
   );
 }
