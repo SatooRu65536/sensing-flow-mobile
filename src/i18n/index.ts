@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { locale } from '@tauri-apps/plugin-os';
 
 import en from './locales/en.json';
 import ja from './locales/ja.json';
@@ -10,12 +11,20 @@ export const resources = {
 } as const;
 export const defaultNS = 'en';
 
+async function getLanguageCode(): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+  const loc = await locale();
+  if (typeof loc !== 'string') return 'en';
+  return loc.split('-')[0] ?? 'en';
+}
+
+const localeCode = await getLanguageCode();
 await i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     ja: { translation: ja },
   },
-  lng: 'ja',
+  lng: localeCode,
   fallbackLng: 'en',
   interpolation: { escapeValue: false },
 });

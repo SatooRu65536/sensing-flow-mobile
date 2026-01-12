@@ -8,6 +8,7 @@
   "permissions": [
     "core:default",
     "opener:default",
-    "sensorkit:default"
+    "sensorkit:default",
+    "os:default"
   ]
 }

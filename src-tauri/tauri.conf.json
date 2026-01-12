@@ -10,7 +10,8 @@
     "frontendDist": "../dist"
   },
   "plugins": {
-    "tauri-plugin-sensorkit": {}
+    "tauri-plugin-sensorkit": {},
+    "@tauri-apps/plugin-os": {}
   },
   "app": {
     "windows": [
