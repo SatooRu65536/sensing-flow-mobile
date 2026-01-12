@@ -40,7 +40,13 @@ export default function AccelerometerPanel() {
     <section>
       <h2>Accelerometer</h2>
       <div>
-        <div>{isRunning ? <button onClick={void stop}>Stop</button> : <button onClick={void start}>Start</button>}</div>
+        <div>
+          {isRunning ? (
+            <button onClick={() => void stop()}>Stop</button>
+          ) : (
+            <button onClick={() => void start()}>Start</button>
+          )}
+        </div>
 
         <div>
           <div>X: {data?.x.toFixed(3) ?? 0}</div>
