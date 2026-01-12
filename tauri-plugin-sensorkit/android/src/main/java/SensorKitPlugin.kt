@@ -9,6 +9,7 @@ import android.webkit.WebView
 import app.tauri.annotation.Command
 import app.tauri.annotation.InvokeArg
 import app.tauri.annotation.TauriPlugin
+import app.tauri.plugin.Channel
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
@@ -19,19 +20,31 @@ import dev.satooru.tauripluginsensorkit.sensor.SensorService
 @InvokeArg
 class StartSensorsArgs : HashMap<String, Int>()
 
+@InvokeArg
+class SetEventHandlerArgs {
+    lateinit var handler: Channel
+}
+
 @TauriPlugin
 class SensorKitPlugin(
     private val activity: Activity,
 ) : Plugin(activity) {
+    private var channel: Channel? = null
+
     private val accelerometer =
-        AccelerometerService(activity) { event, payload ->
-            trigger(event, payload)
-        }
+        AccelerometerService(activity)
 
     private val registry =
         SensorRegistry(
             sensors = listOf(accelerometer),
         )
+
+    @Command
+    fun setEventHandler(invoke: Invoke) {
+        val args = invoke.parseArgs(SetEventHandlerArgs::class.java)
+        this.channel = args.handler
+        invoke.resolve()
+    }
 
     @Command
     fun getAvailableSensors(invoke: Invoke) {
@@ -54,6 +67,7 @@ class SensorKitPlugin(
             val samplingUs = fpsToSamplingUs(fps)
             registry.start(listOf(sensorName), samplingUs)
         }
+        invoke.resolve()
     }
 
     @Command

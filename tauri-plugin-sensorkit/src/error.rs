@@ -6,6 +6,13 @@ pub type Result<T> = std::result::Result<T, Error>;
 pub enum Error {
     #[error(transparent)]
     Io(#[from] std::io::Error),
+
+    #[error("Failed to get app data directory path")]
+    AppDataDirNotFound,
+
+    #[error("Failed to create directory")]
+    CreateDirFailed,
+
     #[cfg(mobile)]
     #[error(transparent)]
     PluginInvoke(#[from] tauri::plugin::mobile::PluginInvokeError),

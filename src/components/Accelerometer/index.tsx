@@ -1,20 +1,33 @@
-import { useEffect, useState } from 'react';
-import { startSensors, stopSensors, listenAccelerometer } from '@satooru65536/tauri-plugin-sensorkit';
+import { use, useEffect, useState } from 'react';
+import {
+  stopSensors,
+  listenTo,
+  type AccelerometerEvent,
+  type UnlistenFn,
+  startSensors,
+} from '@satooru65536/tauri-plugin-sensorkit';
 
 export default function AccelerometerPanel() {
-  const [acc, setAcc] = useState<{ x: number; y: number; z: number } | null>(null);
+  const [data, setData] = useState<AccelerometerEvent | null>(null);
+  const unlisten = use(listenTo('accelerometer', (e) => setData(e)));
+
+  const stop = () => {
+    stopSensors().catch(console.error);
+    unlisten();
+  };
 
   useEffect(() => {
-    let mounted = true;
+    let unlisten: UnlistenFn | null = null;
 
-    startSensors({ accelerometer: 1 }).catch(console.error);
-    listenAccelerometer((e) => {
-      if (!mounted) return;
-      setAcc(e);
-    }).catch(console.error);
+    const start = async () => {
+      await startSensors({ accelerometer: 1 });
+      unlisten = await listenTo('accelerometer', (event) => setData(event));
+    };
+
+    void start();
 
     return () => {
-      mounted = false;
+      if (unlisten) void unlisten();
       stopSensors().catch(console.error);
     };
   }, []);
@@ -22,11 +35,13 @@ export default function AccelerometerPanel() {
   return (
     <section style={{ marginTop: 16 }}>
       <h2>Accelerometer</h2>
-      {acc ? (
+      {data ? (
         <div style={{ display: 'flex', gap: 12 }}>
-          <div>X: {acc.x.toFixed(3)}</div>
-          <div>Y: {acc.y.toFixed(3)}</div>
-          <div>Z: {acc.z.toFixed(3)}</div>
+          <div>X: {data.x.toFixed(3)}</div>
+          <div>Y: {data.y.toFixed(3)}</div>
+          <div>Z: {data.z.toFixed(3)}</div>
+
+          <button onClick={stop}>Stop</button>
         </div>
       ) : (
         <div>Waiting for sensor...</div>

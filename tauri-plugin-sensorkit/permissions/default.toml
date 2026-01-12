@@ -5,4 +5,5 @@ permissions = [
     "allow-start-sensors",
     "allow-stop-sensors",
     "allow-registerListener",
+    "allow-unregister-listener",
 ]

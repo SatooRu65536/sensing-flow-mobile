@@ -12,6 +12,9 @@ links = "tauri-plugin-sensorkit"
 tauri = { version = "2.9.5" }
 serde = "1.0"
 thiserror = "2"
+tokio = { version = "1.49.0", features = ["full"] }
+serde_json = "1.0.149"
+chrono = "0.4.42"
 
 [build-dependencies]
 tauri-plugin = { version = "2.5.2", features = ["build"] }

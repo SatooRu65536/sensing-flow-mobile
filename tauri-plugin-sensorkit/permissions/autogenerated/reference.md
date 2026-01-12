@@ -8,6 +8,7 @@ Default permissions for the plugin
 - `allow-start-sensors`
 - `allow-stop-sensors`
 - `allow-registerListener`
+- `allow-unregister-listener`
 
 ## Permission Table
 
@@ -118,6 +119,32 @@ Enables the stop_sensors command without any pre-configured scope.
 <td>
 
 Denies the stop_sensors command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-unregister-listener`
+
+</td>
+<td>
+
+Enables the unregister_listener command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-unregister-listener`
+
+</td>
+<td>
+
+Denies the unregister_listener command without any pre-configured scope.
 
 </td>
 </tr>

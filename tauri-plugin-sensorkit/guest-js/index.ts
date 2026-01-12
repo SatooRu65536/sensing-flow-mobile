@@ -1,5 +1,9 @@
-import { invoke, PluginListener } from '@tauri-apps/api/core';
-import { addPluginListener } from '@tauri-apps/api/core';
+import { invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
+import { SensorEventMap } from './sensorEvent';
+
+export * from './sensorEvent';
+export { UnlistenFn } from '@tauri-apps/api/event';
 
 export interface GetAvailableSensorsResponse {
   [key: string]: boolean;
@@ -21,17 +25,10 @@ export async function stopSensors(): Promise<void> {
   await invoke('plugin:sensorkit|stop_sensors');
 }
 
-export interface AccelerometerEvent {
-  x: number;
-  y: number;
-  z: number;
-  timestamp?: number;
-}
-
-export async function listenAccelerometer(
-  handler: (event: { x: number; y: number; z: number; timestamp?: number }) => void,
-): Promise<PluginListener> {
-  return await addPluginListener('sensorkit', 'accelerometer', (e: AccelerometerEvent) => {
-    handler(e);
-  });
+export async function listenTo<K extends keyof SensorEventMap>(
+  sensorName: K,
+  handler: (event: SensorEventMap[K]) => void,
+) {
+  const eventname = `sensorkit://${sensorName}/update`;
+  return await listen<SensorEventMap[K]>(eventname, (e) => handler(e.payload));
 }

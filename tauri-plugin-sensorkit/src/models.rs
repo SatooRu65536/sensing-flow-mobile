@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
-
-// getAvailableSensors
+#[cfg(target_os = "android")]
+use tauri::ipc::Channel;
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -12,8 +12,24 @@ pub struct GetAvailableSensorsRequest {}
 #[serde(rename_all = "camelCase")]
 pub struct GetAvailableSensorsResponse(pub std::collections::HashMap<String, bool>); // センサー名と利用可能フラグのマッピング
 
-// startSensors
-
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StartSensorsRequest(pub HashMap<String, i32>); // センサー名とFPSのマッピング
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PushSensorLineRequest(pub String);
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SensorPayload {
+    pub sensor: String,
+    pub csv_raw: String,
+}
+
+#[cfg(target_os = "android")]
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetEventHandlerArgs {
+    pub(crate) handler: Channel,
+}

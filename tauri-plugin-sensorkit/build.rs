@@ -3,6 +3,7 @@ const COMMANDS: &[&str] = &[
     "start_sensors",
     "stop_sensors",
     "registerListener",
+    "unregister_listener",
 ];
 
 fn main() {

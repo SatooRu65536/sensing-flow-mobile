@@ -5,13 +5,14 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import app.tauri.plugin.Channel
 import app.tauri.plugin.JSObject
 
 class AccelerometerService(
     private val activity: Activity,
-    private val trigger: (String, JSObject) -> Unit
 ) : SensorService {
     override val name = "accelerometer"
+    override var channel: Channel? = null
 
     private val sensorManager by lazy {
         activity.getSystemService(Activity.SENSOR_SERVICE) as SensorManager
@@ -29,18 +30,33 @@ class AccelerometerService(
     override fun start(samplingUs: Int) {
         if (!isAvailable() || listening) return
 
-        listener = object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent) {
-                val payload = JSObject().apply {
-                    put("x", event.values[0])
-                    put("y", event.values[1])
-                    put("z", event.values[2])
-                    put("timestamp", event.timestamp)
+        listener =
+            object : SensorEventListener {
+                override fun onSensorChanged(event: SensorEvent) {
+                    val timestamp = event.timestamp
+                    val x = event.values[0]
+                    val y = event.values[1]
+                    val z = event.values[2]
+                    val csvRaw = "$timestamp,$x,$y,$z"
+
+                    val payload =
+                        JSObject().apply {
+                            put("sensor", name)
+                            put("timestamp", timestamp)
+                            put("x", x)
+                            put("y", y)
+                            put("z", z)
+                            put("csv_raw", csvRaw)
+                        }
+
+                    channel?.send(payload)
                 }
-                trigger(name, payload)
+
+                override fun onAccuracyChanged(
+                    sensor: Sensor?,
+                    accuracy: Int,
+                ) {}
             }
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
-        }
 
         sensorManager.registerListener(listener, sensor, samplingUs)
         listening = true

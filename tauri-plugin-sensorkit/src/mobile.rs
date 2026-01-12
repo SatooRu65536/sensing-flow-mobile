@@ -1,10 +1,12 @@
-use serde::de::DeserializeOwned;
-use tauri::{
-    plugin::{PluginApi, PluginHandle},
-    AppHandle, Runtime,
-};
-
+use crate::file_service::FileService;
 use crate::models::*;
+use serde::de::DeserializeOwned;
+use std::sync::Arc;
+use tauri::{
+    ipc::{Channel, InvokeResponseBody},
+    plugin::{PluginApi, PluginHandle},
+    AppHandle, Emitter, Manager, Runtime,
+};
 
 #[cfg(target_os = "ios")]
 tauri::ios_plugin_binding!(init_plugin_sensorkit);
@@ -24,6 +26,36 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     {
         let handle =
             api.register_android_plugin("dev.satooru.tauripluginsensorkit", "SensorKitPlugin")?;
+        let app_handle = _app.clone();
+        handle.run_mobile_plugin::<()>(
+            "setEventHandler",
+            SetEventHandlerArgs {
+                handler: Channel::new(move |event| {
+                    if let InvokeResponseBody::Json(payload) = event {
+                        if let Ok(mut data) = serde_json::from_str::<serde_json::Value>(&payload) {
+                            // FileService への書き込み
+                            let sensor_name =
+                                data["sensor"].as_str().unwrap_or("unknown").to_string();
+                            if let Some(fs) = app_handle.try_state::<Arc<FileService>>() {
+                                let csv_line =
+                                    data["csv_raw"].as_str().unwrap_or_default().to_string();
+                                fs.push_line(&sensor_name, csv_line);
+                            }
+
+                            // csv_raw フィールドを削除
+                            if let Some(obj) = data.as_object_mut() {
+                                obj.remove("csv_raw");
+                            }
+
+                            // TS 側へのイベント発火
+                            let event_name = format!("sensorkit://{}/update", sensor_name);
+                            let _ = app_handle.emit(&event_name, data);
+                        }
+                    }
+                    Ok(())
+                }),
+            },
+        )?;
         Ok(Sensorkit(handle))
     }
 

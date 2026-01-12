@@ -9,6 +9,7 @@ mod mobile;
 
 mod commands;
 mod error;
+mod file_service;
 mod models;
 
 pub use error::{Error, Result};
