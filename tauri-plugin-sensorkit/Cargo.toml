@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-sensorkit"
 version = "0.1.0"
-authors = [ "SaooRu65536" ]
+authors = ["SaooRu65536"]
 description = ""
 edition = "2021"
 rust-version = "1.77.2"
@@ -15,6 +15,13 @@ thiserror = "2"
 tokio = { version = "1.49.0", features = ["full"] }
 serde_json = "1.0.149"
 chrono = "0.4.42"
+tauri-plugin-sql = "2.3.1"
+sqlx = { version = "0.8.6", features = [
+    "runtime-tokio",
+    "sqlite",
+    "chrono",
+    "macros",
+] }
 
 [build-dependencies]
 tauri-plugin = { version = "2.5.2", features = ["build"] }

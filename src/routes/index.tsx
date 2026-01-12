@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getAvailableSensors, type GetAvailableSensorsResponse } from '@satooru65536/tauri-plugin-sensorkit';
 import AccelerometerPanel from '@/components/Accelerometer';
 import { useTranslation } from 'react-i18next';
+import Files from '@/components/Files';
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -37,6 +38,7 @@ function App() {
       </div>
 
       {availableSensors.accelerometer && <AccelerometerPanel />}
+      <Files />
     </main>
   );
 }

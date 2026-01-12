@@ -9,7 +9,6 @@
     "core:default",
     "opener:default",
     "sensorkit:default",
-    "os:default",
-    "sql:default"
+    "os:default"
   ]
 }

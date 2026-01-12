@@ -2,6 +2,7 @@ const COMMANDS: &[&str] = &[
     "get_available_sensors",
     "start_sensors",
     "stop_sensors",
+    "get_sensor_files",
     "registerListener",
     "unregister_listener",
 ];

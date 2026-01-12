@@ -16,6 +16,9 @@ pub enum Error {
     #[cfg(mobile)]
     #[error(transparent)]
     PluginInvoke(#[from] tauri::plugin::mobile::PluginInvokeError),
+
+    #[error("SQL error: {0}")]
+    SqlError(String),
 }
 
 impl Serialize for Error {

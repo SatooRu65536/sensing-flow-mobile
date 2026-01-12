@@ -32,3 +32,15 @@ export async function listenTo<K extends keyof SensorEventMap>(
   const eventname = `sensorkit://${sensorName}/update`;
   return await listen<SensorEventMap[K]>(eventname, (e) => handler(e.payload));
 }
+
+export interface SensorFile {
+  id: number;
+  dataName: string;
+  filePath: string;
+  groupName: string;
+  timestamp: string;
+}
+
+export async function getSensorFiles(): Promise<SensorFile[]> {
+  return await invoke<SensorFile[]>('plugin:sensorkit|get_sensor_files');
+}

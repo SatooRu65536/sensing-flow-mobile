@@ -9,6 +9,7 @@ Default permissions for the plugin
 - `allow-stop-sensors`
 - `allow-registerListener`
 - `allow-unregister-listener`
+- `allow-get-sensor-files`
 
 ## Permission Table
 
@@ -41,6 +42,32 @@ Enables the get_available_sensors command without any pre-configured scope.
 <td>
 
 Denies the get_available_sensors command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-get-sensor-files`
+
+</td>
+<td>
+
+Enables the get_sensor_files command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-get-sensor-files`
+
+</td>
+<td>
+
+Denies the get_sensor_files command without any pre-configured scope.
 
 </td>
 </tr>
