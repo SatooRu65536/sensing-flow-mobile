@@ -64,12 +64,10 @@ impl FileService {
         {
             let writer_service = self.clone();
             tokio::spawn(async move {
-                println!("SensorKit: Restarting writer thread...");
                 writer_service.run_writer().await;
             });
         }
 
-        println!("SensorKit: Started new session at {:?}", *folder);
         Ok(())
     }
 
@@ -89,13 +87,6 @@ impl FileService {
                 lines: VecDeque::new(),
             });
         buffer.lines.push_back(line);
-
-        // push 結果のログ出力(buffer の長さ)
-        println!(
-            "SensorKit: Pushed line to buffer for sensor {}. Buffer length: {}",
-            sensor,
-            buffer.lines.len()
-        );
     }
 
     async fn run_writer(&self) {
@@ -114,17 +105,14 @@ impl FileService {
     }
 
     fn flush_to_disk(&self) {
-        println!("SensorKit: Flushing data to disk...");
         let mut buffers = self.buffers.lock().unwrap();
         if buffers.is_empty() {
-            println!("SensorKit: No data to write.");
             return;
         }
         let folder_path = self.current_folder.lock().unwrap().clone();
 
         for (sensor, buffer) in buffers.iter_mut() {
             if buffer.lines.is_empty() {
-                println!("SensorKit: No data to write for sensor {}", sensor);
                 continue;
             }
 
@@ -141,7 +129,6 @@ impl FileService {
 
                     // 新規作成時のみヘッダーを挿入
                     if is_new_file {
-                        println!("SensorKit: Creating new file for sensor {}", sensor);
                         data.push_str(&buffer.header);
                         data.push('\n');
                     }
@@ -154,11 +141,6 @@ impl FileService {
                     if let Err(e) = file.write_all(data.as_bytes()) {
                         eprintln!("Failed to write to file: {}", e);
                     }
-                    println!(
-                        "SensorKit: Wrote {} lines to file for sensor {}",
-                        buffer.lines.len(),
-                        sensor
-                    );
                 }
                 Err(e) => eprintln!("Failed to open file {:?}: {}", file_path, e),
             }
