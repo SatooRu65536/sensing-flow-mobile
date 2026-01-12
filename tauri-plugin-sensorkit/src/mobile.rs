@@ -1,13 +1,13 @@
-use crate::file::FileService;
 use crate::models::*;
+use crate::{db::DbService, file::FileService};
 use serde::de::DeserializeOwned;
+use sqlx::SqlitePool;
 use std::sync::Arc;
 use tauri::{
     ipc::{Channel, InvokeResponseBody},
     plugin::{PluginApi, PluginHandle},
     AppHandle, Emitter, Manager, Runtime,
 };
-use sqlx::SqlitePool;
 
 #[cfg(target_os = "ios")]
 tauri::ios_plugin_binding!(init_plugin_sensorkit);
@@ -16,7 +16,7 @@ tauri::ios_plugin_binding!(init_plugin_sensorkit);
 pub fn init<R: Runtime, C: DeserializeOwned>(
     _app: &AppHandle<R>,
     api: PluginApi<R, C>,
-    db: SqlitePool,
+    pool: SqlitePool,
 ) -> crate::Result<Sensorkit<R>> {
     #[cfg(target_os = "ios")]
     {
@@ -60,7 +60,9 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
                 }),
             },
         )?;
-        Ok(Sensorkit { handle, db })
+
+        let db_service = DbService::new(pool);
+        Ok(Sensorkit { handle, db_service })
     }
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
@@ -73,7 +75,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 /// Access to the sensorkit APIs.
 pub struct Sensorkit<R: Runtime> {
     pub handle: PluginHandle<R>,
-    pub db: SqlitePool,
+    pub db_service: DbService,
 }
 
 impl<R: Runtime> Sensorkit<R> {
