@@ -1,11 +1,7 @@
 package dev.satooru.tauripluginsensorkit
 import android.app.Activity
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import android.webkit.WebView
 import app.tauri.annotation.Command
 import app.tauri.annotation.InvokeArg
 import app.tauri.annotation.TauriPlugin
@@ -15,7 +11,6 @@ import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
 import dev.satooru.tauripluginsensorkit.sensor.AccelerometerService
 import dev.satooru.tauripluginsensorkit.sensor.SensorRegistry
-import dev.satooru.tauripluginsensorkit.sensor.SensorService
 
 @InvokeArg
 class StartSensorsArgs : HashMap<String, Int>()
