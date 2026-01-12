@@ -13,22 +13,28 @@ use std::{
 use tokio::time::{interval, Duration};
 
 #[derive(Clone)]
+struct SensorBuffer {
+    header: String,
+    lines: VecDeque<String>,
+}
+
+#[derive(Clone)]
 pub struct FileService {
-    folder: PathBuf,
-    buffers: Arc<Mutex<HashMap<String, VecDeque<String>>>>,
+    base_dir: PathBuf,
+    current_folder: Arc<Mutex<PathBuf>>,
+    buffers: Arc<Mutex<HashMap<String, SensorBuffer>>>,
     is_running: Arc<AtomicBool>,
 }
 
 impl FileService {
     pub fn new(base_dir: &Path) -> Result<Self> {
-        // フォルダ名は日時とする
-        let folder_name = Local::now().format("%Y%m%d_%H%M%S").to_string();
-        let folder = base_dir.join("sensors").join(folder_name);
+        fs::create_dir_all(base_dir).map_err(|_| crate::Error::CreateDirFailed)?;
 
-        fs::create_dir_all(&folder).map_err(|_| crate::Error::CreateDirFailed)?;
+        let first_folder = Self::generate_folder_path(base_dir)?;
 
         let service = FileService {
-            folder,
+            base_dir: base_dir.to_path_buf(),
+            current_folder: Arc::new(Mutex::new(first_folder)),
             buffers: Arc::new(Mutex::new(HashMap::new())),
             is_running: Arc::new(AtomicBool::new(true)),
         };
@@ -41,10 +47,55 @@ impl FileService {
         Ok(service)
     }
 
-    pub fn push_line(&self, sensor: &str, line: String) {
+    pub fn start_session(&self) -> Result<()> {
+        let new_folder = Self::generate_folder_path(&self.base_dir)?;
+
+        // バッファを一度クリアして、書き込み先パスを更新
         let mut buffers = self.buffers.lock().unwrap();
-        let buffer = buffers.entry(sensor.to_string()).or_default();
-        buffer.push_back(line);
+        buffers.clear();
+
+        let mut folder = self.current_folder.lock().unwrap();
+        *folder = new_folder;
+
+        if self
+            .is_running
+            .compare_exchange(false, true, Ordering::SeqCst, Ordering::SeqCst)
+            .is_ok()
+        {
+            let writer_service = self.clone();
+            tokio::spawn(async move {
+                println!("SensorKit: Restarting writer thread...");
+                writer_service.run_writer().await;
+            });
+        }
+
+        println!("SensorKit: Started new session at {:?}", *folder);
+        Ok(())
+    }
+
+    fn generate_folder_path(base_dir: &Path) -> Result<PathBuf> {
+        let folder_name = Local::now().format("%Y%m%d_%H%M%S").to_string();
+        let folder = base_dir.join("sensors").join(folder_name);
+        fs::create_dir_all(&folder).map_err(|_| crate::Error::CreateDirFailed)?;
+        Ok(folder)
+    }
+
+    pub fn push_line(&self, sensor: &str, line: String, header: String) {
+        let mut buffers = self.buffers.lock().unwrap();
+        let buffer = buffers
+            .entry(sensor.to_string())
+            .or_insert_with(|| SensorBuffer {
+                header,
+                lines: VecDeque::new(),
+            });
+        buffer.lines.push_back(line);
+
+        // push 結果のログ出力(buffer の長さ)
+        println!(
+            "SensorKit: Pushed line to buffer for sensor {}. Buffer length: {}",
+            sensor,
+            buffer.lines.len()
+        );
     }
 
     async fn run_writer(&self) {
@@ -63,28 +114,54 @@ impl FileService {
     }
 
     fn flush_to_disk(&self) {
-        let mut buffers_snapshot = {
-            let mut buffers = self.buffers.lock().unwrap();
-            let snapshot = buffers.clone();
-            buffers.clear();
-            snapshot
-        };
+        println!("SensorKit: Flushing data to disk...");
+        let mut buffers = self.buffers.lock().unwrap();
+        if buffers.is_empty() {
+            println!("SensorKit: No data to write.");
+            return;
+        }
+        let folder_path = self.current_folder.lock().unwrap().clone();
 
-        for (sensor, mut lines) in buffers_snapshot.drain() {
-            if lines.is_empty() {
+        for (sensor, buffer) in buffers.iter_mut() {
+            if buffer.lines.is_empty() {
+                println!("SensorKit: No data to write for sensor {}", sensor);
                 continue;
             }
 
-            let file_path = self.folder.join(format!("{}.csv", sensor));
-            let mut file = OpenOptions::new()
+            let file_path = folder_path.join(format!("{}.csv", sensor));
+            let is_new_file = !file_path.exists();
+
+            match OpenOptions::new()
                 .create(true)
                 .append(true)
                 .open(&file_path)
-                .unwrap();
+            {
+                Ok(mut file) => {
+                    let mut data = String::new();
 
-            let joined = lines.drain(..).collect::<Vec<_>>().join("\n") + "\n";
-            file.write_all(joined.as_bytes()).unwrap();
-            file.flush().unwrap();
+                    // 新規作成時のみヘッダーを挿入
+                    if is_new_file {
+                        println!("SensorKit: Creating new file for sensor {}", sensor);
+                        data.push_str(&buffer.header);
+                        data.push('\n');
+                    }
+
+                    while let Some(line) = buffer.lines.pop_front() {
+                        data.push_str(&line);
+                        data.push('\n');
+                    }
+
+                    if let Err(e) = file.write_all(data.as_bytes()) {
+                        eprintln!("Failed to write to file: {}", e);
+                    }
+                    println!(
+                        "SensorKit: Wrote {} lines to file for sensor {}",
+                        buffer.lines.len(),
+                        sensor
+                    );
+                }
+                Err(e) => eprintln!("Failed to open file {:?}: {}", file_path, e),
+            }
         }
     }
 }

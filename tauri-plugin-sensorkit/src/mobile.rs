@@ -37,14 +37,16 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
                             let sensor_name =
                                 data["sensor"].as_str().unwrap_or("unknown").to_string();
                             if let Some(fs) = app_handle.try_state::<Arc<FileService>>() {
-                                let csv_line =
-                                    data["csv_raw"].as_str().unwrap_or_default().to_string();
-                                fs.push_line(&sensor_name, csv_line);
+                                let line = data["csv_raw"].as_str().unwrap_or_default().to_string();
+                                let header =
+                                    data["csv_header"].as_str().unwrap_or_default().to_string();
+                                fs.push_line(&sensor_name, line, header);
                             }
 
-                            // csv_raw フィールドを削除
+                            // TS 側で不要なフィールドを削除
                             if let Some(obj) = data.as_object_mut() {
                                 obj.remove("csv_raw");
+                                obj.remove("csv_header");
                             }
 
                             // TS 側へのイベント発火

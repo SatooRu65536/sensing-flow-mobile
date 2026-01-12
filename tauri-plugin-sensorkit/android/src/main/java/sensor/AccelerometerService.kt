@@ -47,6 +47,7 @@ class AccelerometerService(
                             put("y", y)
                             put("z", z)
                             put("csv_raw", csvRaw)
+                            put("csv_header", "timestamp,x,y,z")
                         }
 
                     channel?.send(payload)

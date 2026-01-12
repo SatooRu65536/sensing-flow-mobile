@@ -1,4 +1,3 @@
-use std::fs;
 use std::sync::Arc;
 use tauri::{command, AppHandle, Manager, Runtime, State};
 
@@ -22,10 +21,15 @@ pub(crate) async fn start_sensors<R: Runtime>(
         .path()
         .app_data_dir()
         .map_err(|_| crate::Error::AppDataDirNotFound)?;
-    fs::create_dir_all(&base_dir).map_err(|_| crate::Error::CreateDirFailed)?;
 
-    let file_service = Arc::new(FileService::new(&base_dir)?);
-    app.manage(file_service.clone());
+    if let Some(file_service) = app.try_state::<Arc<FileService>>() {
+        // 既存の場合はフォルダだけ新しくする
+        file_service.start_session()?;
+    } else {
+        // 初回のみ manage する
+        let file_service = Arc::new(FileService::new(&base_dir)?);
+        app.manage(file_service);
+    }
 
     app.sensorkit().start_sensors(payload.clone())
 }
