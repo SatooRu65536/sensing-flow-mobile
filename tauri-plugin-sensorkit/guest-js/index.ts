@@ -33,14 +33,23 @@ export async function listenTo<K extends keyof SensorEventMap>(
   return await listen<SensorEventMap[K]>(eventname, (e) => handler(e.payload));
 }
 
-export interface SensorFile {
+export interface SensorData {
   id: number;
   dataName: string;
   filePath: string;
-  groupName: string;
-  timestamp: string;
+  synced: boolean;
+  activeSensors: string[];
+  groupId: number;
+  createdAt: Date;
 }
 
-export async function getSensorFiles(): Promise<SensorFile[]> {
-  return await invoke<SensorFile[]>('plugin:sensorkit|get_sensor_files');
+export interface GroupedSensorFiles {
+  groupId: number;
+  groupName: string;
+  createdAt: Date;
+  sensorData: SensorData[];
+}
+
+export async function getGroupedSensorData(): Promise<GroupedSensorFiles[]> {
+  return await invoke<GroupedSensorFiles[]>('plugin:sensorkit|get_grouped_sensor_data');
 }

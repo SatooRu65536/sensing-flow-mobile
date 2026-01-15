@@ -6,5 +6,5 @@ permissions = [
     "allow-stop-sensors",
     "allow-registerListener",
     "allow-unregister-listener",
-    "allow-get-sensor-files",
+    "allow-get-grouped-sensor-data",
 ]

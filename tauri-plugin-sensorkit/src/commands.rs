@@ -1,3 +1,4 @@
+use crate::db::db_service::GroupedSensorFiles;
 use crate::file::FileService;
 use crate::models::{GetAvailableSensorsResponse, StartSensorsRequest};
 use crate::SensorkitExt;
@@ -42,8 +43,8 @@ pub(crate) async fn stop_sensors<R: Runtime>(app: AppHandle<R>) -> crate::Result
 }
 
 #[command]
-pub(crate) async fn get_sensor_files<R: Runtime>(
+pub(crate) async fn get_grouped_sensor_data<R: Runtime>(
     app: AppHandle<R>,
-) -> crate::Result<Vec<serde_json::Value>> {
-    app.sensorkit().db_service.get_sensor_files().await
+) -> crate::Result<Vec<GroupedSensorFiles>> {
+    app.sensorkit().db_service.get_grouped_sensor_data().await
 }

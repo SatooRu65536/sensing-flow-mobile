@@ -307,16 +307,16 @@
           "markdownDescription": "Denies the get_available_sensors command without any pre-configured scope."
         },
         {
-          "description": "Enables the get_sensor_files command without any pre-configured scope.",
+          "description": "Enables the get_grouped_sensor_data command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-sensor-files",
-          "markdownDescription": "Enables the get_sensor_files command without any pre-configured scope."
+          "const": "allow-get-grouped-sensor-data",
+          "markdownDescription": "Enables the get_grouped_sensor_data command without any pre-configured scope."
         },
         {
-          "description": "Denies the get_sensor_files command without any pre-configured scope.",
+          "description": "Denies the get_grouped_sensor_data command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-sensor-files",
-          "markdownDescription": "Denies the get_sensor_files command without any pre-configured scope."
+          "const": "deny-get-grouped-sensor-data",
+          "markdownDescription": "Denies the get_grouped_sensor_data command without any pre-configured scope."
         },
         {
           "description": "Enables the registerListener command without any pre-configured scope.",
@@ -367,10 +367,10 @@
           "markdownDescription": "Denies the unregister_listener command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-sensor-files`",
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-sensor-files`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`"
         }
       ]
     }

@@ -1,3 +1,4 @@
+use sea_orm::DbErr;
 use serde::{ser::Serializer, Serialize};
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -27,5 +28,11 @@ impl Serialize for Error {
         S: Serializer,
     {
         serializer.serialize_str(self.to_string().as_ref())
+    }
+}
+
+impl From<DbErr> for Error {
+    fn from(e: DbErr) -> Self {
+        Error::SqlError(e.to_string())
     }
 }

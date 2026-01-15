@@ -14,7 +14,12 @@ impl MigrationTrait for Migration {
                     .col(pk_auto(SensorGroups::Id))
                     .col(string(SensorGroups::Name))
                     .col(integer(SensorGroups::Sorted))
-                    .col(timestamp_with_time_zone(SensorGroups::CreatedAt))
+                    .col(
+                        ColumnDef::new(SensorGroups::CreatedAt)
+                            .timestamp()
+                            .not_null()
+                            .default(Expr::current_timestamp()),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -28,9 +33,14 @@ impl MigrationTrait for Migration {
                     .col(string(SensorData::Name))
                     .col(string(SensorData::FilePath))
                     .col(boolean(SensorData::Synced))
-                    .col(text(SensorData::ActiveSensorIds))
+                    .col(text(SensorData::ActiveSensors))
                     .col(integer(SensorData::GroupId))
-                    .col(timestamp_with_time_zone(SensorData::CreatedAt))
+                    .col(
+                        ColumnDef::new(SensorData::CreatedAt)
+                            .timestamp()
+                            .not_null()
+                            .default(Expr::current_timestamp()),
+                    )
                     .foreign_key(
                         ForeignKey::create()
                             .from(SensorData::Table, SensorData::GroupId)
@@ -44,11 +54,11 @@ impl MigrationTrait for Migration {
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        todo!();
-
         manager
             .drop_table(Table::drop().table(SensorData::Table).to_owned())
+            .await?;
+        manager
+            .drop_table(Table::drop().table(SensorGroups::Table).to_owned())
             .await
     }
 }
@@ -69,7 +79,7 @@ enum SensorData {
     Name,
     FilePath,
     Synced,
-    ActiveSensorIds,
+    ActiveSensors,
     GroupId,
     CreatedAt,
 }

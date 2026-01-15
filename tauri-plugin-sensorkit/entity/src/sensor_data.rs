@@ -5,17 +5,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, FromJsonQueryResult)]
 pub struct ActiveSensors(pub Vec<String>);
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "sensor_data")]
+#[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub name: String,
     pub file_path: String,
     pub synced: bool,
-    pub active_sensor: ActiveSensors,
+    pub active_sensors: ActiveSensors,
     pub group_id: i32,
-    pub created_at: DateTimeWithTimeZone,
+    pub created_at: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter)]

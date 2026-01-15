@@ -1,6 +1,6 @@
 use crate::Result;
-use migration::Migrator;
-use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseConnection};
+use migration::{Migrator, MigratorTrait};
+use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::fs;
 use tauri::{AppHandle, Manager, Runtime};
 
@@ -16,15 +16,16 @@ pub async fn init_db<R: Runtime>(app: &AppHandle<R>) -> Result<DatabaseConnectio
     }
 
     let db_path = base_dir.join("sensorkit.db");
-    let mut opt = ConnectOptions::new(format!("sqlite://{}", db_path.to_string_lossy()))
-        .max_connections(1)
-        .min_connections(1);
+    let db_path_str = format!("sqlite:/{}?mode=rwc", db_path.to_string_lossy());
+
+    let mut opt = ConnectOptions::new(db_path_str);
+    opt.max_connections(1).min_connections(1);
 
     // 接続確立
     let db = Database::connect(opt).await?;
 
     // マイグレーション実行
-    Migrator::up(db, None).await?;
+    Migrator::up(&db, None).await?;
 
     Ok(db)
 }
