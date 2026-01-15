@@ -1,7 +1,7 @@
 use crate::models::*;
 use crate::{db::DbService, file::FileService};
 use serde::de::DeserializeOwned;
-use sqlx::SqlitePool;
+use sea_orm::DatabaseConnection;
 use std::sync::Arc;
 use tauri::{
     ipc::{Channel, InvokeResponseBody},
@@ -16,7 +16,7 @@ tauri::ios_plugin_binding!(init_plugin_sensorkit);
 pub fn init<R: Runtime, C: DeserializeOwned>(
     _app: &AppHandle<R>,
     api: PluginApi<R, C>,
-    pool: SqlitePool,
+    db: DatabaseConnection,
 ) -> crate::Result<Sensorkit<R>> {
     #[cfg(target_os = "ios")]
     {
@@ -61,7 +61,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
             },
         )?;
 
-        let db_service = DbService::new(pool);
+        let db_service = DbService::new(db);
         Ok(Sensorkit { handle, db_service })
     }
 

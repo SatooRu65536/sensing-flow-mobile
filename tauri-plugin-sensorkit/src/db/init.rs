@@ -1,14 +1,11 @@
-use sqlx::{
-    sqlite::{SqliteConnectOptions, SqlitePoolOptions},
-    SqlitePool,
-};
+use crate::Result;
+use migration::Migrator;
+use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseConnection};
 use std::fs;
 use tauri::{AppHandle, Manager, Runtime};
 
-pub async fn init_db<R: Runtime>(
-    app: &AppHandle<R>,
-) -> Result<SqlitePool, Box<dyn std::error::Error>> {
-    // データベースファイルの保存場所を特定
+pub async fn init_db<R: Runtime>(app: &AppHandle<R>) -> Result<DatabaseConnection> {
+    // データベースファイルのパスを特定
     let base_dir = app
         .path()
         .app_data_dir()
@@ -19,19 +16,15 @@ pub async fn init_db<R: Runtime>(
     }
 
     let db_path = base_dir.join("sensorkit.db");
-    let conn_opts = SqliteConnectOptions::new()
-        .filename(&db_path)
-        .create_if_missing(true);
+    let mut opt = ConnectOptions::new(format!("sqlite://{}", db_path.to_string_lossy()))
+        .max_connections(1)
+        .min_connections(1);
 
-    // 接続プールの作成
-    let pool = SqlitePoolOptions::new()
-        .max_connections(5)
-        .connect_with(conn_opts)
-        .await?;
+    // 接続確立
+    let db = Database::connect(opt).await?;
 
-    sqlx::query(include_str!("./migrations/001-create_init_tables.sql"))
-        .execute(&pool)
-        .await?;
+    // マイグレーション実行
+    Migrator::up(db, None).await?;
 
-    Ok(pool)
+    Ok(db)
 }
