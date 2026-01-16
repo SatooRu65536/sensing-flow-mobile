@@ -10,7 +10,7 @@ body {
 
   & > div {
     & > header {
-      height: calc(60px + env(safe-area-inset-top)); // ステータスバーの高さを考慮
+      height: calc(50px + env(safe-area-inset-top)); // ステータスバーの高さを考慮
     }
 
     & > main {

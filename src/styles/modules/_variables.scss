@@ -1,1 +1,8 @@
-$box-shadow: 0 2px 6px 0 rgba(#000003, 0.2);
+// shadow
+$background-shadow: 0 2px 6px 0 rgba(#000000, 0.2);
+
+// blur
+$element-blur: blur(1px);
+
+// transition
+$transition-default: 0.3s ease;

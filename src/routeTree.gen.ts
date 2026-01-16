@@ -10,33 +10,90 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as SensorsIndexRouteImport } from './routes/sensors/index'
+import { Route as SensingIndexRouteImport } from './routes/sensing/index'
+import { Route as LoggingIndexRouteImport } from './routes/logging/index'
+import { Route as FilesIndexRouteImport } from './routes/files/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SensorsIndexRoute = SensorsIndexRouteImport.update({
+  id: '/sensors/',
+  path: '/sensors/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SensingIndexRoute = SensingIndexRouteImport.update({
+  id: '/sensing/',
+  path: '/sensing/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoggingIndexRoute = LoggingIndexRouteImport.update({
+  id: '/logging/',
+  path: '/logging/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FilesIndexRoute = FilesIndexRouteImport.update({
+  id: '/files/',
+  path: '/files/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/files': typeof FilesIndexRoute
+  '/logging': typeof LoggingIndexRoute
+  '/sensing': typeof SensingIndexRoute
+  '/sensors': typeof SensorsIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/files': typeof FilesIndexRoute
+  '/logging': typeof LoggingIndexRoute
+  '/sensing': typeof SensingIndexRoute
+  '/sensors': typeof SensorsIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/files/': typeof FilesIndexRoute
+  '/logging/': typeof LoggingIndexRoute
+  '/sensing/': typeof SensingIndexRoute
+  '/sensors/': typeof SensorsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/files' | '/logging' | '/sensing' | '/sensors' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/files' | '/logging' | '/sensing' | '/sensors' | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/files/'
+    | '/logging/'
+    | '/sensing/'
+    | '/sensors/'
+    | '/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FilesIndexRoute: typeof FilesIndexRoute
+  LoggingIndexRoute: typeof LoggingIndexRoute
+  SensingIndexRoute: typeof SensingIndexRoute
+  SensorsIndexRoute: typeof SensorsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +105,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sensors/': {
+      id: '/sensors/'
+      path: '/sensors'
+      fullPath: '/sensors'
+      preLoaderRoute: typeof SensorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sensing/': {
+      id: '/sensing/'
+      path: '/sensing'
+      fullPath: '/sensing'
+      preLoaderRoute: typeof SensingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logging/': {
+      id: '/logging/'
+      path: '/logging'
+      fullPath: '/logging'
+      preLoaderRoute: typeof LoggingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/files/': {
+      id: '/files/'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof FilesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FilesIndexRoute: FilesIndexRoute,
+  LoggingIndexRoute: LoggingIndexRoute,
+  SensingIndexRoute: SensingIndexRoute,
+  SensorsIndexRoute: SensorsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

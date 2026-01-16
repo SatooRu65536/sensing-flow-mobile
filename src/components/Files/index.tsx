@@ -8,7 +8,6 @@ export default function Files() {
     void (async () => {
       try {
         const groupedSensorData: GroupedSensorFiles[] = await getGroupedSensorData();
-        console.log(groupedSensorData);
         setSensorData(groupedSensorData);
       } catch (error) {
         console.error('Error fetching grouped sensor data:', error);
