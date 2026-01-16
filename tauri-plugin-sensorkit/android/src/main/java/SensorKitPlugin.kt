@@ -9,8 +9,9 @@ import app.tauri.plugin.Channel
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
-import dev.satooru.tauripluginsensorkit.sensor.AccelerometerService
 import dev.satooru.tauripluginsensorkit.sensor.SensorRegistry
+import dev.satooru.tauripluginsensorkit.sensor.AccelerometerService
+import dev.satooru.tauripluginsensorkit.sensor.GyroscopeService
 
 @InvokeArg
 class StartSensorsArgs : HashMap<String, Int>()
@@ -24,12 +25,13 @@ class SetEventHandlerArgs {
 class SensorKitPlugin(
     private val activity: Activity,
 ) : Plugin(activity) {
-    private val accelerometer =
-        AccelerometerService(activity)
-
     private val registry =
         SensorRegistry(
-            sensors = listOf(accelerometer),
+            sensors =
+                listOf(
+                    AccelerometerService(activity),
+                    GyroscopeService(activity),
+                ),
         )
 
     @Command
