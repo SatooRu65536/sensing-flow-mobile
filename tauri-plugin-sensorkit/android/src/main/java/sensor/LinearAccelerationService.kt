@@ -5,15 +5,12 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import app.tauri.plugin.JSObject
 
-class AccelerometerService(
+class LinearAccelerationService(
     activity: Activity,
-) : BaseHardwareSensorService(activity, Sensor.TYPE_ACCELEROMETER) {
-    override val name = "accelerometer"
+) : BaseHardwareSensorService(activity, Sensor.TYPE_LINEAR_ACCELERATION) {
+    override val name = "linear_acceleration"
 
-    override fun createPayload(
-        event: SensorEvent,
-        relativeTimestamp: Long,
-    ): JSObject {
+    override fun createPayload(event: SensorEvent, relativeTimestamp: Long): JSObject {
         val (x, y, z) = event.values
         return JSObject().apply {
             put("sensor", name)

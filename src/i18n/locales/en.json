@@ -4,8 +4,11 @@
   },
   "sensors": {
     "accelerometer": "Accelerometer",
+    "linear_acceleration": "Linear Acceleration",
     "gyroscope": "Gyroscope",
     "magnetometer": "Magnetometer",
-    "barometer": "Barometer"
+    "barometer": "Barometer",
+    "location": "Location",
+    "light": "Light"
   }
 }

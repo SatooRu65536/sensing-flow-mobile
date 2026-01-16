@@ -4,8 +4,11 @@
   },
   "sensors": {
     "accelerometer": "加速度センサー",
+    "linear_acceleration": "線形加速度センサー",
     "gyroscope": "角速度センサー",
     "magnetometer": "磁力センサー",
-    "barometer": "気圧センサー"
+    "barometer": "気圧センサー",
+    "location": "位置情報",
+    "light": "光センサー"
   }
 }

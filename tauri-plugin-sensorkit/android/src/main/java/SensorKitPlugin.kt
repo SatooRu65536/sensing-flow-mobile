@@ -9,9 +9,14 @@ import app.tauri.plugin.Channel
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
-import dev.satooru.tauripluginsensorkit.sensor.SensorRegistry
 import dev.satooru.tauripluginsensorkit.sensor.AccelerometerService
+import dev.satooru.tauripluginsensorkit.sensor.BarometerService
 import dev.satooru.tauripluginsensorkit.sensor.GyroscopeService
+import dev.satooru.tauripluginsensorkit.sensor.LinearAccelerationService
+import dev.satooru.tauripluginsensorkit.sensor.LocationService
+import dev.satooru.tauripluginsensorkit.sensor.MagnetometerService
+import dev.satooru.tauripluginsensorkit.sensor.SensorRegistry
+import dev.satooru.tauripluginsensorkit.sensor.LightSensorService
 
 @InvokeArg
 class StartSensorsArgs : HashMap<String, Int>()
@@ -30,7 +35,12 @@ class SensorKitPlugin(
             sensors =
                 listOf(
                     AccelerometerService(activity),
+                    LinearAccelerationService(activity),
                     GyroscopeService(activity),
+                    BarometerService(activity),
+                    MagnetometerService(activity),
+                    LocationService(activity),
+                    LightSensorService(activity),
                 ),
         )
 

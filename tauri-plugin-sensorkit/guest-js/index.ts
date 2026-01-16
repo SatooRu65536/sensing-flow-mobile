@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
-import { SensorEventMap } from './sensorEvent';
+import { SensorEventMap, SensorNameMap } from './sensorEvent';
 import {
   CreateGroupRequest,
   CreateGroupResponse,
@@ -14,7 +14,14 @@ export * from './sensorEvent';
 export { UnlistenFn } from '@tauri-apps/api/event';
 
 export async function getAvailableSensors(): Promise<GetAvailableSensorsResponse> {
-  return await invoke<GetAvailableSensorsResponse>('plugin:sensorkit|get_available_sensors');
+  const res = await invoke<GetAvailableSensorsResponse>('plugin:sensorkit|get_available_sensors');
+
+  const orderedSensors = {} as GetAvailableSensorsResponse;
+  Object.values(SensorNameMap).forEach((name) => {
+    orderedSensors[name] = res[name] ?? false;
+  });
+
+  return orderedSensors;
 }
 
 export async function startSensors(payload: StartSensorsRequest): Promise<void> {
