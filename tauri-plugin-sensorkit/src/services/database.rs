@@ -113,24 +113,20 @@ impl DbService {
         &self,
         group_id: i32,
         name: String,
-        file_path: String,
+        folder_path: String,
         synced: bool,
         active_sensors: Vec<String>,
     ) -> Result<sensor_data::Model> {
         let record = sensor_data::ActiveModel {
             group_id: Set(group_id),
             name: Set(name),
-            file_path: Set(file_path),
+            folder_path: Set(folder_path),
             synced: Set(synced),
             active_sensors: Set(ActiveSensors(active_sensors)),
             ..Default::default()
         }
         .insert(&self.db)
-        .await
-        .map_err(|e| {
-            println!("SensorKit error: {:?}", e);
-            e // そのまま元のエラーを返す
-        })?;
+        .await?;
 
         Ok(record)
     }

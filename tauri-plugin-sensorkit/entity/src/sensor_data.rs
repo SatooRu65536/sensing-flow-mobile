@@ -12,7 +12,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub name: String,
-    pub file_path: String,
+    pub folder_path: String,
     pub synced: bool,
     pub active_sensors: ActiveSensors,
     pub group_id: i32,

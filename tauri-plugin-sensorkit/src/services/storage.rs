@@ -16,6 +16,8 @@ pub struct StorageService {
     current_folder: Arc<Mutex<PathBuf>>,
 }
 
+pub struct FolderPath(pub String);
+
 impl StorageService {
     pub fn new(base_dir: &Path) -> Result<Self> {
         fs::create_dir_all(base_dir.join("sensor_data"))
@@ -28,10 +30,14 @@ impl StorageService {
         })
     }
 
-    pub fn set_file(&self) {
+    pub fn set_folder(&self) -> FolderPath {
         let new_folder = Self::get_folder_path(&self.base_dir, true).unwrap();
         let mut folder = self.current_folder.lock().unwrap();
+        let path_string = new_folder.display().to_string();
+
         *folder = new_folder;
+
+        FolderPath(path_string)
     }
 
     fn get_folder_path(base_dir: &Path, generate: bool) -> Result<PathBuf> {

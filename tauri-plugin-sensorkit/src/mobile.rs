@@ -108,7 +108,7 @@ impl<R: Runtime> Sensorkit<R> {
 
     pub fn start_sensors(&self, payload: StartSensorsRequest) -> crate::Result<()> {
         self.handle
-            .run_mobile_plugin("startSensors", payload)
+            .run_mobile_plugin("startSensors", payload.sensors)
             .map(|_: ()| ())
             .map_err(Into::into)
     }

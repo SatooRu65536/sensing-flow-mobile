@@ -14,7 +14,11 @@ pub struct GetAvailableSensorsResponse(pub std::collections::HashMap<String, boo
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct StartSensorsRequest(pub HashMap<String, i32>); // センサー名とFPSのマッピング
+pub struct StartSensorsRequest {
+    pub group_id: i32,                 // センサーグループID
+    pub data_name: String,                  // センサーデータ名
+    pub sensors: HashMap<String, i32>, // センサー名とFPSのマッピング
+}
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

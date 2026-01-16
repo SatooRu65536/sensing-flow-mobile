@@ -17,7 +17,7 @@ pub(crate) async fn start_sensors<R: Runtime>(
     payload: StartSensorsRequest,
 ) -> crate::Result<()> {
     let app_for_callback = app.clone();
-    app_for_callback.sensorkit().storage_service.set_file();
+    let folder_path = app_for_callback.sensorkit().storage_service.set_folder();
 
     let callback = Arc::new(move |sensor, data, header| {
         app_for_callback
@@ -26,6 +26,17 @@ pub(crate) async fn start_sensors<R: Runtime>(
             .write(sensor, data, header);
     });
 
+    let _ = app
+        .sensorkit()
+        .db_service
+        .create_sensor_data(
+            payload.group_id,
+            payload.data_name.clone(),
+            folder_path.0,
+            false,
+            payload.sensors.keys().cloned().collect::<Vec<String>>(),
+        )
+        .await?;
     app.sensorkit().sensor_batch_service.start(callback);
     app.sensorkit().start_sensors(payload.clone())
 }

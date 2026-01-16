@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
-import { SensorEventMap } from './sensorEvent';
+import { SensorEventMap, type SensorName } from './sensorEvent';
 
 export * from './sensorEvent';
 export { UnlistenFn } from '@tauri-apps/api/event';
@@ -14,7 +14,9 @@ export async function getAvailableSensors(): Promise<GetAvailableSensorsResponse
 }
 
 interface StartSensorsRequest {
-  [key: string]: number;
+  groupId: number;
+  dataName: string;
+  sensors: { [key in SensorName]: number };
 }
 
 export async function startSensors(payload: StartSensorsRequest): Promise<void> {

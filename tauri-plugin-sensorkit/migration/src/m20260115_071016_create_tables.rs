@@ -31,7 +31,7 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(pk_auto(SensorData::Id))
                     .col(string(SensorData::Name))
-                    .col(string(SensorData::FilePath))
+                    .col(string(SensorData::FolderPath))
                     .col(boolean(SensorData::Synced))
                     .col(text(SensorData::ActiveSensors))
                     .col(integer(SensorData::GroupId))
@@ -77,7 +77,7 @@ enum SensorData {
     Table,
     Id,
     Name,
-    FilePath,
+    FolderPath,
     Synced,
     ActiveSensors,
     GroupId,
