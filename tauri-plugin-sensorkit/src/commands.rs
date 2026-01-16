@@ -1,6 +1,6 @@
-use crate::db::db_service::GroupedSensorFiles;
-use crate::file::FileService;
+use crate::services::StorageService;
 use crate::models::{GetAvailableSensorsResponse, StartSensorsRequest};
+use crate::services::database::GroupedSensorFiles;
 use crate::SensorkitExt;
 
 use std::sync::Arc;
@@ -23,12 +23,12 @@ pub(crate) async fn start_sensors<R: Runtime>(
         .app_data_dir()
         .map_err(|_| crate::Error::AppDataDirNotFound)?;
 
-    if let Some(file_service) = app.try_state::<Arc<FileService>>() {
+    if let Some(file_service) = app.try_state::<Arc<StorageService>>() {
         // 既存の場合はフォルダだけ新しくする
         file_service.start_session()?;
     } else {
         // 初回のみ manage する
-        let file_service = Arc::new(FileService::new(&base_dir)?);
+        let file_service = Arc::new(StorageService::new(&base_dir)?);
         app.manage(file_service);
     }
 
@@ -37,7 +37,7 @@ pub(crate) async fn start_sensors<R: Runtime>(
 
 #[command]
 pub(crate) async fn stop_sensors<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
-    let file_service: State<'_, Arc<FileService>> = app.state();
+    let file_service: State<'_, Arc<StorageService>> = app.state();
     file_service.stop_writer();
     app.sensorkit().stop_sensors()
 }

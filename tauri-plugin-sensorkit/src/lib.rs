@@ -3,17 +3,15 @@ pub use models::*;
 
 use mobile::Sensorkit;
 use tauri::{
-    async_runtime::block_on,
     plugin::{Builder, TauriPlugin},
     Manager, Runtime,
 };
 
 mod commands;
-mod db;
 mod error;
-mod file;
 mod mobile;
 mod models;
+mod services;
 
 /// Extensions to [`tauri::App`], [`tauri::AppHandle`] and [`tauri::Window`] to access the sensorkit APIs.
 pub trait SensorkitExt<R: Runtime> {
@@ -36,18 +34,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::get_grouped_sensor_data
         ])
         .setup(|app, api| {
-            let handle = app.clone();
-            let db = block_on(async {
-                db::init_db(&handle)
-                    .await
-                    .map_err(|e| {
-                        eprintln!("DATABASE ERROR: {:?}", e);
-                        e
-                    })
-                    .expect("Failed to init database")
-            });
-
-            let sensorkit = mobile::init(app, api, db)?;
+            let sensorkit = mobile::init(app, api)?;
             app.manage(sensorkit);
             Ok(())
         })

@@ -1,10 +1,9 @@
 use crate::models::*;
-use crate::{db::DbService, file::FileService};
-use sea_orm::DatabaseConnection;
+use crate::services::{DbService, StorageService};
 use serde::de::DeserializeOwned;
-use std::error::Error;
 use std::sync::Arc;
 use tauri::{
+    async_runtime::block_on,
     ipc::{Channel, InvokeResponseBody},
     plugin::{PluginApi, PluginHandle},
     AppHandle, Emitter, Manager, Runtime,
@@ -15,21 +14,31 @@ tauri::ios_plugin_binding!(init_plugin_sensorkit);
 
 // initializes the Swift or Kotlin plugin classes
 pub fn init<R: Runtime, C: DeserializeOwned>(
-    _app: &AppHandle<R>,
+    app: &AppHandle<R>,
     api: PluginApi<R, C>,
-    db: DatabaseConnection,
 ) -> crate::Result<Sensorkit<R>> {
+    let handle = app.clone();
+    let db_service = block_on(async {
+        DbService::init(&handle)
+            .await
+            .map_err(|e| {
+                eprintln!("DATABASE ERROR: {:?}", e);
+                e
+            })
+            .expect("Failed to init database")
+    });
+
     #[cfg(target_os = "ios")]
     {
         let handle = api.register_ios_plugin(init_plugin_sensorkit)?;
-        Ok(Sensorkit(handle))
+        Ok(Sensorkit { handle, db_service })
     }
 
     #[cfg(target_os = "android")]
     {
         let handle =
             api.register_android_plugin("dev.satooru.tauripluginsensorkit", "SensorKitPlugin")?;
-        let app_handle = _app.clone();
+        let app_handle = app.clone();
         handle.run_mobile_plugin::<()>(
             "setEventHandler",
             SetEventHandlerArgs {
@@ -37,7 +46,6 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
             },
         )?;
 
-        let db_service = DbService::new(db);
         Ok(Sensorkit { handle, db_service })
     }
 
@@ -50,13 +58,14 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 
 fn setup_sensor_event_handler<R: tauri::Runtime>(
     app_handle: &AppHandle<R>,
-) -> tauri::plugin::Result<()> {
+) -> Channel<InvokeResponseBody> {
+    let app_handle = app_handle.clone();
     Channel::new(move |event| {
         if let InvokeResponseBody::Json(payload) = event {
             if let Ok(mut data) = serde_json::from_str::<serde_json::Value>(&payload) {
-                // FileService への書き込み
+                // StorageService への書き込み
                 let sensor_name = data["sensor"].as_str().unwrap_or("unknown").to_string();
-                if let Some(fs) = app_handle.try_state::<Arc<FileService>>() {
+                if let Some(fs) = app_handle.try_state::<Arc<StorageService>>() {
                     let line = data["csv_raw"].as_str().unwrap_or_default().to_string();
                     let header = data["csv_header"].as_str().unwrap_or_default().to_string();
                     fs.push_line(&sensor_name, line, header);

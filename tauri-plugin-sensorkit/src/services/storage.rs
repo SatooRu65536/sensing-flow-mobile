@@ -19,20 +19,20 @@ struct SensorBuffer {
 }
 
 #[derive(Clone)]
-pub struct FileService {
+pub struct StorageService {
     base_dir: PathBuf,
     current_folder: Arc<Mutex<PathBuf>>,
     buffers: Arc<Mutex<HashMap<String, SensorBuffer>>>,
     is_running: Arc<AtomicBool>,
 }
 
-impl FileService {
+impl StorageService {
     pub fn new(base_dir: &Path) -> Result<Self> {
         fs::create_dir_all(base_dir).map_err(|_| crate::Error::CreateDirFailed)?;
 
         let first_folder = Self::generate_folder_path(base_dir)?;
 
-        let service = FileService {
+        let service = StorageService {
             base_dir: base_dir.to_path_buf(),
             current_folder: Arc::new(Mutex::new(first_folder)),
             buffers: Arc::new(Mutex::new(HashMap::new())),

@@ -1,8 +1,12 @@
+use std::fs;
+
 use crate::Result;
 use entity::sensor_data::ActiveSensors;
 use entity::{sensor_data, sensor_groups};
-use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set};
+use migration::{Migrator, MigratorTrait};
+use sea_orm::{ActiveModelTrait, ConnectOptions, Database, DatabaseConnection, EntityTrait, QueryOrder, Set};
 use serde::Serialize;
+use tauri::{AppHandle, Manager, Runtime};
 
 pub struct DbService {
     db: DatabaseConnection,
@@ -23,6 +27,33 @@ pub struct GroupedSensorFiles {
 }
 
 impl DbService {
+    pub async fn init<R: Runtime>(app: &AppHandle<R>) -> Result<Self> {
+        // 1. パスの特定とディレクトリ作成
+        let base_dir = app
+            .path()
+            .app_data_dir()
+            .map_err(|_| crate::Error::AppDataDirNotFound)?;
+
+        if !base_dir.exists() {
+            fs::create_dir_all(&base_dir).map_err(|_| crate::Error::CreateDirFailed)?;
+        }
+
+        let db_path = base_dir.join("sensorkit.db");
+        let db_path_str = format!("sqlite:/{}?mode=rwc", db_path.to_string_lossy());
+
+        // 2. 接続設定
+        let mut opt = ConnectOptions::new(db_path_str);
+        opt.max_connections(1).min_connections(1);
+
+        // 3. 接続確立
+        let db = Database::connect(opt).await?;
+
+        // 4. マイグレーション実行
+        Migrator::up(&db, None).await?;
+
+        Ok(Self { db })
+    }
+
     pub fn new(db: DatabaseConnection) -> Self {
         Self { db }
     }
