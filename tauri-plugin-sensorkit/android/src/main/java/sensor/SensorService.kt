@@ -46,11 +46,15 @@ abstract class BaseSensorService(
         listener =
             object : SensorEventListener {
                 override fun onSensorChanged(event: SensorEvent) {
-                    val relativeTimestamp = event.timestamp - startTimeNanos
+                    val relativeTimestamp = (event.timestamp - startTimeNanos) / 1_000_000
                     val payload = createPayload(event, relativeTimestamp)
                     channel?.send(payload)
                 }
-                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+                override fun onAccuracyChanged(
+                    sensor: Sensor?,
+                    accuracy: Int,
+                ) {}
             }
 
         sensorManager.registerListener(listener, sensor, samplingUs)
@@ -63,5 +67,8 @@ abstract class BaseSensorService(
     }
 
     // 各センサで固有のデータ変換ロジックを実装する
-    protected abstract fun createPayload(event: SensorEvent, relativeTimestamp: Long): JSObject
+    protected abstract fun createPayload(
+        event: SensorEvent,
+        relativeTimestamp: Long,
+    ): JSObject
 }

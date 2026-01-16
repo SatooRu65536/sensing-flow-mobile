@@ -19,7 +19,7 @@ class AccelerometerService(
             put("y", y)
             put("z", z)
             put("csv_raw", "${relativeTimestamp},$x,$y,$z")
-            put("csv_header", "timestamp(ns),x(m/s^2),y(m/s^2),z(m/s^2)")
+            put("csv_header", "timestamp(ms),x(m/s^2),y(m/s^2),z(m/s^2)")
         }
     }
 }
