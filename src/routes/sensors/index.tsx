@@ -1,10 +1,12 @@
 import { TabSelect } from '@/components/TabBar';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { getAvailableSensors, type GetAvailableSensorsResponse } from '@satooru65536/tauri-plugin-sensorkit';
-import AccelerometerPanel from '@/components/Accelerometer';
+import { getAvailableSensors } from '@satooru65536/tauri-plugin-sensorkit';
 import { useTranslation } from 'react-i18next';
-import Files from '@/components/Files';
+import PageLayout from '@/layout/page';
+import SectionLayout from '@/layout/section';
+import { useQuery } from '@tanstack/react-query';
+import ListItem from '@/components/ListItem';
+import { entries } from '@/utils';
 
 export const Route = createFileRoute('/sensors/')({
   staticData: {
@@ -15,35 +17,25 @@ export const Route = createFileRoute('/sensors/')({
 
 function RouteComponent() {
   const { t } = useTranslation();
-  const [availableSensors, setAvailableSensors] = useState<GetAvailableSensorsResponse>({});
-
-  useEffect(() => {
-    void (async () => {
-      if (Object.keys(availableSensors).length > 0) return;
-
-      const sensors = await getAvailableSensors().catch((err) => {
-        console.error('Error fetching available sensors:', err);
-        return {};
-      });
-      setAvailableSensors(sensors);
-    })();
-  }, []);
+  const { data: sensors } = useQuery({
+    queryKey: ['availableSensors'],
+    queryFn: getAvailableSensors,
+    staleTime: Infinity,
+  });
 
   return (
-    <main className="container">
-      <h1>{t('titles.AvailableSensors')}</h1>
-
-      <div>
-        {Object.entries(availableSensors).map(([sensor, isAvailable]) => (
-          <div key={sensor}>
-            {sensor}: {isAvailable ? 'Available' : 'Not Available'}
-          </div>
-        ))}
-      </div>
-
-      {availableSensors.accelerometer && <AccelerometerPanel />}
-      <Files />
-    </main>
+    <PageLayout>
+      <SectionLayout title={t('titles.BaseSensors')}>
+        <div>
+          {sensors &&
+            entries(sensors).map(([sensor, isAvailable]) => (
+              <ListItem key={sensor} disabled={!isAvailable} to={`/sensing`} search={{ sensor }}>
+                {t(`sensors.${sensor}`)}
+              </ListItem>
+            ))}
+        </div>
+      </SectionLayout>
+    </PageLayout>
   );
 }
 

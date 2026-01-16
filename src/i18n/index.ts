@@ -12,7 +12,6 @@ export const resources = {
 export const defaultNS = 'en';
 
 async function getLanguageCode(): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const loc = await locale();
   if (typeof loc !== 'string') return 'en';
   return loc.split('-')[0] ?? 'en';

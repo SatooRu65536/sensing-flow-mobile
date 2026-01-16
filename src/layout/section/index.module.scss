@@ -1,0 +1,6 @@
+.section_layout {
+  & > h2 {
+    font-size: $text-size-lg;
+    padding: 10px 0;
+  }
+}

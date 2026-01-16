@@ -2,7 +2,9 @@ export const SensorNameMap = {
   Accelerometer: 'accelerometer',
   Gyroscope: 'gyroscope',
 } as const;
+export const SensorNames = Object.values(SensorNameMap);
 export type SensorName = (typeof SensorNameMap)[keyof typeof SensorNameMap];
+
 export interface AccelerometerEvent {
   timestamp: number;
   x: number;

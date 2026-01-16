@@ -1,5 +1,11 @@
 {
   "titles": {
-    "AvailableSensors": "利用可能なセンサー"
+    "BaseSensors": "基本センサー"
+  },
+  "sensors": {
+    "accelerometer": "加速度センサー",
+    "gyroscope": "角速度センサー",
+    "magnetometer": "磁力センサー",
+    "barometer": "気圧センサー"
   }
 }

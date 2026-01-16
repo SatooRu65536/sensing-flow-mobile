@@ -1,0 +1,23 @@
+.list_item {
+  padding: 10px 15px;
+
+  font-size: $text-size-base;
+  font-weight: $text-weight-bold;
+  background-color: $color-background;
+
+  border-radius: $radius-md;
+
+  display: flex;
+  align-items: center;
+
+  .content {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+  }
+}

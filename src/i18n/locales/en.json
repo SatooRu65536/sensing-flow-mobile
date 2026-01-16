@@ -1,5 +1,11 @@
 {
   "titles": {
-    "AvailableSensors": "Available Sensors"
+    "BaseSensors": "Base Sensors"
+  },
+  "sensors": {
+    "accelerometer": "Accelerometer",
+    "gyroscope": "Gyroscope",
+    "magnetometer": "Magnetometer",
+    "barometer": "Barometer"
   }
 }

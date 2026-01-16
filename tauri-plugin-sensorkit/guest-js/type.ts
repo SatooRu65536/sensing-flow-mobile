@@ -1,8 +1,8 @@
 import { SensorName } from './sensorEvent';
 
-export interface GetAvailableSensorsResponse {
-  [key: string]: boolean;
-}
+export type GetAvailableSensorsResponse = {
+  [key in SensorName]: boolean;
+};
 
 export interface StartSensorsRequest {
   groupId: number;
@@ -15,7 +15,7 @@ export interface SensorData {
   dataName: string;
   filePath: string;
   synced: boolean;
-  activeSensors: string[];
+  activeSensors: SensorName[];
   groupId: number;
   createdAt: Date;
 }
