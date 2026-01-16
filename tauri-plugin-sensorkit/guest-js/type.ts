@@ -7,7 +7,7 @@ export interface GetAvailableSensorsResponse {
 export interface StartSensorsRequest {
   groupId: number;
   dataName: string;
-  sensors: { [key in SensorName]: number };
+  sensors: { [key in SensorName]?: number };
 }
 
 export interface SensorData {
