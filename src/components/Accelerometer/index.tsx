@@ -17,7 +17,7 @@ export default function AccelerometerPanel() {
   };
 
   const start = async () => {
-    await startSensors({ groupId: 1, dataName: 'data-name', sensors: { accelerometer: 1 } });
+    await startSensors({ groupId: 1, dataName: 'data-name', sensors: { accelerometer: 30 } });
     setIsRunning(true);
   };
 
