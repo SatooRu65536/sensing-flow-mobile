@@ -1,0 +1,16 @@
+.header {
+  padding-inline: 20px;
+  padding-top: env(safe-area-inset-top); // ステータスバーの高さを考慮
+
+  font-size: $text-size-base;
+  font-weight: $text-weight-bold;
+
+  background-color: $color-background;
+  box-shadow: $box-shadow;
+
+  display: flex;
+  align-items: center;
+
+  position: sticky;
+  top: 0;
+}
