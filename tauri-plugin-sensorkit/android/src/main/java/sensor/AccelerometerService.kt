@@ -10,15 +10,15 @@ class AccelerometerService(
 ) : BaseSensorService(activity, Sensor.TYPE_ACCELEROMETER) {
     override val name = "accelerometer"
 
-    override fun createPayload(event: SensorEvent): JSObject {
+    override fun createPayload(event: SensorEvent, relativeTimestamp: Long): JSObject {
         val (x, y, z) = event.values
         return JSObject().apply {
             put("sensor", name)
-            put("timestamp", event.timestamp)
+            put("timestamp", relativeTimestamp)
             put("x", x)
             put("y", y)
             put("z", z)
-            put("csv_raw", "${event.timestamp},$x,$y,$z")
+            put("csv_raw", "${relativeTimestamp},$x,$y,$z")
             put("csv_header", "timestamp(ns),x(m/s^2),y(m/s^2),z(m/s^2)")
         }
     }

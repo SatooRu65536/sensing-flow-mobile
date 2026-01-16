@@ -26,6 +26,7 @@ abstract class BaseSensorService(
     override var channel: Channel? = null
     private var listening = false
     private var listener: SensorEventListener? = null
+    protected var startTimeNanos: Long = 0
 
     private val sensorManager by lazy {
         activity.getSystemService(Activity.SENSOR_SERVICE) as SensorManager
@@ -40,17 +41,16 @@ abstract class BaseSensorService(
     override fun start(samplingUs: Int) {
         if (!isAvailable() || listening) return
 
+        startTimeNanos = android.os.SystemClock.elapsedRealtimeNanos()
+
         listener =
             object : SensorEventListener {
                 override fun onSensorChanged(event: SensorEvent) {
-                    val payload = createPayload(event)
+                    val relativeTimestamp = event.timestamp - startTimeNanos
+                    val payload = createPayload(event, relativeTimestamp)
                     channel?.send(payload)
                 }
-
-                override fun onAccuracyChanged(
-                    sensor: Sensor?,
-                    accuracy: Int,
-                ) {}
+                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
             }
 
         sensorManager.registerListener(listener, sensor, samplingUs)
@@ -63,5 +63,5 @@ abstract class BaseSensorService(
     }
 
     // 各センサで固有のデータ変換ロジックを実装する
-    protected abstract fun createPayload(event: SensorEvent): JSObject
+    protected abstract fun createPayload(event: SensorEvent, relativeTimestamp: Long): JSObject
 }
