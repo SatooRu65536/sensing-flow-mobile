@@ -18,8 +18,9 @@ pub struct StorageService {
 
 impl StorageService {
     pub fn new(base_dir: &Path) -> Result<Self> {
+        fs::create_dir_all(base_dir.join("sensor_data"))
+            .map_err(|_| crate::Error::CreateDirFailed)?;
         let new_folder = Self::get_folder_path(base_dir, false).unwrap();
-        fs::create_dir_all(&new_folder).map_err(|_| crate::Error::CreateDirFailed)?;
 
         Ok(Self {
             base_dir: base_dir.to_path_buf(),
