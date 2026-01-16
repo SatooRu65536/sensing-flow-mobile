@@ -1,3 +1,4 @@
+import styles from './index.module.scss';
 import { TabSelect } from '@/components/TabBar';
 import { createFileRoute } from '@tanstack/react-router';
 import { getAvailableSensors } from '@satooru65536/tauri-plugin-sensorkit';
@@ -26,7 +27,7 @@ function RouteComponent() {
   return (
     <PageLayout>
       <SectionLayout title={t('titles.BaseSensors')}>
-        <div>
+        <div className={styles.sensor_list}>
           {sensors &&
             entries(sensors).map(([sensor, isAvailable]) => (
               <ListItem key={sensor} disabled={!isAvailable} to={`/sensing`} search={{ sensor }}>
