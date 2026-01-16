@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 #[cfg(target_os = "android")]
 use tauri::ipc::Channel;
@@ -16,13 +17,28 @@ pub struct GetAvailableSensorsResponse(pub std::collections::HashMap<String, boo
 #[serde(rename_all = "camelCase")]
 pub struct StartSensorsRequest {
     pub group_id: i32,                 // センサーグループID
-    pub data_name: String,                  // センサーデータ名
+    pub data_name: String,             // センサーデータ名
     pub sensors: HashMap<String, i32>, // センサー名とFPSのマッピング
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PushSensorLineRequest(pub String);
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateGroupRequest {
+    pub name: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateGroupResponse {
+    pub id: i32,
+    pub name: String,
+    pub sorted: i32,
+    pub created_at: NaiveDateTime,
+}
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

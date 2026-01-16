@@ -1,22 +1,20 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
-import { SensorEventMap, type SensorName } from './sensorEvent';
+import { SensorEventMap } from './sensorEvent';
+import {
+  CreateGroupRequest,
+  CreateGroupResponse,
+  GetAvailableSensorsResponse,
+  GroupedSensorFiles,
+  StartSensorsRequest,
+} from './type';
 
+export * from './type';
 export * from './sensorEvent';
 export { UnlistenFn } from '@tauri-apps/api/event';
 
-export interface GetAvailableSensorsResponse {
-  [key: string]: boolean;
-}
-
 export async function getAvailableSensors(): Promise<GetAvailableSensorsResponse> {
   return await invoke<GetAvailableSensorsResponse>('plugin:sensorkit|get_available_sensors');
-}
-
-interface StartSensorsRequest {
-  groupId: number;
-  dataName: string;
-  sensors: { [key in SensorName]: number };
 }
 
 export async function startSensors(payload: StartSensorsRequest): Promise<void> {
@@ -35,23 +33,10 @@ export async function listenTo<K extends keyof SensorEventMap>(
   return await listen<SensorEventMap[K]>(eventname, (e) => handler(e.payload));
 }
 
-export interface SensorData {
-  id: number;
-  dataName: string;
-  filePath: string;
-  synced: boolean;
-  activeSensors: string[];
-  groupId: number;
-  createdAt: Date;
-}
-
-export interface GroupedSensorFiles {
-  groupId: number;
-  groupName: string;
-  createdAt: Date;
-  sensorData: SensorData[];
-}
-
 export async function getGroupedSensorData(): Promise<GroupedSensorFiles[]> {
   return await invoke<GroupedSensorFiles[]>('plugin:sensorkit|get_grouped_sensor_data');
+}
+
+export async function createGroup(payload: CreateGroupRequest): Promise<CreateGroupResponse> {
+  return await invoke<CreateGroupResponse>('plugin:sensorkit|create_group', { payload });
 }

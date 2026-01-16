@@ -295,6 +295,18 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the create_group command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-create-group",
+          "markdownDescription": "Enables the create_group command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the create_group command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-create-group",
+          "markdownDescription": "Denies the create_group command without any pre-configured scope."
+        },
+        {
           "description": "Enables the get_available_sensors command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-available-sensors",
@@ -367,10 +379,10 @@
           "markdownDescription": "Denies the unregister_listener command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`",
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`"
         }
       ]
     }
