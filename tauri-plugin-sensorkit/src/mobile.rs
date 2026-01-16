@@ -1,12 +1,12 @@
-use crate::models::*;
-use crate::services::{DbService, StorageService};
+use crate::services::{DbService, SensorBatchService, StorageService};
+use crate::{models::*, SensorkitExt};
 use serde::de::DeserializeOwned;
-use std::sync::Arc;
+use std::fs;
 use tauri::{
     async_runtime::block_on,
     ipc::{Channel, InvokeResponseBody},
     plugin::{PluginApi, PluginHandle},
-    AppHandle, Emitter, Manager, Runtime,
+    AppHandle, Manager, Runtime,
 };
 
 #[cfg(target_os = "ios")]
@@ -17,9 +17,18 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     app: &AppHandle<R>,
     api: PluginApi<R, C>,
 ) -> crate::Result<Sensorkit<R>> {
-    let handle = app.clone();
+    let base_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|_| crate::Error::AppDataDirNotFound)?;
+    if !base_dir.exists() {
+        fs::create_dir_all(&base_dir).map_err(|_| crate::Error::CreateDirFailed)?;
+    }
+
+    let sensor_batch_service = SensorBatchService::new();
+    let storage_service = StorageService::new(&base_dir)?;
     let db_service = block_on(async {
-        DbService::init(&handle)
+        DbService::init(&base_dir)
             .await
             .map_err(|e| {
                 eprintln!("DATABASE ERROR: {:?}", e);
@@ -31,7 +40,12 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     #[cfg(target_os = "ios")]
     {
         let handle = api.register_ios_plugin(init_plugin_sensorkit)?;
-        Ok(Sensorkit { handle, db_service })
+        Ok(Sensorkit {
+            handle,
+            db_service,
+            sensor_batch_service,
+            storage_service,
+        })
     }
 
     #[cfg(target_os = "android")]
@@ -46,7 +60,12 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
             },
         )?;
 
-        Ok(Sensorkit { handle, db_service })
+        Ok(Sensorkit {
+            handle,
+            db_service,
+            sensor_batch_service,
+            storage_service,
+        })
     }
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
@@ -56,31 +75,16 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     }
 }
 
-fn setup_sensor_event_handler<R: tauri::Runtime>(
+fn setup_sensor_event_handler<R: Runtime>(
     app_handle: &AppHandle<R>,
 ) -> Channel<InvokeResponseBody> {
     let app_handle = app_handle.clone();
     Channel::new(move |event| {
         if let InvokeResponseBody::Json(payload) = event {
-            if let Ok(mut data) = serde_json::from_str::<serde_json::Value>(&payload) {
-                // StorageService への書き込み
-                let sensor_name = data["sensor"].as_str().unwrap_or("unknown").to_string();
-                if let Some(fs) = app_handle.try_state::<Arc<StorageService>>() {
-                    let line = data["csv_raw"].as_str().unwrap_or_default().to_string();
-                    let header = data["csv_header"].as_str().unwrap_or_default().to_string();
-                    fs.push_line(&sensor_name, line, header);
-                }
-
-                // TS 側で不要なフィールドを削除
-                if let Some(obj) = data.as_object_mut() {
-                    obj.remove("csv_raw");
-                    obj.remove("csv_header");
-                }
-
-                // TS 側へのイベント発火
-                let event_name = format!("sensorkit://{}/update", sensor_name);
-                let _ = app_handle.emit(&event_name, data);
-            }
+            app_handle
+                .sensorkit()
+                .sensor_batch_service
+                .push(&app_handle, payload);
         }
         Ok(())
     })
@@ -90,6 +94,8 @@ fn setup_sensor_event_handler<R: tauri::Runtime>(
 pub struct Sensorkit<R: Runtime> {
     pub handle: PluginHandle<R>,
     pub db_service: DbService,
+    pub sensor_batch_service: SensorBatchService,
+    pub storage_service: StorageService,
 }
 
 impl<R: Runtime> Sensorkit<R> {
