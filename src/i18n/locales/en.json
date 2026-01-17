@@ -3,6 +3,9 @@
     "BaseSensors": "Base Sensors"
   },
   "pages": {
+    "files": {
+      "SavedData": "Saved Data"
+    },
     "sensing": {
       "Sensing": "Sensing",
       "SelectSensors": "Select Sensors",

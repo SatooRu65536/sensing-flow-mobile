@@ -12,18 +12,18 @@ export interface StartSensorsRequest {
 
 export interface SensorData {
   id: number;
-  dataName: string;
+  name: string;
   filePath: string;
   synced: boolean;
   activeSensors: SensorName[];
   groupId: number;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface GroupedSensorFiles {
   groupId: number;
   groupName: string;
-  createdAt: Date;
+  createdAt: string;
   sensorData: SensorData[];
 }
 
@@ -35,11 +35,9 @@ interface Group {
   id: number;
   name: string;
   sorted: number;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export type CreateGroupResponse = Group;
 
-export interface GetGroupsResponse {
-  groups: Group[];
-}
+export type GetGroupsResponse = Group[];

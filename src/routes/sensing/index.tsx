@@ -6,7 +6,7 @@ import { z } from 'zod';
 import PageLayout from '@/layout/page';
 import SectionLayout from '@/layout/section';
 import { useTranslation } from 'react-i18next';
-import SensingConfig from '@/components/SensingConfig';
+import SensingSettings from '@/components/SensingSettings';
 
 const SearchSchema = z.object({
   sensor: z.enum(SensorNames).optional().catch(undefined),
@@ -27,7 +27,7 @@ function RouteComponent() {
   return (
     <PageLayout>
       <SectionLayout title={t('pages.sensing.Sensing')} center>
-        <SensingConfig defaultSensor={sensor} />
+        <SensingSettings defaultSensor={sensor} />
       </SectionLayout>
     </PageLayout>
   );

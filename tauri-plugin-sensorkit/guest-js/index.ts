@@ -5,6 +5,7 @@ import {
   CreateGroupRequest,
   CreateGroupResponse,
   GetAvailableSensorsResponse,
+  GetGroupsResponse,
   GroupedSensorFiles,
   StartSensorsRequest,
 } from './type';
@@ -48,6 +49,6 @@ export async function createGroup(payload: CreateGroupRequest): Promise<CreateGr
   return await invoke<CreateGroupResponse>('plugin:sensorkit|create_group', { payload });
 }
 
-export async function getGroups(): Promise<CreateGroupResponse[]> {
-  return await invoke<CreateGroupResponse[]>('plugin:sensorkit|get_groups');
+export async function getGroups(): Promise<GetGroupsResponse> {
+  return (await invoke<{ groups: GetGroupsResponse }>('plugin:sensorkit|get_groups')).groups;
 }

@@ -1,0 +1,70 @@
+.Accordion {
+  width: 100%;
+
+  color: $color-text;
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 100%;
+}
+
+.Item {
+  width: 100%;
+
+  .Header {
+    .Trigger {
+      width: 100%;
+      padding: 10px 15px;
+
+      font-size: $text-size-base;
+      font-weight: $text-weight-bold;
+      background: $color-background;
+      border-radius: $radius-md;
+      border: none;
+
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+
+      &:focus-visible {
+        outline: 2px solid $color-active;
+        z-index: 1;
+      }
+
+      .TriggerIcon {
+        flex-shrink: 0;
+
+        $size: $text-size-lg;
+        width: $size;
+        height: $size;
+        margin-right: 0.5rem;
+
+        transition: rotate 150ms ease-out;
+
+        [data-panel-open] > & {
+          rotate: 180deg;
+        }
+      }
+    }
+  }
+
+  .Panel {
+    width: 100%;
+    padding: 10px 0 10px 15px;
+
+    color: $color-sky-600;
+
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 100%;
+
+    overflow: hidden;
+    transition: height 150ms ease-out;
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      height: 0;
+    }
+  }
+}

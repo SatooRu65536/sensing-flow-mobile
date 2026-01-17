@@ -1,7 +1,15 @@
+import styles from './index.module.scss';
 import { createFileRoute } from '@tanstack/react-router';
-// import { useTranslation } from 'react-i18next';
-import Files from '@/components/Files';
+import { useTranslation } from 'react-i18next';
 import { TabSelect } from '@/components/TabBar';
+import PageLayout from '@/layout/page';
+import { useQuery } from '@tanstack/react-query';
+import { getGroupedSensorData } from '@satooru65536/tauri-plugin-sensorkit';
+import SectionLayout from '@/layout/section';
+import { AccordionRoot, AccordionItem } from '@/components/Accordion';
+import ListItem from '@/components/ListItem';
+import { IconCloudUp, IconCloudOff } from '@tabler/icons-react';
+import { formatDate } from '@/utils/date';
 
 export const Route = createFileRoute('/files/')({
   staticData: {
@@ -11,11 +19,35 @@ export const Route = createFileRoute('/files/')({
 });
 
 function App() {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
+  const { data: groupedSensorData } = useQuery({
+    queryKey: ['getGroupedSensorData'],
+    queryFn: getGroupedSensorData,
+    staleTime: Infinity,
+  });
 
   return (
-    <main className="container">
-      <Files />
-    </main>
+    <PageLayout className={styles.files}>
+      <SectionLayout title={t('pages.files.SavedData')}>
+        <AccordionRoot multiple>
+          {groupedSensorData?.map((group) => (
+            <AccordionItem key={group.groupId} header={<span>{group.groupName}</span>}>
+              {group.sensorData.map((data) => (
+                <ListItem
+                  key={data.id}
+                  className={styles.list_item}
+                  to={`/files/$dataId`}
+                  params={{ dataId: data.id.toString() }}
+                >
+                  {data.synced ? <IconCloudUp /> : <IconCloudOff />}
+                  <span className={styles.data_name}>{data.name}</span>
+                  <span className={styles.created_at}>{formatDate(data.createdAt)}</span>
+                </ListItem>
+              ))}
+            </AccordionItem>
+          ))}
+        </AccordionRoot>
+      </SectionLayout>
+    </PageLayout>
   );
 }

@@ -132,9 +132,9 @@ $available-height: 200px;
 .Item {
   font-size: $text-size-sm;
   line-height: $text-size-sm * 1.5;
-  padding: $text-size-sm / 2 $text-size-sm;
+  padding: calc(calc($text-size-sm / 2)) $text-size-sm;
   display: grid;
-  gap: $text-size-sm / 2;
+  gap: calc($text-size-sm / 2);
   align-items: center;
   grid-template-columns: $text-size-sm 1fr;
   font-size: $text-size-sm;
@@ -154,7 +154,7 @@ $available-height: 200px;
     z-index: -1;
     position: absolute;
     inset-block: 0;
-    inset-inline: $text-size-sm / 2;
+    inset-inline: $text-size-sm;
     border-radius: $radius-md;
     background-color: $color-text;
   }
@@ -164,7 +164,7 @@ $available-height: 200px;
   width: 100%;
   font-size: $text-size-sm;
   line-height: $text-size-sm * 1.5;
-  padding: $text-size-sm / 2 $text-size-sm;
+  padding: calc($text-size-sm / 2) $text-size-sm;
   font-size: $text-size-sm;
 
   & > span {
@@ -186,47 +186,8 @@ $available-height: 200px;
   grid-column-start: 2;
 }
 
-.ScrollArrow {
-  width: 100%;
-  background: canvas;
-  z-index: 1;
-  text-align: center;
-  border-radius: $radius-md;
-  height: $text-size-sm;
-  font-size: $text-size-sm;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-  }
-
-  &[data-direction='up'] {
-    &[data-side='none'] {
-      &::before {
-        top: -100%;
-      }
-    }
-  }
-
-  &[data-direction='down'] {
-    bottom: 0;
-
-    &[data-side='none'] {
-      &::before {
-        bottom: -100%;
-      }
-    }
-  }
-}
-
 .Group {
-  padding: $text-size-sm / 2 $text-size-sm;
+  padding: calc($text-size-sm / 2) $text-size-sm;
   line-height: $text-size-sm * 1.5;
 
   .GroupLabel {

@@ -14,7 +14,7 @@ interface SensingConfigProps extends React.ComponentProps<'div'> {
   defaultSync?: boolean;
 }
 
-export default function SensingConfig({
+export default function SensingSettings({
   defaultSensor,
   defaultGroup,
   defaultSync = false,

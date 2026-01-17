@@ -15,6 +15,7 @@ import { Route as SensorsIndexRouteImport } from './routes/sensors/index'
 import { Route as SensingIndexRouteImport } from './routes/sensing/index'
 import { Route as LoggingIndexRouteImport } from './routes/logging/index'
 import { Route as FilesIndexRouteImport } from './routes/files/index'
+import { Route as FilesDataIdIndexRouteImport } from './routes/files/$dataId/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const FilesIndexRoute = FilesIndexRouteImport.update({
   path: '/files/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FilesDataIdIndexRoute = FilesDataIdIndexRouteImport.update({
+  id: '/files/$dataId/',
+  path: '/files/$dataId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/sensing': typeof SensingIndexRoute
   '/sensors': typeof SensorsIndexRoute
   '/settings': typeof SettingsIndexRoute
+  '/files/$dataId': typeof FilesDataIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/sensing': typeof SensingIndexRoute
   '/sensors': typeof SensorsIndexRoute
   '/settings': typeof SettingsIndexRoute
+  '/files/$dataId': typeof FilesDataIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +79,27 @@ export interface FileRoutesById {
   '/sensing/': typeof SensingIndexRoute
   '/sensors/': typeof SensorsIndexRoute
   '/settings/': typeof SettingsIndexRoute
+  '/files/$dataId/': typeof FilesDataIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/files' | '/logging' | '/sensing' | '/sensors' | '/settings'
+  fullPaths:
+    | '/'
+    | '/files'
+    | '/logging'
+    | '/sensing'
+    | '/sensors'
+    | '/settings'
+    | '/files/$dataId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/files' | '/logging' | '/sensing' | '/sensors' | '/settings'
+  to:
+    | '/'
+    | '/files'
+    | '/logging'
+    | '/sensing'
+    | '/sensors'
+    | '/settings'
+    | '/files/$dataId'
   id:
     | '__root__'
     | '/'
@@ -85,6 +108,7 @@ export interface FileRouteTypes {
     | '/sensing/'
     | '/sensors/'
     | '/settings/'
+    | '/files/$dataId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +118,7 @@ export interface RootRouteChildren {
   SensingIndexRoute: typeof SensingIndexRoute
   SensorsIndexRoute: typeof SensorsIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
+  FilesDataIdIndexRoute: typeof FilesDataIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FilesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/files/$dataId/': {
+      id: '/files/$dataId/'
+      path: '/files/$dataId'
+      fullPath: '/files/$dataId'
+      preLoaderRoute: typeof FilesDataIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   SensingIndexRoute: SensingIndexRoute,
   SensorsIndexRoute: SensorsIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
+  FilesDataIdIndexRoute: FilesDataIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

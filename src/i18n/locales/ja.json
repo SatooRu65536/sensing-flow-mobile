@@ -3,6 +3,9 @@
     "BaseSensors": "基本センサー"
   },
   "pages": {
+    "files": {
+      "SavedData": "保存されたデータ"
+    },
     "sensing": {
       "Sensing": "センシング",
       "SelectSensors": "センサーを選択",
