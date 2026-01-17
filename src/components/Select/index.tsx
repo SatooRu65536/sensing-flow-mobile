@@ -5,16 +5,27 @@ import { IconSelector, IconCheck } from '@tabler/icons-react';
 
 export interface SelectItem {
   label: string;
-  value: string;
+  value: string | number;
 }
 
-interface SelectProps extends React.ComponentProps<typeof BSelect.Root> {
+export interface GroupedSelectItem {
+  label: string;
+  items?: SelectItem[];
+}
+
+export type SelectItems = SelectItem[] | undefined;
+export type GroupedSelectItems = GroupedSelectItem[] | undefined;
+
+interface SelectProps extends Omit<React.ComponentProps<typeof BSelect.Root>, 'items'> {
   label?: string;
-  items: SelectItem[];
   placeholder?: string;
+  items: SelectItems | GroupedSelectItems;
+  noOptionsMessage?: string;
 }
 
-export default function Select({ label, items, placeholder, ...props }: SelectProps) {
+export default function Select({ label, items, placeholder, noOptionsMessage = 'No options', ...props }: SelectProps) {
+  const isGrouped = Array.isArray(items) && items.length > 0 && 'items' in items[0];
+
   return (
     <Field.Root className={styles.Field}>
       {label && (
@@ -23,7 +34,7 @@ export default function Select({ label, items, placeholder, ...props }: SelectPr
         </Field.Label>
       )}
 
-      <BSelect.Root items={items} {...props}>
+      <BSelect.Root {...props}>
         <BSelect.Trigger className={styles.Select}>
           <BSelect.Value className={styles.Value} placeholder={placeholder} />
           <BSelect.Icon className={styles.SelectIcon}>
@@ -37,14 +48,11 @@ export default function Select({ label, items, placeholder, ...props }: SelectPr
               <BSelect.ScrollUpArrow className={styles.ScrollArrow} />
 
               <BSelect.List className={styles.List}>
-                {items.map(({ label, value }) => (
-                  <BSelect.Item key={label} value={value} className={styles.Item}>
-                    <BSelect.ItemIndicator className={styles.ItemIndicator}>
-                      <IconCheck className={styles.ItemIndicatorIcon} />
-                    </BSelect.ItemIndicator>
-                    <BSelect.ItemText className={styles.ItemText}>{label}</BSelect.ItemText>
-                  </BSelect.Item>
-                ))}
+                {isGrouped ? (
+                  <GroupedItems items={items as GroupedSelectItem[]} noOptionsMessage={noOptionsMessage} />
+                ) : (
+                  <Items items={items as SelectItem[]} noOptionsMessage={noOptionsMessage} />
+                )}
               </BSelect.List>
 
               <BSelect.ScrollDownArrow className={styles.ScrollArrow} />
@@ -53,5 +61,55 @@ export default function Select({ label, items, placeholder, ...props }: SelectPr
         </BSelect.Portal>
       </BSelect.Root>
     </Field.Root>
+  );
+}
+
+interface GroupedItemsProps {
+  items?: GroupedSelectItem[];
+  noOptionsMessage?: string;
+}
+function GroupedItems({ items, noOptionsMessage }: GroupedItemsProps) {
+  return (
+    <>
+      {items
+        ?.filter(
+          (
+            g,
+          ): g is {
+            label: string;
+            items: SelectItem[];
+          } => g.items != undefined,
+        )
+        .map(({ label, items: groupItems }) => (
+          <BSelect.Group key={label} className={styles.Group}>
+            <BSelect.GroupLabel className={styles.GroupLabel}>{label}</BSelect.GroupLabel>
+            <Items items={groupItems} noOptionsMessage={noOptionsMessage} />
+          </BSelect.Group>
+        ))}
+    </>
+  );
+}
+
+interface ItemsProps {
+  items?: SelectItem[];
+  noOptionsMessage?: string;
+}
+function Items({ items, noOptionsMessage }: ItemsProps) {
+  return (
+    <>
+      {items?.map(({ label, value }) => (
+        <BSelect.Item key={label} value={value} className={styles.Item}>
+          <BSelect.ItemIndicator className={styles.ItemIndicator}>
+            <IconCheck className={styles.ItemIndicatorIcon} />
+          </BSelect.ItemIndicator>
+          <BSelect.ItemText className={styles.ItemText}>{label}</BSelect.ItemText>
+        </BSelect.Item>
+      ))}
+      {!items?.length && (
+        <div className={styles.EmptyMessage}>
+          <span>{noOptionsMessage}</span>
+        </div>
+      )}
+    </>
   );
 }

@@ -8,4 +8,5 @@ permissions = [
     "allow-unregister-listener",
     "allow-get-grouped-sensor-data",
     "allow-create-group",
+    "allow-get-groups",
 ]

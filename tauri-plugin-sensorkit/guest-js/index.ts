@@ -47,3 +47,7 @@ export async function getGroupedSensorData(): Promise<GroupedSensorFiles[]> {
 export async function createGroup(payload: CreateGroupRequest): Promise<CreateGroupResponse> {
   return await invoke<CreateGroupResponse>('plugin:sensorkit|create_group', { payload });
 }
+
+export async function getGroups(): Promise<CreateGroupResponse[]> {
+  return await invoke<CreateGroupResponse[]>('plugin:sensorkit|get_groups');
+}

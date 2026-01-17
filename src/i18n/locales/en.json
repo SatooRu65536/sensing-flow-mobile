@@ -9,7 +9,9 @@
       "SelectGroup": "Select Group",
       "InputDataName": "Input Data Name",
       "AutoSyncToCloud": "Auto Sync to Cloud",
-      "RealTimeShare": "Real-time Share"
+      "RealTimeShare": "Real-time Share",
+      "Sensors": "Sensors",
+      "SensorSets": "Sensor Sets"
     }
   },
   "sensors": {

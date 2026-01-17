@@ -109,6 +109,15 @@ impl DbService {
         Ok(model)
     }
 
+    pub async fn get_sensor_groups(&self) -> Result<Vec<sensor_groups::Model>> {
+        let records = sensor_groups::Entity::find()
+            .order_by_asc(sensor_groups::Column::Sorted)
+            .all(&self.db)
+            .await?;
+
+        Ok(records)
+    }
+
     pub async fn create_sensor_data(
         &self,
         group_id: i32,

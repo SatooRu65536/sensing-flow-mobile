@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use chrono::NaiveDateTime;
+use entity::sensor_groups;
 use serde::{Deserialize, Serialize};
 #[cfg(target_os = "android")]
 use tauri::ipc::Channel;
@@ -38,6 +39,12 @@ pub struct CreateGroupResponse {
     pub name: String,
     pub sorted: i32,
     pub created_at: NaiveDateTime,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetGroupsResponse {
+    pub groups: Vec<sensor_groups::Model>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

@@ -36,8 +36,6 @@ $available-height: 200px;
   font-size: $text-size-sm;
   line-height: $text-size-sm * 1.5;
   color: $color-text;
-  user-select: none;
-  -webkit-user-select: none;
 
   &:active {
     background-color: $color-background;
@@ -58,9 +56,8 @@ $available-height: 200px;
 }
 
 .Positioner {
+  height: auto !important;
   z-index: 1;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .Popup {
@@ -133,7 +130,6 @@ $available-height: 200px;
 }
 
 .Item {
-  outline: 0;
   font-size: $text-size-sm;
   line-height: $text-size-sm * 1.5;
   padding: $text-size-sm / 2 $text-size-sm;
@@ -141,9 +137,6 @@ $available-height: 200px;
   gap: $text-size-sm / 2;
   align-items: center;
   grid-template-columns: $text-size-sm 1fr;
-  cursor: default;
-  -webkit-user-select: none;
-  user-select: none;
   font-size: $text-size-sm;
 
   [data-side='none'] & {
@@ -167,6 +160,18 @@ $available-height: 200px;
   }
 }
 
+.EmptyMessage {
+  width: 100%;
+  font-size: $text-size-sm;
+  line-height: $text-size-sm * 1.5;
+  padding: $text-size-sm / 2 $text-size-sm;
+  font-size: $text-size-sm;
+
+  & > span {
+    width: 100%;
+  }
+}
+
 .ItemIndicator {
   grid-column-start: 1;
 }
@@ -186,7 +191,6 @@ $available-height: 200px;
   background: canvas;
   z-index: 1;
   text-align: center;
-  cursor: default;
   border-radius: $radius-md;
   height: $text-size-sm;
   font-size: $text-size-sm;
@@ -218,5 +222,14 @@ $available-height: 200px;
         bottom: -100%;
       }
     }
+  }
+}
+
+.Group {
+  padding: $text-size-sm / 2 $text-size-sm;
+  line-height: $text-size-sm * 1.5;
+
+  .GroupLabel {
+    font-weight: $text-weight-bold;
   }
 }

@@ -31,9 +31,15 @@ export interface CreateGroupRequest {
   groupName: string;
 }
 
-export interface CreateGroupResponse {
+interface Group {
   id: number;
   name: string;
   sorted: number;
   createdAt: Date;
+}
+
+export type CreateGroupResponse = Group;
+
+export interface GetGroupsResponse {
+  groups: Group[];
 }

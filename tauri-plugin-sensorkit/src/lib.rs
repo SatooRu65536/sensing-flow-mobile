@@ -33,6 +33,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::stop_sensors,
             commands::get_grouped_sensor_data,
             commands::create_group,
+            commands::get_groups,
         ])
         .setup(|app, api| {
             let sensorkit = mobile::init(app, api)?;
