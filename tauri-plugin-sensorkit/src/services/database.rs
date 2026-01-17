@@ -1,11 +1,13 @@
 use std::path::Path;
 
 use crate::Result;
+use crate::services::StorageService;
 use entity::sensor_data::ActiveSensors;
 use entity::{sensor_data, sensor_groups};
 use migration::{Migrator, MigratorTrait};
 use sea_orm::{
-    ActiveModelTrait, ConnectOptions, Database, DatabaseConnection, EntityTrait, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, ConnectOptions, Database, DatabaseConnection, EntityTrait,
+    QueryFilter, QueryOrder, Set,
 };
 use serde::Serialize;
 
@@ -83,6 +85,38 @@ impl DbService {
         .await?;
 
         Ok(model)
+    }
+
+    pub async fn delete_sensor_group(
+        &self,
+        storage_service: &StorageService,
+        group_id: i32,
+    ) -> Result<()> {
+        // group_idに紐づくセンサーデータを取得
+        let sensor_data_list: Vec<sensor_data::Model> = sensor_data::Entity::find()
+            .filter(sensor_data::Column::GroupId.eq(group_id))
+            .all(&self.db)
+            .await?;
+
+        // センサーデータを削除
+        sensor_data::Entity::delete_many()
+            .filter(sensor_data::Column::GroupId.eq(group_id))
+            .exec(&self.db)
+            .await?;
+
+        // センサーグループを削除
+        sensor_groups::Entity::delete_by_id(group_id)
+            .exec(&self.db)
+            .await?;
+
+        // ストレージ上のデータを削除
+        let delete_paths: Vec<&str> = sensor_data_list
+            .iter()
+            .map(|data| data.folder_path.as_str())
+            .collect();
+        storage_service.delete_folders(delete_paths)?;
+
+        Ok(())
     }
 
     pub async fn get_sensor_groups(&self) -> Result<Vec<sensor_groups::Model>> {

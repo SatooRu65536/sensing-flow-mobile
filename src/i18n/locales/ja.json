@@ -36,6 +36,15 @@
         "emptyGroupName": "グループ名を入力してください。",
         "failedToCreateGroup": "グループの作成に失敗しました。もう一度お試しください。"
       }
+    },
+    "DeleteGroupDialog": {
+      "title": "グループを削除",
+      "message": "{{groupName}} を削除してもよろしいですか？この操作は元に戻せません。",
+      "cancel": "キャンセル",
+      "confirm": "削除",
+      "error": {
+        "failedToDeleteGroup": "グループの削除に失敗しました。もう一度お試しください。"
+      }
     }
   }
 }

@@ -11,7 +11,12 @@
   justify-content: center;
 
   border-radius: $radius-md;
-  border: 1px solid $color-sky-200;
+  border: none;
+
+  &[data-danger='true'] {
+    color: $color-on-danger;
+    background-color: $color-danger;
+  }
 }
 
 .Backdrop {
@@ -21,6 +26,7 @@
 
   position: fixed;
   inset: 0;
+  z-index: 100;
 
   transition: opacity 150ms;
   opacity: 0.2;
@@ -45,6 +51,7 @@
   position: fixed;
   top: 50%;
   left: 50%;
+  z-index: 101;
 
   display: grid;
   gap: $text-size-lg;
@@ -93,6 +100,11 @@
     &:focus-visible {
       outline: 2px solid $color-primary;
       outline-offset: -1px;
+    }
+
+    &[data-danger='true'] {
+      color: $color-on-danger;
+      background-color: $color-danger;
     }
   }
 }

@@ -78,4 +78,14 @@ impl StorageService {
             Err(e) => eprintln!("Failed to open file {:?}: {}", file_path, e),
         }
     }
+
+    pub fn delete_folders(&self, folder_paths: Vec<&str>) -> Result<()> {
+        for folder_path in folder_paths {
+            let path = Path::new(folder_path);
+            if path.exists() && path.is_dir() {
+                fs::remove_dir_all(path).map_err(|_| crate::Error::DeleteDirFailed)?;
+            }
+        }
+        Ok(())
+    }
 }

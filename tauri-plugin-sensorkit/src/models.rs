@@ -41,6 +41,13 @@ pub struct CreateGroupResponse {
     pub created_at: NaiveDateTime,
 }
 
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteGroupRequest {
+    pub group_id: i32,
+}
+
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetGroupsResponse {

@@ -12,6 +12,15 @@
   width: 100%;
 
   .Header {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+
+    .HeaderContent {
+      padding-left: 15px;
+    }
+
     .Trigger {
       width: 100%;
       padding: 10px 15px;
@@ -22,11 +31,6 @@
       border-radius: $radius-md;
       border: none;
 
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
-
       &:focus-visible {
         outline: 2px solid $color-active;
         z-index: 1;
@@ -35,16 +39,15 @@
       .TriggerIcon {
         flex-shrink: 0;
 
-        $size: $text-size-lg;
+        $size: 30px;
         width: $size;
         height: $size;
-        margin-right: 0.5rem;
 
-        transition: rotate 150ms ease-out;
+        transition: rotate 0.5s ease;
+      }
 
-        [data-panel-open] > & {
-          rotate: 180deg;
-        }
+      &[data-panel-open] .TriggerIcon {
+        rotate: -180deg;
       }
     }
   }
@@ -62,9 +65,37 @@
     overflow: hidden;
     transition: height 150ms ease-out;
 
-    &[data-starting-style],
-    &[data-ending-style] {
-      height: 0;
+    &:empty {
+      padding: 0;
     }
   }
+}
+
+.HeaderWrapper {
+  border-radius: $radius-md;
+  background-color: $color-danger;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.DeleteAction {
+  width: 60px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-background;
+  color: $color-black;
+}
+
+.HeaderMotion {
+  border-radius: $radius-md;
+  background-color: $color-background;
+  touch-action: pan-y;
+  position: relative;
+  z-index: 1;
 }

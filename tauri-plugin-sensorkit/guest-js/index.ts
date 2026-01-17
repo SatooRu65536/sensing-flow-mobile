@@ -48,7 +48,10 @@ export async function getGroupedSensorData(): Promise<GetGroupedSensorDataRespon
 export async function createGroup(payload: CreateGroupRequest): Promise<CreateGroupResponse> {
   return await invoke<CreateGroupResponse>('plugin:sensorkit|create_group', { payload });
 }
-
 export async function getGroups(): Promise<GetGroupsResponse> {
   return (await invoke<{ groups: GetGroupsResponse }>('plugin:sensorkit|get_groups')).groups;
+}
+
+export async function deleteGroup(groupId: number): Promise<void> {
+  await invoke('plugin:sensorkit|delete_group', { payload: { groupId } });
 }

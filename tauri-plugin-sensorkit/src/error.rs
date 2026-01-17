@@ -14,6 +14,9 @@ pub enum Error {
     #[error("Failed to create directory")]
     CreateDirFailed,
 
+    #[error("Failed to delete directory")]
+    DeleteDirFailed,
+
     #[cfg(mobile)]
     #[error(transparent)]
     PluginInvoke(#[from] tauri::plugin::mobile::PluginInvokeError),

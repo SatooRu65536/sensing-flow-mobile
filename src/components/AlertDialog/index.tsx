@@ -9,6 +9,7 @@ interface AlertDialogProps extends Omit<AlertDialogRootProps, 'children'> {
   children: ReactNode;
   cancelText?: string;
   confirmText?: string;
+  danger?: boolean;
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
   isLoading?: boolean;
@@ -20,6 +21,7 @@ export default function AlertDialog({
   children,
   cancelText = 'Cancel',
   confirmText = 'Confirm',
+  danger = false,
   onConfirm,
   onCancel,
   isLoading = false,
@@ -41,7 +43,9 @@ export default function AlertDialog({
 
   return (
     <BAlertDialog.Root open={open} onOpenChange={setOpen} {...props}>
-      <BAlertDialog.Trigger className={styles.Trigger}>{trigger}</BAlertDialog.Trigger>
+      <BAlertDialog.Trigger className={styles.Trigger} data-danger={danger}>
+        {trigger}
+      </BAlertDialog.Trigger>
 
       <BAlertDialog.Portal>
         <BAlertDialog.Backdrop className={styles.Backdrop} />
@@ -61,6 +65,7 @@ export default function AlertDialog({
               onClick={(e) => {
                 void handleConfirm(e);
               }}
+              data-danger={danger}
             >
               {confirmText}
             </BAlertDialog.Close>

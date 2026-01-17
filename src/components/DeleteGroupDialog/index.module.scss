@@ -1,0 +1,15 @@
+.icon {
+  $size: 30px;
+  width: $size;
+  height: $size;
+
+  font-size: $text-size-lg;
+  line-height: $text-size-lg * 2.5;
+}
+
+.error {
+  padding: 5px 0;
+
+  color: $color-error;
+  font-size: $text-size-sm;
+}

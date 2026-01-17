@@ -12,6 +12,7 @@ Default permissions for the plugin
 - `allow-get-grouped-sensor-data`
 - `allow-create-group`
 - `allow-get-groups`
+- `allow-delete-group`
 
 ## Permission Table
 
@@ -44,6 +45,32 @@ Enables the create_group command without any pre-configured scope.
 <td>
 
 Denies the create_group command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-delete-group`
+
+</td>
+<td>
+
+Enables the delete_group command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-delete-group`
+
+</td>
+<td>
+
+Denies the delete_group command without any pre-configured scope.
 
 </td>
 </tr>

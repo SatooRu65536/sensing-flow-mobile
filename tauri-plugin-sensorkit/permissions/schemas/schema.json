@@ -307,6 +307,18 @@
           "markdownDescription": "Denies the create_group command without any pre-configured scope."
         },
         {
+          "description": "Enables the delete_group command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-delete-group",
+          "markdownDescription": "Enables the delete_group command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the delete_group command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-delete-group",
+          "markdownDescription": "Denies the delete_group command without any pre-configured scope."
+        },
+        {
           "description": "Enables the get_available_sensors command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-available-sensors",
@@ -391,10 +403,10 @@
           "markdownDescription": "Denies the unregister_listener command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-groups`",
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-groups`\n- `allow-delete-group`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-groups`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-groups`\n- `allow-delete-group`"
         }
       ]
     }

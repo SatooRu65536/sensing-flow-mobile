@@ -5,6 +5,7 @@ const COMMANDS: &[&str] = &[
     "get_grouped_sensor_data",
     "create_group",
     "get_groups",
+    "delete_group",
     "registerListener",
     "unregister_listener",
 ];

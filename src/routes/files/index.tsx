@@ -12,15 +12,16 @@ import { IconCloudUp, IconCloudOff } from '@tabler/icons-react';
 import { formatDate } from '@/utils/date';
 import AddNewGroupDialog from '@/components/AddNewGroupDialog';
 import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
+import DeleteGroupDialog from '@/components/DeleteGroupDialog';
 
 export const Route = createFileRoute('/files/')({
   staticData: {
     selectTab: TabSelect.Files,
   },
-  component: App,
+  component: RouteComponent,
 });
 
-function App() {
+function RouteComponent() {
   const { t } = useTranslation();
   const { data: groupedSensorData } = useQuery({
     queryKey: [GET_GROUPED_SENSOR_DATA],
@@ -33,7 +34,11 @@ function App() {
       <SectionLayout title={t('pages.files.SavedData')}>
         <AccordionRoot multiple>
           {groupedSensorData?.map((group) => (
-            <AccordionItem key={group.groupId} header={<span>{group.groupName}</span>}>
+            <AccordionItem
+              key={group.groupId}
+              header={<span>{group.groupName}</span>}
+              delete={<DeleteGroupDialog groupId={group.groupId} groupName={group.groupName} />}
+            >
               {group.sensorData.map((data) => (
                 <ListItem
                   key={data.id}

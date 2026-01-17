@@ -1,6 +1,8 @@
 use crate::models::{GetAvailableSensorsResponse, StartSensorsRequest};
 use crate::services::database::GroupedSensorFiles;
-use crate::{CreateGroupRequest, CreateGroupResponse, GetGroupsResponse, SensorkitExt};
+use crate::{
+    CreateGroupRequest, CreateGroupResponse, DeleteGroupRequest, GetGroupsResponse, SensorkitExt,
+};
 use std::sync::Arc;
 use tauri::{command, AppHandle, Runtime};
 
@@ -78,4 +80,15 @@ pub(crate) async fn get_groups<R: Runtime>(app: AppHandle<R>) -> crate::Result<G
         .get_sensor_groups()
         .await
         .map(|groups| GetGroupsResponse { groups })
+}
+
+#[command]
+pub(crate) async fn delete_group<R: Runtime>(
+    app: AppHandle<R>,
+    payload: DeleteGroupRequest,
+) -> crate::Result<()> {
+    app.sensorkit()
+        .db_service
+        .delete_sensor_group(&app.sensorkit().storage_service, payload.group_id)
+        .await
 }
