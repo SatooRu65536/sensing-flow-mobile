@@ -10,6 +10,7 @@ import { AccordionRoot, AccordionItem } from '@/components/Accordion';
 import ListItem from '@/components/ListItem';
 import { IconCloudUp, IconCloudOff } from '@tabler/icons-react';
 import { formatDate } from '@/utils/date';
+import AddNewGroupDialog from '@/components/AddNewGroupDialog';
 
 export const Route = createFileRoute('/files/')({
   staticData: {
@@ -46,6 +47,7 @@ function App() {
               ))}
             </AccordionItem>
           ))}
+          <AddNewGroupDialog />
         </AccordionRoot>
       </SectionLayout>
     </PageLayout>

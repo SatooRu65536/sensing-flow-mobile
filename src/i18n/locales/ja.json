@@ -25,5 +25,17 @@
     "barometer": "気圧センサー",
     "location": "位置情報",
     "light": "光センサー"
+  },
+  "components": {
+    "AddNewGroupDialog": {
+      "title": "グループを作成",
+      "groupName": "グループ名",
+      "cancel": "キャンセル",
+      "confirm": "作成",
+      "error": {
+        "emptyGroupName": "グループ名を入力してください。",
+        "failedToCreateGroup": "グループの作成に失敗しました。もう一度お試しください。"
+      }
+    }
   }
 }

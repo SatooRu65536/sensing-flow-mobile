@@ -25,5 +25,17 @@
     "barometer": "Barometer",
     "location": "Location",
     "light": "Light"
+  },
+  "components": {
+    "AddNewGroupDialog": {
+      "title": "Add New Group",
+      "groupName": "Group Name",
+      "cancel": "Cancel",
+      "confirm": "Create",
+      "error": {
+        "emptyGroupName": "Group name cannot be empty.",
+        "failedToCreateGroup": "Failed to create group. Please try again."
+      }
+    }
   }
 }

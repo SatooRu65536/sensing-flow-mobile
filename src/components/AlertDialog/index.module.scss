@@ -1,0 +1,98 @@
+.Trigger {
+  width: 100%;
+
+  color: $color-on-primary;
+  background-color: $color-primary;
+  font-size: $text-size-base;
+  font-weight: $text-weight-medium;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: $radius-md;
+  border: 1px solid $color-sky-200;
+}
+
+.Backdrop {
+  min-height: 100dvh;
+
+  background-color: $color-black;
+
+  position: fixed;
+  inset: 0;
+
+  transition: opacity 150ms;
+  opacity: 0.2;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
+}
+
+.Popup {
+  margin-top: -2rem;
+  padding: 1.5rem;
+  width: 24rem;
+  max-width: calc(100vw - 3rem);
+
+  color: $color-text;
+  background-color: $color-background;
+  border-radius: $radius-md;
+  outline: 1px solid $color-sky-300;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  display: grid;
+  gap: $text-size-lg;
+
+  transform: translate(-50%, -50%);
+  transition: all 150ms;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+.Title {
+  font-size: $text-size-lg;
+  font-weight: $text-weight-bold;
+}
+
+.Actions {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+
+  .Confirm,
+  .Cancel {
+    width: 100%;
+
+    color: $color-text;
+    background-color: $color-background;
+    font-size: $text-size-base;
+    font-weight: $text-weight-medium;
+    line-height: $text-size-base * 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: $radius-md;
+    border: 1px solid $color-sky-200;
+
+    &:active {
+      background-color: $color-sky-100;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: -1px;
+    }
+  }
+}

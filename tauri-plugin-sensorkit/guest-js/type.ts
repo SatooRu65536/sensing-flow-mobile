@@ -20,15 +20,17 @@ export interface SensorData {
   createdAt: string;
 }
 
-export interface GroupedSensorFiles {
+export interface GroupedSensorData {
   groupId: number;
   groupName: string;
   createdAt: string;
   sensorData: SensorData[];
 }
 
+export type GetGroupedSensorDataResponse = GroupedSensorData[];
+
 export interface CreateGroupRequest {
-  groupName: string;
+  name: string;
 }
 
 interface Group {

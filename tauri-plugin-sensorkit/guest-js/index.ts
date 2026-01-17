@@ -5,8 +5,8 @@ import {
   CreateGroupRequest,
   CreateGroupResponse,
   GetAvailableSensorsResponse,
+  GetGroupedSensorDataResponse,
   GetGroupsResponse,
-  GroupedSensorFiles,
   StartSensorsRequest,
 } from './type';
 
@@ -41,8 +41,8 @@ export async function listenTo<K extends keyof SensorEventMap>(
   return await listen<SensorEventMap[K]>(eventname, (e) => handler(e.payload));
 }
 
-export async function getGroupedSensorData(): Promise<GroupedSensorFiles[]> {
-  return await invoke<GroupedSensorFiles[]>('plugin:sensorkit|get_grouped_sensor_data');
+export async function getGroupedSensorData(): Promise<GetGroupedSensorDataResponse> {
+  return await invoke<GetGroupedSensorDataResponse>('plugin:sensorkit|get_grouped_sensor_data');
 }
 
 export async function createGroup(payload: CreateGroupRequest): Promise<CreateGroupResponse> {
