@@ -7,6 +7,7 @@ import Checkbox from '@/components/Checkbox';
 import { useQuery } from '@tanstack/react-query';
 import { getAvailableSensors, getGroups } from '@satooru65536/tauri-plugin-sensorkit';
 import { entries } from '@/utils';
+import { AVAILABLE_SENSORS, GET_GROUPS } from '@/consts/query-key';
 
 interface SensingConfigProps extends React.ComponentProps<'div'> {
   defaultSensor?: string;
@@ -22,12 +23,12 @@ export default function SensingSettings({
 }: SensingConfigProps) {
   const { t } = useTranslation();
   const { data: sensors } = useQuery({
-    queryKey: ['availableSensors'],
+    queryKey: [AVAILABLE_SENSORS],
     queryFn: getAvailableSensors,
     staleTime: Infinity,
   });
   const { data: groups } = useQuery({
-    queryKey: ['getGroups'],
+    queryKey: [GET_GROUPS],
     queryFn: getGroups,
     staleTime: Infinity,
   });

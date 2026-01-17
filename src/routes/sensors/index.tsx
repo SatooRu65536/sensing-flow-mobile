@@ -8,6 +8,7 @@ import SectionLayout from '@/layout/section';
 import { useQuery } from '@tanstack/react-query';
 import ListItem from '@/components/ListItem';
 import { entries } from '@/utils';
+import { AVAILABLE_SENSORS } from '@/consts/query-key';
 
 export const Route = createFileRoute('/sensors/')({
   staticData: {
@@ -19,7 +20,7 @@ export const Route = createFileRoute('/sensors/')({
 function RouteComponent() {
   const { t } = useTranslation();
   const { data: sensors } = useQuery({
-    queryKey: ['availableSensors'],
+    queryKey: [AVAILABLE_SENSORS],
     queryFn: getAvailableSensors,
     staleTime: Infinity,
   });

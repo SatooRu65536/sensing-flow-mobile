@@ -6,6 +6,7 @@ import Input from '@/components/Input';
 import { createGroup } from '@satooru65536/tauri-plugin-sensorkit';
 import { useState, type ChangeEvent } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { GET_GROUPED_SENSOR_DATA, GET_GROUPS } from '@/consts/query-key';
 
 export default function AddNewGroupDialog() {
   const { t } = useTranslation();
@@ -22,8 +23,9 @@ export default function AddNewGroupDialog() {
         throw new Error(t('components.AddNewGroupDialog.error.failedToCreateGroup'));
       }
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['getGroups', 'getGroupedSensorData'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [GET_GROUPED_SENSOR_DATA] });
+      await queryClient.invalidateQueries({ queryKey: [GET_GROUPS] });
     },
   });
 

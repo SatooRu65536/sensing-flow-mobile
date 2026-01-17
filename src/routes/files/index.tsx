@@ -11,6 +11,7 @@ import ListItem from '@/components/ListItem';
 import { IconCloudUp, IconCloudOff } from '@tabler/icons-react';
 import { formatDate } from '@/utils/date';
 import AddNewGroupDialog from '@/components/AddNewGroupDialog';
+import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
 
 export const Route = createFileRoute('/files/')({
   staticData: {
@@ -22,7 +23,7 @@ export const Route = createFileRoute('/files/')({
 function App() {
   const { t } = useTranslation();
   const { data: groupedSensorData } = useQuery({
-    queryKey: ['getGroupedSensorData'],
+    queryKey: [GET_GROUPED_SENSOR_DATA],
     queryFn: getGroupedSensorData,
     staleTime: Infinity,
   });

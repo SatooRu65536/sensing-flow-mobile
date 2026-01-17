@@ -13,11 +13,6 @@ pub struct DbService {
     db: DatabaseConnection,
 }
 
-struct SensorDataWithGroup {
-    sensor_data: sensor_data::Model,
-    sensor_group: sensor_groups::Model,
-}
-
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GroupedSensorFiles {
@@ -51,42 +46,23 @@ impl DbService {
     }
 
     pub async fn get_grouped_sensor_data(&self) -> Result<Vec<GroupedSensorFiles>> {
-        let records: Vec<(sensor_data::Model, Option<sensor_groups::Model>)> =
-            sensor_data::Entity::find()
-                .inner_join(sensor_groups::Entity)
-                .select_also(sensor_groups::Entity)
+        let records: Vec<(sensor_groups::Model, Vec<sensor_data::Model>)> =
+            sensor_groups::Entity::find()
+                .find_with_related(sensor_data::Entity)
                 .order_by_asc(sensor_groups::Column::Sorted)
                 .order_by_desc(sensor_data::Column::CreatedAt)
                 .all(&self.db)
                 .await?;
-        let records = records
+
+        let grouped = records
             .into_iter()
-            .map(|(sd, sg)| (sd, sg))
-            .into_iter()
-            .map(|(sd, sg)| SensorDataWithGroup {
-                sensor_data: sd,
-                sensor_group: sg.expect("sensor_group must exist"),
+            .map(|(group, data_list)| GroupedSensorFiles {
+                group_id: group.id,
+                group_name: group.name,
+                created_at: group.created_at.to_string(),
+                sensor_data: data_list,
             })
-            .collect::<Vec<SensorDataWithGroup>>();
-
-        // GroupId でグループ化する
-        let mut grouped: Vec<GroupedSensorFiles> = Vec::new();
-        for record in records {
-            let group_id = record.sensor_group.id;
-
-            if let Some(group) = grouped.iter_mut().find(|g| g.group_id == group_id) {
-                // 既存のグループに追加
-                group.sensor_data.push(record.sensor_data);
-            } else {
-                // 新しいグループを作成
-                grouped.push(GroupedSensorFiles {
-                    group_id: group_id,
-                    group_name: record.sensor_group.name.clone(),
-                    created_at: record.sensor_group.created_at.to_string(),
-                    sensor_data: vec![record.sensor_data],
-                });
-            }
-        }
+            .collect();
 
         Ok(grouped)
     }
