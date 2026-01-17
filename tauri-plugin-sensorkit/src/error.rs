@@ -17,6 +17,9 @@ pub enum Error {
     #[error("Failed to delete directory")]
     DeleteDirFailed,
 
+    #[error("Not found: {0}")]
+    NotFound(String),
+
     #[cfg(mobile)]
     #[error(transparent)]
     PluginInvoke(#[from] tauri::plugin::mobile::PluginInvokeError),

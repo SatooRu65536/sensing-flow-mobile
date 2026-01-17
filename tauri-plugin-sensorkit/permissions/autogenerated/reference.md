@@ -11,6 +11,7 @@ Default permissions for the plugin
 - `allow-unregister-listener`
 - `allow-get-grouped-sensor-data`
 - `allow-create-group`
+- `allow-get-group`
 - `allow-get-groups`
 - `allow-delete-group`
 
@@ -97,6 +98,32 @@ Enables the get_available_sensors command without any pre-configured scope.
 <td>
 
 Denies the get_available_sensors command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-get-group`
+
+</td>
+<td>
+
+Enables the get_group command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-get-group`
+
+</td>
+<td>
+
+Denies the get_group command without any pre-configured scope.
 
 </td>
 </tr>

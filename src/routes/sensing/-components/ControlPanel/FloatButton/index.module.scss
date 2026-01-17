@@ -1,0 +1,31 @@
+.float_button {
+  all: unset;
+
+  padding: 6px 14px;
+  width: fit-content;
+
+  background-color: $color-background;
+  box-shadow: $background-shadow;
+  border-radius: $radius-full;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  & > svg {
+    height: $text-size-4xl;
+    width: $text-size-4xl;
+
+    color: $color-active;
+
+    &[data-disabled='true'] {
+      color: $color-sky-200;
+    }
+  }
+
+  &:disabled {
+    & > svg {
+      color: $color-sky-200;
+    }
+  }
+}

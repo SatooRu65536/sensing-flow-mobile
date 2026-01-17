@@ -33,6 +33,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::stop_sensors,
             commands::get_grouped_sensor_data,
             commands::create_group,
+            commands::get_group,
             commands::get_groups,
             commands::delete_group,
         ])

@@ -42,4 +42,6 @@ interface Group {
 
 export type CreateGroupResponse = Group;
 
+export type GetGroupResponse = Group;
+
 export type GetGroupsResponse = Group[];

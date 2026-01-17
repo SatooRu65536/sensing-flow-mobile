@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use crate::Result;
 use crate::services::StorageService;
+use crate::Result;
 use entity::sensor_data::ActiveSensors;
 use entity::{sensor_data, sensor_groups};
 use migration::{Migrator, MigratorTrait};
@@ -117,6 +117,11 @@ impl DbService {
         storage_service.delete_folders(delete_paths)?;
 
         Ok(())
+    }
+
+    pub async fn get_sensor_group(&self, id: i32) -> Result<sensor_groups::Model> {
+        let record = sensor_groups::Entity::find_by_id(id).one(&self.db).await?;
+        record.ok_or_else(|| crate::Error::NotFound("Sensor group not found".into()))
     }
 
     pub async fn get_sensor_groups(&self) -> Result<Vec<sensor_groups::Model>> {

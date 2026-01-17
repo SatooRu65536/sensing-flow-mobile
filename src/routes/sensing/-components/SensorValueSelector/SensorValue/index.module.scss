@@ -1,0 +1,27 @@
+.sensor_values {
+  padding: 10px 0;
+  text-align: center;
+
+  .sensor_value {
+    .key,
+    .value {
+      font-size: $text-size-2xl;
+      font-weight: $text-weight-medium;
+    }
+
+    .value {
+      min-width: 70px;
+      display: inline-block;
+    }
+
+    .separator{
+      font-size: $text-size-xl;
+      font-weight: $text-weight-normal;
+    }
+    
+    .unit {
+      font-size: $text-size-lg;
+      font-weight: $text-weight-normal;
+    }
+  }
+}

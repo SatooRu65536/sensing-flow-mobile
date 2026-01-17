@@ -6,10 +6,15 @@ import { z } from 'zod';
 import PageLayout from '@/layout/page';
 import SectionLayout from '@/layout/section';
 import { useTranslation } from 'react-i18next';
-import SensingSettings from '@/routes/sensing/-components/SensingSettings';
+import SensingSettings from './-components/SensingSettings';
+import ControlPanel from './-components/ControlPanel';
+import SensorValueSelector from './-components/SensorValueSelector';
 
 const SearchSchema = z.object({
-  sensor: z.enum(SensorNames).optional().catch(undefined),
+  sensor: z.enum(SensorNames).or(z.number()).optional().catch(undefined),
+  groupId: z.coerce.number().optional().catch(undefined),
+  sync: z.coerce.boolean().optional().catch(undefined),
+  realTime: z.coerce.boolean().optional().catch(undefined),
 });
 
 export const Route = createFileRoute('/sensing/')({
@@ -22,12 +27,19 @@ export const Route = createFileRoute('/sensing/')({
 
 function RouteComponent() {
   const { t } = useTranslation();
-  const { sensor } = useSearch({ from: '/sensing/' });
+  const { sensor, groupId, sync, realTime } = useSearch({ from: '/sensing/' });
 
   return (
     <PageLayout>
       <SectionLayout title={t('pages.sensing.Sensing')} center>
-        <SensingSettings defaultSensor={sensor} />
+        <SensingSettings
+          defaultSensor={sensor}
+          defaultGroupId={groupId}
+          defaultSync={sync}
+          defaultRealTime={realTime}
+        />
+        <ControlPanel />
+        <SensorValueSelector />
       </SectionLayout>
     </PageLayout>
   );
