@@ -21,7 +21,7 @@ export default function DeleteGroupDialog({ groupId, groupName }: DeleteGroupDia
         await deleteGroup(groupId);
       } catch (e) {
         console.error(e);
-        throw new Error(t('components.DeleteGroupDialog.error.failedToDeleteGroup'));
+        throw new Error(t('pages.files.components.DeleteGroupDialog.error.failedToDeleteGroup'));
       }
     },
     onSuccess: async () => {
@@ -37,14 +37,14 @@ export default function DeleteGroupDialog({ groupId, groupName }: DeleteGroupDia
           <IconTrash className={styles.icon} />
         </div>
       }
-      title={t('components.DeleteGroupDialog.title')}
-      cancelText={t('components.DeleteGroupDialog.cancel')}
-      confirmText={t('components.DeleteGroupDialog.confirm')}
+      title={t('pages.files.components.DeleteGroupDialog.title')}
+      cancelText={t('pages.files.components.DeleteGroupDialog.cancel')}
+      confirmText={t('pages.files.components.DeleteGroupDialog.confirm')}
       onConfirm={mutateAsync}
       isLoading={isPending}
       danger
     >
-      <p>{t('components.DeleteGroupDialog.message', { groupName: groupName })}</p>
+      <p>{t('pages.files.components.DeleteGroupDialog.message', { groupName: groupName })}</p>
       {error && <p className={styles.error}>{error.message}</p>}
     </AlertDialog>
   );

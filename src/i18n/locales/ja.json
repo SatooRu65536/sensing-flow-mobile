@@ -4,7 +4,28 @@
   },
   "pages": {
     "files": {
-      "SavedData": "保存されたデータ"
+      "SavedData": "保存されたデータ",
+      "components": {
+        "AddNewGroupDialog": {
+          "title": "グループを作成",
+          "groupName": "グループ名",
+          "cancel": "キャンセル",
+          "confirm": "作成",
+          "error": {
+            "emptyGroupName": "グループ名を入力してください。",
+            "failedToCreateGroup": "グループの作成に失敗しました。もう一度お試しください。"
+          }
+        },
+        "DeleteGroupDialog": {
+          "title": "グループを削除",
+          "message": "{{groupName}} を削除してもよろしいですか？この操作は元に戻せません。",
+          "cancel": "キャンセル",
+          "confirm": "削除",
+          "error": {
+            "failedToDeleteGroup": "グループの削除に失敗しました。もう一度お試しください。"
+          }
+        }
+      }
     },
     "sensing": {
       "Sensing": "センシング",
@@ -28,26 +49,5 @@
     "barometer": "気圧センサー",
     "location": "位置情報",
     "light": "光センサー"
-  },
-  "components": {
-    "AddNewGroupDialog": {
-      "title": "グループを作成",
-      "groupName": "グループ名",
-      "cancel": "キャンセル",
-      "confirm": "作成",
-      "error": {
-        "emptyGroupName": "グループ名を入力してください。",
-        "failedToCreateGroup": "グループの作成に失敗しました。もう一度お試しください。"
-      }
-    },
-    "DeleteGroupDialog": {
-      "title": "グループを削除",
-      "message": "{{groupName}} を削除してもよろしいですか？この操作は元に戻せません。",
-      "cancel": "キャンセル",
-      "confirm": "削除",
-      "error": {
-        "failedToDeleteGroup": "グループの削除に失敗しました。もう一度お試しください。"
-      }
-    }
   }
 }

@@ -15,12 +15,12 @@ export default function AddNewGroupDialog() {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: async () => {
-      if (groupName.trim() === '') throw new Error(t('components.AddNewGroupDialog.error.emptyGroupName'));
+      if (groupName.trim() === '') throw new Error(t('pages.files.components.AddNewGroupDialog.error.emptyGroupName'));
       try {
         await createGroup({ name: groupName.trim() });
       } catch (e) {
         console.error(e);
-        throw new Error(t('components.AddNewGroupDialog.error.failedToCreateGroup'));
+        throw new Error(t('pages.files.components.AddNewGroupDialog.error.failedToCreateGroup'));
       }
     },
     onSuccess: async () => {
@@ -40,13 +40,17 @@ export default function AddNewGroupDialog() {
           <IconPlus className={styles.icon} />
         </div>
       }
-      title={t('components.AddNewGroupDialog.title')}
-      cancelText={t('components.AddNewGroupDialog.cancel')}
-      confirmText={t('components.AddNewGroupDialog.confirm')}
+      title={t('pages.files.components.AddNewGroupDialog.title')}
+      cancelText={t('pages.files.components.AddNewGroupDialog.cancel')}
+      confirmText={t('pages.files.components.AddNewGroupDialog.confirm')}
       onConfirm={mutateAsync}
       isLoading={isPending}
     >
-      <Input placeholder={t('components.AddNewGroupDialog.groupName')} value={groupName} onChange={changeGroupName} />
+      <Input
+        placeholder={t('pages.files.components.AddNewGroupDialog.groupName')}
+        value={groupName}
+        onChange={changeGroupName}
+      />
       {error && <p className={styles.error}>{error.message}</p>}
     </AlertDialog>
   );

@@ -4,7 +4,28 @@
   },
   "pages": {
     "files": {
-      "SavedData": "Saved Data"
+      "SavedData": "Saved Data",
+      "components": {
+        "AddNewGroupDialog": {
+          "title": "Add New Group",
+          "groupName": "Group Name",
+          "cancel": "Cancel",
+          "confirm": "Create",
+          "error": {
+            "emptyGroupName": "Group name cannot be empty.",
+            "failedToCreateGroup": "Failed to create group. Please try again."
+          }
+        },
+        "DeleteGroupDialog": {
+          "title": "Delete Group",
+          "message": "Are you sure you want to delete \"{{groupName}}\"\n? This action cannot be undone.",
+          "cancel": "Cancel",
+          "confirm": "Delete",
+          "error": {
+            "failedToDeleteGroup": "Failed to delete group. Please try again."
+          }
+        }
+      }
     },
     "sensing": {
       "Sensing": "Sensing",
@@ -28,26 +49,5 @@
     "barometer": "Barometer",
     "location": "Location",
     "light": "Light"
-  },
-  "components": {
-    "AddNewGroupDialog": {
-      "title": "Add New Group",
-      "groupName": "Group Name",
-      "cancel": "Cancel",
-      "confirm": "Create",
-      "error": {
-        "emptyGroupName": "Group name cannot be empty.",
-        "failedToCreateGroup": "Failed to create group. Please try again."
-      }
-    },
-    "DeleteGroupDialog": {
-      "title": "Delete Group",
-      "message": "Are you sure you want to delete \"{{groupName}}\"\n? This action cannot be undone.",
-      "cancel": "Cancel",
-      "confirm": "Delete",
-      "error": {
-        "failedToDeleteGroup": "Failed to delete group. Please try again."
-      }
-    }
   }
 }
