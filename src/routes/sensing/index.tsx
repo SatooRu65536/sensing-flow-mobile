@@ -6,7 +6,7 @@ import { z } from 'zod';
 import PageLayout from '@/layout/page';
 import SectionLayout from '@/layout/section';
 import { useTranslation } from 'react-i18next';
-import SensingSettings from '@/components/SensingSettings';
+import SensingSettings from '@/routes/sensing/-components/SensingSettings';
 
 const SearchSchema = z.object({
   sensor: z.enum(SensorNames).optional().catch(undefined),

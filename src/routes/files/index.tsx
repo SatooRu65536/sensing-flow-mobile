@@ -10,9 +10,9 @@ import { AccordionRoot, AccordionItem } from '@/components/Accordion';
 import ListItem from '@/components/ListItem';
 import { IconCloudUp, IconCloudOff } from '@tabler/icons-react';
 import { formatDate } from '@/utils/date';
-import AddNewGroupDialog from '@/components/AddNewGroupDialog';
+import AddNewGroupDialog from '@/routes/files/-components/AddNewGroupDialog';
 import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
-import DeleteGroupDialog from '@/components/DeleteGroupDialog';
+import DeleteGroupDialog from '@/routes/files/-components/DeleteGroupDialog';
 
 export const Route = createFileRoute('/files/')({
   staticData: {

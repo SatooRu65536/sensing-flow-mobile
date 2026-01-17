@@ -16,7 +16,7 @@ import {
   setDataName,
   setAutoSync,
   setRealTimeShare,
-} from '@/stores/sensing-settings';
+} from '@/routes/sensing/-stores/sensing-settings';
 
 interface SensingConfigProps extends React.ComponentProps<'div'> {
   defaultSensor?: string;
