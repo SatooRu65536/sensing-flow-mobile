@@ -8,20 +8,31 @@ import { useQuery } from '@tanstack/react-query';
 import { getAvailableSensors, getGroups } from '@satooru65536/tauri-plugin-sensorkit';
 import { entries } from '@/utils';
 import { AVAILABLE_SENSORS, GET_GROUPS } from '@/consts/query-key';
+import { useStore } from '@tanstack/react-store';
+import {
+  sensingSettingsStore,
+  setSensor,
+  setGroupId,
+  setDataName,
+  setAutoSync,
+  setRealTimeShare,
+} from '@/stores/sensing-settings';
 
 interface SensingConfigProps extends React.ComponentProps<'div'> {
   defaultSensor?: string;
-  defaultGroup?: string;
+  defaultGroupId?: number;
   defaultSync?: boolean;
 }
 
 export default function SensingSettings({
   defaultSensor,
-  defaultGroup,
+  defaultGroupId,
   defaultSync = false,
   ...props
 }: SensingConfigProps) {
   const { t } = useTranslation();
+  const state = useStore(sensingSettingsStore);
+
   const { data: sensors } = useQuery({
     queryKey: [AVAILABLE_SENSORS],
     queryFn: getAvailableSensors,
@@ -54,11 +65,38 @@ export default function SensingSettings({
 
   return (
     <Card className={styles.sensing_config} {...props}>
-      <Select items={sensorItems} defaultValue={defaultSensor} placeholder={t('pages.sensing.SelectSensors')} />
-      <Select items={groupItems} defaultValue={defaultGroup} placeholder={t('pages.sensing.SelectGroup')} />
-      <Input placeholder={t('pages.sensing.InputDataName')} className={styles.Input} />
-      <Checkbox label={t('pages.sensing.AutoSyncToCloud')} defaultChecked={defaultSync} disabled />
-      <Checkbox label={t('pages.sensing.RealTimeShare')} defaultChecked={defaultSync} disabled />
+      <Select<string>
+        items={sensorItems}
+        defaultValue={defaultSensor}
+        placeholder={t('pages.sensing.SelectSensors')}
+        onChange={(value) => {
+          setSensor(value);
+        }}
+      />
+      <Select<number>
+        items={groupItems}
+        defaultValue={defaultGroupId}
+        placeholder={t('pages.sensing.SelectGroup')}
+        onChange={(value) => setGroupId(value)}
+      />
+      <Input
+        placeholder={t('pages.sensing.InputDataName')}
+        className={styles.Input}
+        value={state.dataName}
+        onChange={(e) => setDataName(e.target.value)}
+      />
+      <Checkbox
+        label={t('pages.sensing.AutoSyncToCloud')}
+        defaultChecked={defaultSync || state.autoSync}
+        disabled
+        onCheckedChange={(checked) => setAutoSync(checked)}
+      />
+      <Checkbox
+        label={t('pages.sensing.RealTimeShare')}
+        defaultChecked={defaultSync || state.realTimeShare}
+        disabled
+        onCheckedChange={(checked) => setRealTimeShare(checked)}
+      />
     </Card>
   );
 }

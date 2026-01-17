@@ -1,5 +1,5 @@
 import styles from './index.module.scss';
-import { Select as BSelect } from '@base-ui/react/select';
+import { Select as BSelect, type SelectRootProps } from '@base-ui/react/select';
 import { IconSelector, IconCheck } from '@tabler/icons-react';
 
 export interface SelectItem {
@@ -15,20 +15,34 @@ export interface GroupedSelectItem {
 export type SelectItems = SelectItem[] | undefined;
 export type GroupedSelectItems = GroupedSelectItem[] | undefined;
 
-interface SelectProps extends Omit<React.ComponentProps<typeof BSelect.Root>, 'items'> {
+interface SelectProps<T> extends Omit<SelectRootProps<T, false>, 'items' | 'onValueChange' | 'children'> {
   placeholder?: string;
   items: SelectItems | GroupedSelectItems;
   noOptionsMessage?: string;
+  onChange?: (value: T | undefined) => void;
 }
 
-export default function Select({ items, placeholder, noOptionsMessage = 'No options', ...props }: SelectProps) {
+export default function Select<T extends string | number>({
+  items,
+  placeholder,
+  noOptionsMessage = 'No options',
+  onChange,
+  ...props
+}: SelectProps<T>) {
   const isGrouped = Array.isArray(items) && items.length > 0 && 'items' in items[0];
   const flatItems: SelectItem[] = isGrouped
     ? ((items as GroupedSelectItems)?.flatMap((i) => i.items ?? []) ?? [])
     : ((items as SelectItems) ?? []);
 
   return (
-    <BSelect.Root {...props} items={flatItems}>
+    <BSelect.Root<T, false>
+      {...props}
+      items={flatItems}
+      onValueChange={(value) => {
+        onChange?.(value ?? undefined);
+      }}
+      multiple={false}
+    >
       <BSelect.Trigger className={styles.Select}>
         <BSelect.Value className={styles.Value} placeholder={placeholder} />
         <BSelect.Icon className={styles.SelectIcon}>
