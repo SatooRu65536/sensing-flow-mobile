@@ -1,0 +1,73 @@
+.Label {
+  color: $color-text;
+  font-size: $text-size-sm;
+  font-weight: $text-weight-medium;
+  line-height: $text-size-sm * 1.5;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .Checkbox {
+    width: $text-size-lg;
+    height: $text-size-lg;
+
+    border-radius: $radius-sm;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &[data-unchecked] {
+      border: 1px solid $color-sky-200;
+      background-color: transparent;
+    }
+
+    &[data-checked] {
+      background-color: $color-text;
+    }
+
+    &[data-disabled] {
+      background-color: $color-disabled;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-active;
+      outline-offset: 2px;
+    }
+
+    .Indicator {
+      display: flex;
+      color: $color-on-text;
+
+      &[data-unchecked] {
+        display: none;
+      }
+
+      .Icon {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
+    }
+  }
+
+  .Text {
+    position: relative;
+  }
+
+  &:has(.Checkbox[data-disabled]) {
+    font-weight: $text-weight-light;
+
+    .Text::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 0.5px;
+      top: 50%;
+      left: 0;
+      right: 0;
+      background-color: $color-text;
+      border-radius: $radius-sm;
+    }
+  }
+}

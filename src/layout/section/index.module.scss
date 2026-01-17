@@ -2,5 +2,9 @@
   & > h2 {
     font-size: $text-size-lg;
     padding: 10px 0;
+
+    &[data-center='true'] {
+      text-align: center;
+    }
   }
 }

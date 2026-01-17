@@ -2,6 +2,16 @@
   "titles": {
     "BaseSensors": "Base Sensors"
   },
+  "pages": {
+    "sensing": {
+      "Sensing": "Sensing",
+      "SelectSensors": "Select Sensors",
+      "SelectGroup": "Select Group",
+      "InputDataName": "Input Data Name",
+      "AutoSyncToCloud": "Auto Sync to Cloud",
+      "RealTimeShare": "Real-time Share"
+    }
+  },
   "sensors": {
     "accelerometer": "Accelerometer",
     "linear_acceleration": "Linear Acceleration",

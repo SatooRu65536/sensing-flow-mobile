@@ -1,0 +1,222 @@
+$anchor-width: 200px;
+$transform-origin: 80px 20px;
+$available-height: 200px;
+
+.Field {
+  display: flex;
+}
+
+.Label {
+  font-size: $text-size-sm;
+  line-height: $text-size-sm * 1.5;
+  font-weight: $text-weight-normal;
+  color: $color-text;
+}
+
+.Value {
+  color: $color-text;
+  font-weight: $text-weight-medium;
+
+  &[data-placeholder] {
+    color: $color-placeholder;
+  }
+}
+
+.Select {
+  height: $text-size-sm * 2.5;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: $text-size-sm;
+  border: 1px solid $color-sky-200;
+  border-radius: $radius-md;
+  background-color: $color-background;
+  font-family: inherit;
+  font-size: $text-size-sm;
+  line-height: $text-size-sm * 1.5;
+  color: $color-text;
+  user-select: none;
+  -webkit-user-select: none;
+
+  &:active {
+    background-color: $color-background;
+  }
+
+  &[data-popup-open] {
+    background-color: $color-background;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: -1px;
+  }
+}
+
+.SelectIcon {
+  display: flex;
+}
+
+.Positioner {
+  z-index: 1;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.Popup {
+  border-radius: $radius-md;
+  background-color: $color-background;
+  background-clip: padding-box;
+  color: $color-text;
+  min-width: $anchor-width;
+  transform-origin: $transform-origin;
+  transition:
+    transform 150ms,
+    opacity 150ms;
+  outline: 1px solid $color-sky-200;
+  box-shadow:
+    0 10px 15px -3px $color-sky-200,
+    0 4px 6px -4px $color-sky-200;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  &[data-side='none'] {
+    transition: none;
+    transform: none;
+    opacity: 1;
+    min-width: calc($anchor-width + 1rem);
+  }
+}
+
+.List {
+  position: relative;
+  padding-block: 5px;
+  overflow-y: auto;
+  max-height: $available-height;
+  scroll-padding-block: $text-size-sm;
+}
+
+.Arrow {
+  display: flex;
+
+  &[data-side='top'] {
+    bottom: -8px;
+    rotate: 180deg;
+  }
+
+  &[data-side='bottom'] {
+    top: -8px;
+    rotate: 0deg;
+  }
+
+  &[data-side='left'] {
+    right: -13px;
+    rotate: 90deg;
+  }
+
+  &[data-side='right'] {
+    left: -13px;
+    rotate: -90deg;
+  }
+}
+
+.ArrowFill {
+  fill: $color-primary;
+}
+
+.ArrowOuterStroke {
+  fill: $color-primary;
+}
+
+.Item {
+  outline: 0;
+  font-size: $text-size-sm;
+  line-height: $text-size-sm * 1.5;
+  padding: $text-size-sm / 2 $text-size-sm;
+  display: grid;
+  gap: $text-size-sm / 2;
+  align-items: center;
+  grid-template-columns: $text-size-sm 1fr;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+  font-size: $text-size-sm;
+
+  [data-side='none'] & {
+    font-size: $text-size-sm;
+  }
+
+  &[data-highlighted] {
+    z-index: 0;
+    position: relative;
+    color: $color-sky-50;
+  }
+
+  &[data-highlighted]::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    inset-block: 0;
+    inset-inline: $text-size-sm / 2;
+    border-radius: $radius-md;
+    background-color: $color-text;
+  }
+}
+
+.ItemIndicator {
+  grid-column-start: 1;
+}
+
+.ItemIndicatorIcon {
+  display: block;
+  width: $text-size-sm;
+  height: $text-size-sm;
+}
+
+.ItemText {
+  grid-column-start: 2;
+}
+
+.ScrollArrow {
+  width: 100%;
+  background: canvas;
+  z-index: 1;
+  text-align: center;
+  cursor: default;
+  border-radius: $radius-md;
+  height: $text-size-sm;
+  font-size: $text-size-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+  }
+
+  &[data-direction='up'] {
+    &[data-side='none'] {
+      &::before {
+        top: -100%;
+      }
+    }
+  }
+
+  &[data-direction='down'] {
+    bottom: 0;
+
+    &[data-side='none'] {
+      &::before {
+        bottom: -100%;
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.input {
+  height: $text-size-sm * 2.5;
+  width: 100%;
+  padding-inline: $text-size-sm;
+
+  color: $color-text;
+  font-size: $text-size-sm;
+  font-weight: $text-weight-medium;
+
+  border: 1px solid $color-sky-200;
+  border-radius: $radius-md;
+
+  &::placeholder {
+    color: $color-placeholder;
+    font-weight: $text-weight-normal;
+  }
+}
