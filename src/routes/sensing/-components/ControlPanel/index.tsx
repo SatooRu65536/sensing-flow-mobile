@@ -7,24 +7,26 @@ import { useStore } from '@tanstack/react-store';
 import { resetSensingSettings } from '../../-stores/sensing-settings';
 import { valiedSensingSettings, type SensingSettingsSchema } from '../../-stores/valid-sensing-settings';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { startSensors } from '@satooru65536/tauri-plugin-sensorkit';
+import { startSensors, createSensorData, deleteSensorData, stopSensors } from '@satooru65536/tauri-plugin-sensorkit';
 import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
 import { sensorListStore } from '../../-stores/sensor-list';
+import AlertDialog from '@/components/AlertDialog';
+import { useTranslation } from 'react-i18next';
 
 export default function ControlPanel() {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<'ready' | 'running' | 'paused'>('ready');
   const timerRef = useRef<TimerHandle>(null);
   const settings = useStore(valiedSensingSettings);
   const sensors = useStore(sensorListStore);
 
   const queryClient = useQueryClient();
-  const { mutateAsync: startSensing } = useMutation({
+  const { mutateAsync: startSensing, data: sensorData } = useMutation({
     mutationFn: async (settings: SensingSettingsSchema) => {
-      await startSensors({
+      return await createSensorData({
         dataName: settings.dataName,
         groupId: settings.groupId,
-        // TODO: 仮に 200Hz 固定
-        sensors: Object.fromEntries(sensors.map((sensor) => [sensor, 200])),
+        sensors: sensors,
       });
     },
     onSuccess: async () => {
@@ -34,7 +36,12 @@ export default function ControlPanel() {
 
   const start = async () => {
     if (!settings.isValid) return;
-    await startSensing(settings.data);
+
+    // 開始前にセンサーデータを作成
+    if (status === 'ready') await startSensing(settings.data);
+
+    // TODO: 仮に 200Hz 固定
+    await startSensors({ sensors: Object.fromEntries(sensors.map((sensor) => [sensor, 200])) });
     setStatus('running');
     timerRef.current?.start();
   };
@@ -42,17 +49,21 @@ export default function ControlPanel() {
   const pause = () => {
     timerRef.current?.pause();
     setStatus('paused');
+    void stopSensors();
   };
 
   const complete = () => {
     timerRef.current?.reset();
     setStatus('ready');
+    resetSensingSettings();
+    void stopSensors();
   };
 
   const reset = () => {
     timerRef.current?.reset();
     setStatus('ready');
-    resetSensingSettings();
+    void stopSensors();
+    if (sensorData) void deleteSensorData(sensorData.id);
   };
 
   return (
@@ -72,9 +83,21 @@ export default function ControlPanel() {
           <IconCheck />
         </FloatButton>
 
-        <FloatButton onClick={reset} className={styles.reset} disabled={status !== 'paused'}>
-          <IconArrowBack />
-        </FloatButton>
+        <AlertDialog
+          title={t('pages.sensing.Reset')}
+          trigger={
+            <FloatButton disabled={status !== 'paused'}>
+              <IconArrowBack />
+            </FloatButton>
+          }
+          triggerClassName={styles.trigger}
+          danger={true}
+          confirmText={t('pages.sensing.Reset')}
+          cancelText={t('pages.sensing.Cancel')}
+          onConfirm={reset}
+        >
+          <p>{t('pages.sensing.ResetSensingData')}</p>
+        </AlertDialog>
       </div>
     </div>
   );

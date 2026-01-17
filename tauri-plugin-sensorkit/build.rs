@@ -2,6 +2,8 @@ const COMMANDS: &[&str] = &[
     "get_available_sensors",
     "start_sensors",
     "stop_sensors",
+    "create_sensor_data",
+    "delete_sensor_data",
     "get_grouped_sensor_data",
     "create_group",
     "get_group",

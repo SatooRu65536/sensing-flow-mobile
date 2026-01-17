@@ -31,6 +31,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             commands::get_available_sensors,
             commands::start_sensors,
             commands::stop_sensors,
+            commands::create_sensor_data,
+            commands::delete_sensor_data,
             commands::get_grouped_sensor_data,
             commands::create_group,
             commands::get_group,

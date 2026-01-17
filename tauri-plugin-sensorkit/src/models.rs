@@ -16,15 +16,33 @@ pub struct GetAvailableSensorsResponse(pub std::collections::HashMap<String, boo
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct CreateSensorDataRequest {
+    pub group_id: i32,        // センサーグループID
+    pub data_name: String,    // センサーデータ名
+    pub sensors: Vec<String>, // 利用するセンサー名のリスト
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct StartSensorsRequest {
-    pub group_id: i32,                 // センサーグループID
-    pub data_name: String,             // センサーデータ名
     pub sensors: HashMap<String, i32>, // センサー名とFPSのマッピング
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PushSensorLineRequest(pub String);
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateSensorData {
+    pub id: i32,
+    pub name: String,
+    pub folder_path: String,
+    pub synced: bool,
+    pub active_sensors: Vec<String>,
+    pub group_id: i32,
+    pub created_at: NaiveDateTime,
+}
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -39,12 +57,6 @@ pub struct CreateGroupResponse {
     pub name: String,
     pub sorted: i32,
     pub created_at: NaiveDateTime,
-}
-
-#[derive(Debug, Clone, Default, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct DeleteGroupRequest {
-    pub group_id: i32,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

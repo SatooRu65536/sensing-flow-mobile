@@ -4,6 +4,8 @@ import { SensorEventMap, SensorNameMap } from './sensorEvent';
 import {
   CreateGroupRequest,
   CreateGroupResponse,
+  CreateSensorDataRequest,
+  CreateSensorDataResponse,
   GetAvailableSensorsResponse,
   GetGroupedSensorDataResponse,
   GetGroupResponse,
@@ -34,6 +36,14 @@ export async function stopSensors(): Promise<void> {
   await invoke('plugin:sensorkit|stop_sensors');
 }
 
+export async function createSensorData(payload: CreateSensorDataRequest): Promise<CreateSensorDataResponse> {
+  return await invoke<CreateSensorDataResponse>('plugin:sensorkit|create_sensor_data', { payload });
+}
+
+export async function deleteSensorData(id: number): Promise<void> {
+  await invoke('plugin:sensorkit|delete_sensor_data', { id });
+}
+
 export async function listenTo<K extends keyof SensorEventMap>(
   sensorName: K,
   handler: (event: SensorEventMap[K]) => void,
@@ -58,6 +68,6 @@ export async function getGroups(): Promise<GetGroupsResponse> {
   return (await invoke<{ groups: GetGroupsResponse }>('plugin:sensorkit|get_groups')).groups;
 }
 
-export async function deleteGroup(groupId: number): Promise<void> {
-  await invoke('plugin:sensorkit|delete_group', { payload: { groupId } });
+export async function deleteGroup(id: number): Promise<void> {
+  await invoke('plugin:sensorkit|delete_group', { payload: { id } });
 }

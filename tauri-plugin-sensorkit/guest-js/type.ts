@@ -5,9 +5,23 @@ export type GetAvailableSensorsResponse = {
 };
 
 export interface StartSensorsRequest {
+  sensors: { [key in SensorName]?: number };
+}
+
+export interface CreateSensorDataRequest {
   groupId: number;
   dataName: string;
-  sensors: { [key in SensorName]?: number };
+  sensors: SensorName[];
+}
+
+export interface CreateSensorDataResponse {
+  id: number;
+  name: string;
+  folderPath: string;
+  synced: boolean;
+  activeSensors: SensorName[];
+  groupId: number;
+  createdAt: string;
 }
 
 export interface SensorData {

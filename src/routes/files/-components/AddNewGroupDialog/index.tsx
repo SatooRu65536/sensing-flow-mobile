@@ -35,7 +35,11 @@ export default function AddNewGroupDialog() {
 
   return (
     <AlertDialog
-      trigger={<IconPlus className={styles.icon} />}
+      trigger={
+        <div className={styles.tigger}>
+          <IconPlus className={styles.icon} />
+        </div>
+      }
       title={t('components.AddNewGroupDialog.title')}
       cancelText={t('components.AddNewGroupDialog.cancel')}
       confirmText={t('components.AddNewGroupDialog.confirm')}

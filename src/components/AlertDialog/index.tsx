@@ -2,10 +2,12 @@ import styles from './index.module.scss';
 import { AlertDialog as BAlertDialog, type AlertDialogRootProps } from '@base-ui/react/alert-dialog';
 import type { BaseUIEvent } from 'node_modules/@base-ui/react/esm/utils/types';
 import { useState, type ReactElement, type ReactNode } from 'react';
+import classnames from 'classnames';
 
 interface AlertDialogProps extends Omit<AlertDialogRootProps, 'children'> {
   title: string;
   trigger: ReactElement;
+  triggerClassName?: string;
   children: ReactNode;
   cancelText?: string;
   confirmText?: string;
@@ -18,6 +20,7 @@ interface AlertDialogProps extends Omit<AlertDialogRootProps, 'children'> {
 export default function AlertDialog({
   title,
   trigger,
+  triggerClassName,
   children,
   cancelText = 'Cancel',
   confirmText = 'Confirm',
@@ -43,9 +46,7 @@ export default function AlertDialog({
 
   return (
     <BAlertDialog.Root open={open} onOpenChange={setOpen} {...props}>
-      <BAlertDialog.Trigger className={styles.Trigger} data-danger={danger}>
-        {trigger}
-      </BAlertDialog.Trigger>
+      <BAlertDialog.Trigger className={classnames(styles.Trigger, triggerClassName)}>{trigger}</BAlertDialog.Trigger>
 
       <BAlertDialog.Portal>
         <BAlertDialog.Backdrop className={styles.Backdrop} />

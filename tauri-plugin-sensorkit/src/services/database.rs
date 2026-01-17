@@ -87,6 +87,28 @@ impl DbService {
         Ok(model)
     }
 
+    pub async fn delete_sensor_data(
+        &self,
+        storage_service: &StorageService,
+        data_id: i32,
+    ) -> Result<()> {
+        // センサーデータを取得
+        let record = sensor_data::Entity::find_by_id(data_id)
+            .one(&self.db)
+            .await?
+            .ok_or_else(|| crate::Error::NotFound("Sensor data not found".into()))?;
+
+        // センサーデータを削除
+        sensor_data::Entity::delete_by_id(data_id)
+            .exec(&self.db)
+            .await?;
+
+        // ストレージ上のデータを削除
+        storage_service.delete_folder(&record.folder_path)?;
+
+        Ok(())
+    }
+
     pub async fn delete_sensor_group(
         &self,
         storage_service: &StorageService,

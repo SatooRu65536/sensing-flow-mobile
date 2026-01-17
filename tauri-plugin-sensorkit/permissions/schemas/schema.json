@@ -307,6 +307,18 @@
           "markdownDescription": "Denies the create_group command without any pre-configured scope."
         },
         {
+          "description": "Enables the create_sensor_data command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-create-sensor-data",
+          "markdownDescription": "Enables the create_sensor_data command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the create_sensor_data command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-create-sensor-data",
+          "markdownDescription": "Denies the create_sensor_data command without any pre-configured scope."
+        },
+        {
           "description": "Enables the delete_group command without any pre-configured scope.",
           "type": "string",
           "const": "allow-delete-group",
@@ -317,6 +329,18 @@
           "type": "string",
           "const": "deny-delete-group",
           "markdownDescription": "Denies the delete_group command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the delete_sensor_data command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-delete-sensor-data",
+          "markdownDescription": "Enables the delete_sensor_data command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the delete_sensor_data command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-delete-sensor-data",
+          "markdownDescription": "Denies the delete_sensor_data command without any pre-configured scope."
         },
         {
           "description": "Enables the get_available_sensors command without any pre-configured scope.",
@@ -415,10 +439,10 @@
           "markdownDescription": "Denies the unregister_listener command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`",
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-create-sensor-data`\n- `allow-delete-sensor-data`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-create-sensor-data`\n- `allow-delete-sensor-data`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`"
         }
       ]
     }

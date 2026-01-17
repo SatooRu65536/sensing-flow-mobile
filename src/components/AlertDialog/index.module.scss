@@ -1,22 +1,5 @@
 .Trigger {
-  width: 100%;
-
-  color: $color-on-primary;
-  background-color: $color-primary;
-  font-size: $text-size-base;
-  font-weight: $text-weight-medium;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: $radius-md;
-  border: none;
-
-  &[data-danger='true'] {
-    color: $color-on-danger;
-    background-color: $color-danger;
-  }
+  all: unset;
 }
 
 .Backdrop {

@@ -32,7 +32,11 @@ export default function DeleteGroupDialog({ groupId, groupName }: DeleteGroupDia
 
   return (
     <AlertDialog
-      trigger={<IconTrash className={styles.icon} />}
+      trigger={
+        <div className={styles.trigger}>
+          <IconTrash className={styles.icon} />
+        </div>
+      }
       title={t('components.DeleteGroupDialog.title')}
       cancelText={t('components.DeleteGroupDialog.cancel')}
       confirmText={t('components.DeleteGroupDialog.confirm')}

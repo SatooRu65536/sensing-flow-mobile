@@ -14,7 +14,10 @@
       "AutoSyncToCloud": "Auto Sync to Cloud",
       "RealTimeShare": "Real-time Share",
       "Sensors": "Sensors",
-      "SensorSets": "Sensor Sets"
+      "SensorSets": "Sensor Sets",
+      "Reset": "Reset",
+      "Cancel": "Cancel",
+      "ResetSensingData": "Reset Sensing Data."
     }
   },
   "sensors": {

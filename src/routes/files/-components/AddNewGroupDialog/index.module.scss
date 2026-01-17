@@ -1,10 +1,26 @@
-.icon {
-  $size: 30px;
-  width: $size;
-  height: $size;
+.tigger {
+  width: 100%;
 
-  font-size: $text-size-lg;
-  line-height: $text-size-lg * 2.5;
+  color: $color-on-primary;
+  background-color: $color-primary;
+  font-size: $text-size-base;
+  font-weight: $text-weight-medium;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: $radius-md;
+  border: none;
+
+  .icon {
+    $size: 30px;
+    width: $size;
+    height: $size;
+
+    font-size: $text-size-lg;
+    line-height: $text-size-lg * 2.5;
+  }
 }
 
 .error {

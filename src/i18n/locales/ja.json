@@ -14,7 +14,10 @@
       "AutoSyncToCloud": "クラウドに自動同期",
       "RealTimeShare": "リアルタイム共有",
       "Sensors": "センサー",
-      "SensorSets": "センサーセット"
+      "SensorSets": "センサーセット",
+      "Reset": "リセット",
+      "Cancel": "キャンセル",
+      "ResetSensingData": "センシングデータをリセットします。"
     }
   },
   "sensors": {

@@ -1,8 +1,8 @@
 use crate::models::{GetAvailableSensorsResponse, StartSensorsRequest};
 use crate::services::database::GroupedSensorFiles;
 use crate::{
-    CreateGroupRequest, CreateGroupResponse, DeleteGroupRequest, GetGroupResponse,
-    GetGroupsResponse, SensorkitExt,
+    CreateGroupRequest, CreateGroupResponse, CreateSensorData, CreateSensorDataRequest,
+    GetGroupResponse, GetGroupsResponse, SensorkitExt,
 };
 use std::sync::Arc;
 use tauri::{command, AppHandle, Runtime};
@@ -19,6 +19,20 @@ pub(crate) async fn start_sensors<R: Runtime>(
     app: AppHandle<R>,
     payload: StartSensorsRequest,
 ) -> crate::Result<()> {
+    app.sensorkit().start_sensors(payload.clone())
+}
+
+#[command]
+pub(crate) async fn stop_sensors<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
+    app.sensorkit().sensor_batch_service.stop();
+    app.sensorkit().stop_sensors()
+}
+
+#[command]
+pub(crate) async fn create_sensor_data<R: Runtime>(
+    app: AppHandle<R>,
+    payload: CreateSensorDataRequest,
+) -> crate::Result<CreateSensorData> {
     let app_for_callback = app.clone();
     let folder_path = app_for_callback.sensorkit().storage_service.set_folder();
 
@@ -29,7 +43,7 @@ pub(crate) async fn start_sensors<R: Runtime>(
             .write(sensor, data, header);
     });
 
-    let _ = app
+    let sensor_data = app
         .sensorkit()
         .db_service
         .create_sensor_data(
@@ -37,17 +51,34 @@ pub(crate) async fn start_sensors<R: Runtime>(
             payload.data_name.clone(),
             folder_path.0,
             false,
-            payload.sensors.keys().cloned().collect::<Vec<String>>(),
+            payload.sensors,
         )
-        .await?;
+        .await
+        .map(|record| CreateSensorData {
+            id: record.id,
+            name: record.name,
+            folder_path: record.folder_path,
+            synced: record.synced,
+            active_sensors: record.active_sensors.0,
+            group_id: record.group_id,
+            created_at: record.created_at,
+        })?;
     app.sensorkit().sensor_batch_service.start(callback);
-    app.sensorkit().start_sensors(payload.clone())
+
+    Ok(sensor_data)
 }
 
 #[command]
-pub(crate) async fn stop_sensors<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
-    app.sensorkit().sensor_batch_service.stop();
-    app.sensorkit().stop_sensors()
+pub(crate) async fn delete_sensor_data<R: Runtime>(
+    app: AppHandle<R>,
+    id: i32,
+) -> crate::Result<()> {
+    {
+        app.sensorkit()
+            .db_service
+            .delete_sensor_data(&app.sensorkit().storage_service, id)
+            .await
+    }
 }
 
 #[command]
@@ -96,12 +127,9 @@ pub(crate) async fn get_groups<R: Runtime>(app: AppHandle<R>) -> crate::Result<G
 }
 
 #[command]
-pub(crate) async fn delete_group<R: Runtime>(
-    app: AppHandle<R>,
-    payload: DeleteGroupRequest,
-) -> crate::Result<()> {
+pub(crate) async fn delete_group<R: Runtime>(app: AppHandle<R>, id: i32) -> crate::Result<()> {
     app.sensorkit()
         .db_service
-        .delete_sensor_group(&app.sensorkit().storage_service, payload.group_id)
+        .delete_sensor_group(&app.sensorkit().storage_service, id)
         .await
 }

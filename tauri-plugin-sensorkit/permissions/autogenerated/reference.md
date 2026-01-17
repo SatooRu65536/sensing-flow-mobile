@@ -9,6 +9,8 @@ Default permissions for the plugin
 - `allow-stop-sensors`
 - `allow-registerListener`
 - `allow-unregister-listener`
+- `allow-create-sensor-data`
+- `allow-delete-sensor-data`
 - `allow-get-grouped-sensor-data`
 - `allow-create-group`
 - `allow-get-group`
@@ -53,6 +55,32 @@ Denies the create_group command without any pre-configured scope.
 <tr>
 <td>
 
+`sensorkit:allow-create-sensor-data`
+
+</td>
+<td>
+
+Enables the create_sensor_data command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-create-sensor-data`
+
+</td>
+<td>
+
+Denies the create_sensor_data command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `sensorkit:allow-delete-group`
 
 </td>
@@ -72,6 +100,32 @@ Enables the delete_group command without any pre-configured scope.
 <td>
 
 Denies the delete_group command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-delete-sensor-data`
+
+</td>
+<td>
+
+Enables the delete_sensor_data command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-delete-sensor-data`
+
+</td>
+<td>
+
+Denies the delete_sensor_data command without any pre-configured scope.
 
 </td>
 </tr>
