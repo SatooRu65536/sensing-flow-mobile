@@ -52,7 +52,7 @@ impl DbService {
             sensor_groups::Entity::find()
                 .find_with_related(sensor_data::Entity)
                 .order_by_asc(sensor_groups::Column::Sorted)
-                .order_by_desc(sensor_data::Column::CreatedAt)
+                .order_by_asc(sensor_data::Column::CreatedAt)
                 .all(&self.db)
                 .await?;
 
