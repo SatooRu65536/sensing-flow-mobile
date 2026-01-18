@@ -14,4 +14,9 @@
     color: $color-placeholder;
     font-weight: $text-weight-normal;
   }
+
+  &:disabled {
+    color: $color-on-disabled;
+    background-color: $color-disabled;
+  }
 }

@@ -9,15 +9,6 @@ $available-height: 200px;
   color: $color-text;
 }
 
-.Value {
-  color: $color-text;
-  font-weight: $text-weight-medium;
-
-  &[data-placeholder] {
-    color: $color-placeholder;
-  }
-}
-
 .Select {
   height: $text-size-sm * 2.5;
   width: 100%;
@@ -37,12 +28,6 @@ $available-height: 200px;
     background-color: $color-background;
   }
 
-  &:disabled {
-    color: $color-sky-300;
-    background-color: $color-disabled;
-    cursor: not-allowed;
-  }
-
   &[data-popup-open] {
     background-color: $color-background;
   }
@@ -50,6 +35,23 @@ $available-height: 200px;
   &:focus-visible {
     outline: 2px solid $color-primary;
     outline-offset: -1px;
+  }
+
+  .Value {
+    color: $color-text;
+    font-weight: $text-weight-medium;
+
+    &[data-placeholder] {
+      color: $color-placeholder;
+    }
+  }
+
+  &:disabled {
+    background-color: $color-disabled;
+
+    .Value {
+      color: $color-on-disabled;
+    }
   }
 }
 

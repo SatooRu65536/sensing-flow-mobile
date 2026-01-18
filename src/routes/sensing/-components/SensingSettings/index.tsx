@@ -81,15 +81,14 @@ export default function SensingSettings({
       />
       <Select<number>
         items={groupItems}
-        defaultValue={defaultGroupId}
         placeholder={t('pages.sensing.SelectGroup')}
         onChange={(value) => setGroupId(value)}
+        defaultValue={defaultGroupId}
         value={settings.groupId}
         disabled={state !== 'ready'}
       />
       <Input
         placeholder={t('pages.sensing.InputDataName')}
-        className={styles.Input}
         onChange={(e) => setDataName(e.target.value)}
         value={settings.dataName}
         disabled={state !== 'ready'}
@@ -98,15 +97,16 @@ export default function SensingSettings({
         label={t('pages.sensing.AutoSyncToCloud')}
         defaultChecked={defaultSync}
         onCheckedChange={(checked) => setAutoSync(checked)}
-        checked={settings.autoSync}
-        disabled={state !== 'ready'}
+        // disabled={state !== 'ready'} // TODO: 未実装
+        disabled={true}
       />
       <Checkbox
         label={t('pages.sensing.RealTimeShare')}
         defaultChecked={defaultRealTime}
         onCheckedChange={(checked) => setRealTimeShare(checked)}
         checked={settings.realTimeShare}
-        disabled={state !== 'ready'}
+        // disabled={state !== 'ready'} // TODO: 未実装
+        disabled={true}
       />
     </Card>
   );
