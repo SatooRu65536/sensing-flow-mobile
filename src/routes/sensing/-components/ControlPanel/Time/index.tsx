@@ -1,6 +1,14 @@
 import styles from './index.module.scss';
-import { useRef, useImperativeHandle, useState } from 'react';
+import { useEffect, useRef, useImperativeHandle } from 'react';
 import classnames from 'classnames';
+import { Store } from '@tanstack/store';
+import { useStore } from '@tanstack/react-store';
+
+const timerStore = new Store({
+  elapsedTime: 0,
+  isRunning: false,
+  startTime: 0,
+});
 
 export interface TimerHandle {
   start: () => void;
@@ -15,44 +23,59 @@ interface TimerProps {
 }
 
 export default function Timer({ ref, className }: TimerProps) {
-  const startTimeRef = useRef<number | null>(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const { elapsedTime, isRunning } = useStore(timerStore);
   const timerIdRef = useRef<number | null>(null);
 
   const start = () => {
-    if (timerIdRef.current) return;
+    if (timerStore.state.isRunning) return;
 
-    startTimeRef.current = Date.now() - elapsedTime;
-
-    timerIdRef.current = window.setInterval(() => {
-      setElapsedTime(Date.now() - (startTimeRef.current as number));
-    }, 100);
+    const now = Date.now();
+    timerStore.setState((prev) => ({
+      ...prev,
+      isRunning: true,
+      startTime: now - prev.elapsedTime,
+    }));
   };
 
   const pause = () => {
-    if (timerIdRef.current) {
-      window.clearInterval(timerIdRef.current);
-      timerIdRef.current = null;
-    }
+    timerStore.setState((prev) => ({ ...prev, isRunning: false }));
+    if (timerIdRef.current) clearInterval(timerIdRef.current);
   };
 
   const reset = () => {
     pause();
-    setElapsedTime(0);
+    timerStore.setState({ elapsedTime: 0, isRunning: false, startTime: 0 });
   };
+
+  useEffect(() => {
+    if (isRunning) {
+      timerIdRef.current = window.setInterval(() => {
+        timerStore.setState((prev) => ({
+          ...prev,
+          elapsedTime: Date.now() - prev.startTime,
+        }));
+      }, 100);
+    }
+
+    return () => {
+      if (timerIdRef.current) {
+        clearInterval(timerIdRef.current);
+        timerIdRef.current = null;
+      }
+    };
+  }, [isRunning]);
 
   useImperativeHandle(ref, () => ({
     start,
     pause,
     reset,
-    getTime: () => elapsedTime,
+    getTime: () => timerStore.state.elapsedTime,
   }));
 
   const formatTime = (ms: number) => {
     const s = Math.floor(ms / 1000);
     const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    return `${m.toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
   };
 
   return <div className={classnames(styles.timer, className)}>{formatTime(elapsedTime)}</div>;
