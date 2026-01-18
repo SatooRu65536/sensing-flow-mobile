@@ -2,10 +2,6 @@ $anchor-width: 200px;
 $transform-origin: 80px 20px;
 $available-height: 200px;
 
-.Field {
-  display: flex;
-}
-
 .Label {
   font-size: $text-size-sm;
   line-height: $text-size-sm * 1.5;
@@ -39,6 +35,12 @@ $available-height: 200px;
 
   &:active {
     background-color: $color-background;
+  }
+
+  &:disabled {
+    color: $color-sky-300;
+    background-color: $color-disabled;
+    cursor: not-allowed;
   }
 
   &[data-popup-open] {

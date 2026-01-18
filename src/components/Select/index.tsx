@@ -26,6 +26,7 @@ export default function Select<T extends string | number>({
   items,
   placeholder,
   noOptionsMessage = 'No options',
+  disabled,
   onChange,
   ...props
 }: SelectProps<T>) {
@@ -42,8 +43,9 @@ export default function Select<T extends string | number>({
         onChange?.(value ?? undefined);
       }}
       multiple={false}
+      disabled={disabled}
     >
-      <BSelect.Trigger className={styles.Select}>
+      <BSelect.Trigger className={styles.Select} disabled={disabled}>
         <BSelect.Value className={styles.Value} placeholder={placeholder} />
         <BSelect.Icon className={styles.SelectIcon}>
           <IconSelector />

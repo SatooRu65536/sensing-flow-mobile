@@ -17,6 +17,7 @@ import {
   setAutoSync,
   setRealTimeShare,
 } from '@/routes/sensing/-stores/sensing-settings';
+import { sensingStateStore } from '@/routes/sensing/-stores/sensing-state';
 
 interface SensingConfigProps extends React.ComponentProps<'div'> {
   defaultSensor?: SensorName | number;
@@ -33,7 +34,8 @@ export default function SensingSettings({
   ...props
 }: SensingConfigProps) {
   const { t } = useTranslation();
-  const state = useStore(sensingSettingsStore);
+  const settings = useStore(sensingSettingsStore);
+  const state = useStore(sensingStateStore);
 
   const { data: sensors } = useQuery({
     queryKey: [AVAILABLE_SENSORS],
@@ -74,34 +76,37 @@ export default function SensingSettings({
         onChange={(value) => {
           setSensor(value);
         }}
-        value={state.sensor}
+        value={settings.sensor}
+        disabled={state !== 'ready'}
       />
       <Select<number>
         items={groupItems}
         defaultValue={defaultGroupId}
         placeholder={t('pages.sensing.SelectGroup')}
         onChange={(value) => setGroupId(value)}
-        value={state.groupId}
+        value={settings.groupId}
+        disabled={state !== 'ready'}
       />
       <Input
         placeholder={t('pages.sensing.InputDataName')}
         className={styles.Input}
         onChange={(e) => setDataName(e.target.value)}
-        value={state.dataName}
+        value={settings.dataName}
+        disabled={state !== 'ready'}
       />
       <Checkbox
         label={t('pages.sensing.AutoSyncToCloud')}
         defaultChecked={defaultSync}
-        disabled
         onCheckedChange={(checked) => setAutoSync(checked)}
-        checked={state.autoSync}
+        checked={settings.autoSync}
+        disabled={state !== 'ready'}
       />
       <Checkbox
         label={t('pages.sensing.RealTimeShare')}
         defaultChecked={defaultRealTime}
-        disabled
         onCheckedChange={(checked) => setRealTimeShare(checked)}
-        checked={state.realTimeShare}
+        checked={settings.realTimeShare}
+        disabled={state !== 'ready'}
       />
     </Card>
   );

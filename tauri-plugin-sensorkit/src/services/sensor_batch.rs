@@ -59,7 +59,6 @@ impl SensorBatchService {
     }
 
     pub fn push<R: Runtime>(&self, app_handle: &AppHandle<R>, payload: String) {
-        println!("SensorKit: Received payload: {}", payload);
         if let Ok(mut data) = serde_json::from_str::<serde_json::Value>(&payload) {
             let sensor_name = data["sensor"].as_str().unwrap_or("unknown").to_string();
 

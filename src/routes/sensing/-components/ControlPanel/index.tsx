@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import styles from './index.module.scss';
 import Timer, { type TimerHandle } from './Time';
 import { IconPlayerStopFilled, IconPlayerPlayFilled, IconCheck, IconArrowBack } from '@tabler/icons-react';
@@ -12,10 +12,11 @@ import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
 import { sensorListStore } from '../../-stores/sensor-list';
 import AlertDialog from '@/components/AlertDialog';
 import { useTranslation } from 'react-i18next';
+import { sensingStateStore, setState } from '@/routes/sensing/-stores/sensing-state';
 
 export default function ControlPanel() {
   const { t } = useTranslation();
-  const [status, setStatus] = useState<'ready' | 'running' | 'paused'>('ready');
+  const state = useStore(sensingStateStore);
   const timerRef = useRef<TimerHandle>(null);
   const settings = useStore(valiedSensingSettings);
   const sensors = useStore(sensorListStore);
@@ -38,30 +39,30 @@ export default function ControlPanel() {
     if (!settings.isValid) return;
 
     // 開始前にセンサーデータを作成
-    if (status === 'ready') await startSensing(settings.data);
+    if (state === 'ready') await startSensing(settings.data);
 
     // TODO: 仮に 200Hz 固定
     await startSensors({ sensors: Object.fromEntries(sensors.map((sensor) => [sensor, 200])) });
-    setStatus('running');
+    setState('running');
     timerRef.current?.start();
   };
 
   const pause = () => {
     timerRef.current?.pause();
-    setStatus('paused');
+    setState('paused');
     void stopSensors();
   };
 
   const complete = () => {
     timerRef.current?.reset();
-    setStatus('ready');
+    setState('ready');
     resetSensingSettings();
     void stopSensors();
   };
 
   const reset = () => {
     timerRef.current?.reset();
-    setStatus('ready');
+    setState('ready');
     void stopSensors();
     if (sensorData) void deleteSensorData(sensorData.id);
   };
@@ -71,22 +72,22 @@ export default function ControlPanel() {
       <Timer ref={timerRef} className={styles.timer} />
 
       <div className={styles.buttons}>
-        <FloatButton onClick={pause} disabled={status !== 'running'}>
+        <FloatButton onClick={pause} disabled={state !== 'running'}>
           <IconPlayerStopFilled />
         </FloatButton>
 
-        <FloatButton onClick={() => void start()} disabled={status === 'running' || !settings.isValid}>
+        <FloatButton onClick={() => void start()} disabled={state === 'running' || !settings.isValid}>
           <IconPlayerPlayFilled />
         </FloatButton>
 
-        <FloatButton onClick={complete} disabled={status === 'ready'}>
+        <FloatButton onClick={complete} disabled={state === 'ready'}>
           <IconCheck />
         </FloatButton>
 
         <AlertDialog
           title={t('pages.sensing.Reset')}
           trigger={
-            <FloatButton disabled={status !== 'paused'}>
+            <FloatButton disabled={state !== 'paused'}>
               <IconArrowBack />
             </FloatButton>
           }
