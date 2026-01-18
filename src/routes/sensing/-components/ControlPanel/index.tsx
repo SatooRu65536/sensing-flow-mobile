@@ -12,7 +12,7 @@ import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
 import { sensorListStore } from '../../-stores/sensor-list';
 import AlertDialog from '@/components/AlertDialog';
 import { useTranslation } from 'react-i18next';
-import { sensingStateStore, setState } from '@/routes/sensing/-stores/sensing-state';
+import { sensingStateStore, setState } from '@/stores/sensing-state';
 import { setSensorData } from '../../-stores/sensor-data';
 
 export default function ControlPanel() {
