@@ -16,6 +16,7 @@ Default permissions for the plugin
 - `allow-get-group`
 - `allow-get-groups`
 - `allow-delete-group`
+- `allow-sync-sensor-data`
 
 ## Permission Table
 
@@ -308,6 +309,32 @@ Enables the stop_sensors command without any pre-configured scope.
 <td>
 
 Denies the stop_sensors command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-sync-sensor-data`
+
+</td>
+<td>
+
+Enables the sync_sensor_data command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-sync-sensor-data`
+
+</td>
+<td>
+
+Denies the sync_sensor_data command without any pre-configured scope.
 
 </td>
 </tr>

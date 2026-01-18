@@ -9,11 +9,16 @@ const COMMANDS: &[&str] = &[
     "get_group",
     "get_groups",
     "delete_group",
+    "sync_sensor_data",
     "registerListener",
     "unregister_listener",
 ];
 
 fn main() {
+    let api_url =
+        std::env::var("API_URL").expect("API_URL environment variable is required during build");
+    println!("cargo:rustc-env=API_URL={api_url}");
+
     tauri_plugin::Builder::new(COMMANDS)
         .android_path("android")
         .ios_path("ios")

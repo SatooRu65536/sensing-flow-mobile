@@ -133,3 +133,13 @@ pub(crate) async fn delete_group<R: Runtime>(app: AppHandle<R>, id: i32) -> crat
         .delete_sensor_group(&app.sensorkit().storage_service, id)
         .await
 }
+
+#[command]
+pub(crate) async fn sync_sensor_data<R: Runtime>(app: AppHandle<R>, id: i32) -> crate::Result<()> {
+    let sensor_data = app.sensorkit().db_service.get_sensor_data(id).await?;
+
+    app.sensorkit()
+        .cloud_sync_service
+        .upload_sensor_data(sensor_data.folder_path, sensor_data.active_sensors.0)
+        .await
+}

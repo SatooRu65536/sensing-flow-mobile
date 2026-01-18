@@ -87,6 +87,33 @@ impl DbService {
         Ok(model)
     }
 
+    pub async fn create_sensor_data(
+        &self,
+        group_id: i32,
+        name: String,
+        folder_path: String,
+        synced: bool,
+        active_sensors: Vec<String>,
+    ) -> Result<sensor_data::Model> {
+        let record = sensor_data::ActiveModel {
+            group_id: Set(group_id),
+            name: Set(name),
+            folder_path: Set(folder_path),
+            synced: Set(synced),
+            active_sensors: Set(ActiveSensors(active_sensors)),
+            ..Default::default()
+        }
+        .insert(&self.db)
+        .await?;
+
+        Ok(record)
+    }
+
+    pub async fn get_sensor_data(&self, id: i32) -> Result<sensor_data::Model> {
+        let record = sensor_data::Entity::find_by_id(id).one(&self.db).await?;
+        record.ok_or_else(|| crate::Error::NotFound("Sensor data not found".into()))
+    }
+
     pub async fn delete_sensor_data(
         &self,
         storage_service: &StorageService,
@@ -153,27 +180,5 @@ impl DbService {
             .await?;
 
         Ok(records)
-    }
-
-    pub async fn create_sensor_data(
-        &self,
-        group_id: i32,
-        name: String,
-        folder_path: String,
-        synced: bool,
-        active_sensors: Vec<String>,
-    ) -> Result<sensor_data::Model> {
-        let record = sensor_data::ActiveModel {
-            group_id: Set(group_id),
-            name: Set(name),
-            folder_path: Set(folder_path),
-            synced: Set(synced),
-            active_sensors: Set(ActiveSensors(active_sensors)),
-            ..Default::default()
-        }
-        .insert(&self.db)
-        .await?;
-
-        Ok(record)
     }
 }

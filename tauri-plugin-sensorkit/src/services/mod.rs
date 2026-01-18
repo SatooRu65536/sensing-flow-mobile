@@ -1,3 +1,6 @@
+pub mod cloud_sync;
+pub use cloud_sync::CloudSyncService;
+
 pub mod storage;
 pub use storage::StorageService;
 

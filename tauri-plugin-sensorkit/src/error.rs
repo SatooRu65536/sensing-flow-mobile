@@ -26,6 +26,12 @@ pub enum Error {
 
     #[error("SQL error: {0}")]
     SqlError(String),
+
+    #[error("HTTP error: {0}")]
+    HttpError(String),
+
+    #[error("Configuration error: {0}")]
+    ConfigurationError(String),
 }
 
 impl Serialize for Error {

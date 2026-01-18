@@ -1,4 +1,4 @@
-use crate::services::{DbService, SensorBatchService, StorageService};
+use crate::services::{CloudSyncService, DbService, SensorBatchService, StorageService};
 use crate::{models::*, SensorkitExt};
 use serde::de::DeserializeOwned;
 use std::fs;
@@ -25,6 +25,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
         fs::create_dir_all(&base_dir).map_err(|_| crate::Error::CreateDirFailed)?;
     }
 
+    let cloud_sync_service = CloudSyncService::new();
     let sensor_batch_service = SensorBatchService::new();
     let storage_service = StorageService::new(&base_dir)?;
     let db_service = block_on(async {
@@ -45,6 +46,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
             db_service,
             sensor_batch_service,
             storage_service,
+            cloud_sync_service,
         })
     }
 
@@ -65,6 +67,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
             db_service,
             sensor_batch_service,
             storage_service,
+            cloud_sync_service,
         })
     }
 
@@ -96,6 +99,7 @@ pub struct Sensorkit<R: Runtime> {
     pub db_service: DbService,
     pub sensor_batch_service: SensorBatchService,
     pub storage_service: StorageService,
+    pub cloud_sync_service: CloudSyncService,
 }
 
 impl<R: Runtime> Sensorkit<R> {
