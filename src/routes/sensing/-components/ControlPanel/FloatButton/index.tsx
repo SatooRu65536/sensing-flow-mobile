@@ -6,10 +6,15 @@ interface FloatButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   as?: React.ElementType;
 }
 
-export default function FloatButton({ children, className, as = 'button', ...props }: FloatButtonProps) {
+export default function FloatButton({ children, className, disabled, as = 'button', ...props }: FloatButtonProps) {
   const Component = as;
   return (
-    <Component className={classnames(styles.float_button, className)} {...props}>
+    <Component
+      className={classnames(styles.float_button, className)}
+      data-disabled={disabled}
+      disabled={disabled}
+      {...props}
+    >
       {children}
     </Component>
   );

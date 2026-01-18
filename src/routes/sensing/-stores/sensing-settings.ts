@@ -2,6 +2,7 @@ import { Store } from '@tanstack/store';
 import { type SensorName } from '@satooru65536/tauri-plugin-sensorkit';
 
 export interface SensingSettingsState {
+  save: boolean;
   sensor: SensorName | number | null;
   groupId: number | null;
   dataName: string;
@@ -10,6 +11,7 @@ export interface SensingSettingsState {
 }
 
 const initValue: SensingSettingsState = {
+  save: true,
   sensor: null,
   groupId: null,
   dataName: '',
@@ -18,6 +20,13 @@ const initValue: SensingSettingsState = {
 };
 
 export const sensingSettingsStore = new Store<SensingSettingsState>(initValue);
+
+export const setSave = (save: boolean) => {
+  sensingSettingsStore.setState((state) => ({
+    ...state,
+    save,
+  }));
+};
 
 export const setSensor = (sensor: SensorName | number | null) => {
   sensingSettingsStore.setState((state) => ({
@@ -55,5 +64,5 @@ export const setRealTimeShare = (realTimeShare: boolean) => {
 };
 
 export const resetSensingSettings = () => {
-  sensingSettingsStore.setState(initValue);
+  sensingSettingsStore.setState((state) => ({ ...initValue, save: state.save }));
 };

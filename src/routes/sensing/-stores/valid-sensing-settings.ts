@@ -2,13 +2,20 @@ import { Store } from '@tanstack/store';
 import { z } from 'zod';
 import { sensingSettingsStore } from './sensing-settings';
 
-export const sensingSettingsSchema = z.object({
-  sensor: z.number().or(z.string().min(1, 'センサーを選択してください')),
-  groupId: z.number().int().positive('グループを選択してください'),
-  dataName: z.string().min(1, 'データ名を入力してください'),
-  autoSync: z.boolean(),
-  realTimeShare: z.boolean(),
-});
+export const sensingSettingsSchema = z
+  .object({
+    save: z.literal(true),
+    sensor: z.number().or(z.string().min(1, 'センサーを選択してください')),
+    groupId: z.number().int().positive('グループを選択してください'),
+    dataName: z.string().min(1, 'データ名を入力してください'),
+    autoSync: z.boolean(),
+    realTimeShare: z.boolean(),
+  })
+  .or(
+    z.object({
+      save: z.literal(false),
+    }),
+  );
 export type SensingSettingsSchema = z.infer<typeof sensingSettingsSchema>;
 
 interface ValidationStateError {

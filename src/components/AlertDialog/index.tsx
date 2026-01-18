@@ -12,6 +12,7 @@ interface AlertDialogProps extends Omit<AlertDialogRootProps, 'children'> {
   cancelText?: string;
   confirmText?: string;
   danger?: boolean;
+  disabled?: boolean;
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
   isLoading?: boolean;
@@ -25,6 +26,7 @@ export default function AlertDialog({
   cancelText = 'Cancel',
   confirmText = 'Confirm',
   danger = false,
+  disabled = false,
   onConfirm,
   onCancel,
   isLoading = false,
@@ -46,7 +48,9 @@ export default function AlertDialog({
 
   return (
     <BAlertDialog.Root open={open} onOpenChange={setOpen} {...props}>
-      <BAlertDialog.Trigger className={classnames(styles.Trigger, triggerClassName)}>{trigger}</BAlertDialog.Trigger>
+      <BAlertDialog.Trigger className={classnames(styles.Trigger, triggerClassName)} disabled={disabled}>
+        {trigger}
+      </BAlertDialog.Trigger>
 
       <BAlertDialog.Portal>
         <BAlertDialog.Backdrop className={styles.Backdrop} />

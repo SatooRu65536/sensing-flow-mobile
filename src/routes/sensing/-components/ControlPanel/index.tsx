@@ -25,6 +25,8 @@ export default function ControlPanel() {
   const queryClient = useQueryClient();
   const { mutateAsync: startSensing, data: sensorData } = useMutation({
     mutationFn: async (settings: SensingSettingsSchema) => {
+      if (!settings.save) return; // 保存しない場合
+
       return await createSensorData({
         dataName: settings.dataName,
         groupId: settings.groupId,
@@ -90,12 +92,13 @@ export default function ControlPanel() {
         <AlertDialog
           title={t('pages.sensing.Reset')}
           trigger={
-            <FloatButton disabled={state !== 'paused'} as="div">
+            <FloatButton as="div" disabled={state !== 'paused'}>
               <IconArrowBack />
             </FloatButton>
           }
           triggerClassName={styles.trigger}
           danger
+          disabled={state !== 'paused'}
           confirmText={t('pages.sensing.Reset')}
           cancelText={t('pages.sensing.Cancel')}
           onConfirm={reset}

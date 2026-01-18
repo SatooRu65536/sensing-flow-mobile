@@ -23,7 +23,8 @@
     }
   }
 
-  &:disabled {
+  &:disabled,
+  &[data-disabled='true'] {
     & > svg {
       color: $color-sky-200;
     }

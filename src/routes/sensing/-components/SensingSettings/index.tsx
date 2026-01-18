@@ -16,6 +16,7 @@ import {
   setDataName,
   setAutoSync,
   setRealTimeShare,
+  setSave,
 } from '@/routes/sensing/-stores/sensing-settings';
 import { sensingStateStore } from '@/stores/sensing-state';
 
@@ -69,6 +70,15 @@ export default function SensingSettings({
 
   return (
     <Card className={styles.sensing_config} {...props}>
+      <Checkbox
+        label={t('pages.sensing.Save')}
+        defaultChecked={true}
+        onCheckedChange={(checked) => setSave(checked)}
+        disabled={state !== 'ready'}
+      />
+
+      <div className={styles.line}></div>
+
       <Select<SensorName | number> // string: sensorId, number: sensorSetId
         items={sensorItems}
         defaultValue={defaultSensor}
@@ -77,7 +87,7 @@ export default function SensingSettings({
           setSensor(value);
         }}
         value={settings.sensor}
-        disabled={state !== 'ready'}
+        disabled={state !== 'ready' || settings.save === false}
       />
       <Select<number>
         items={groupItems}
@@ -85,19 +95,19 @@ export default function SensingSettings({
         onChange={(value) => setGroupId(value)}
         defaultValue={defaultGroupId}
         value={settings.groupId}
-        disabled={state !== 'ready'}
+        disabled={state !== 'ready' || settings.save === false}
       />
       <Input
         placeholder={t('pages.sensing.InputDataName')}
         onChange={(e) => setDataName(e.target.value)}
         value={settings.dataName}
-        disabled={state !== 'ready'}
+        disabled={state !== 'ready' || settings.save === false}
       />
       <Checkbox
         label={t('pages.sensing.AutoSyncToCloud')}
         defaultChecked={defaultSync}
         onCheckedChange={(checked) => setAutoSync(checked)}
-        // disabled={state !== 'ready'} // TODO: 未実装
+        // disabled={state !== 'ready' || settings.save === false} // TODO: 未実装
         disabled={true}
       />
       <Checkbox

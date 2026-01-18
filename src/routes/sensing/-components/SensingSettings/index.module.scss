@@ -3,4 +3,9 @@
   background-color: $color-background;
   display: grid;
   gap: 10px;
+
+  .line {
+    height: 1px;
+    background-color: $color-primary;
+  }
 }
