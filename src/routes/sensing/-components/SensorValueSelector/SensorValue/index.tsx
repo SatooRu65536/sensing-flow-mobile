@@ -1,26 +1,22 @@
 import styles from './index.module.scss';
-import { useEffect, useState } from 'react';
-import {
-  listenTo,
-  SensorKeysMap,
-  type SensorEvent,
-  type SensorName,
-  type UnlistenFn,
-} from '@satooru65536/tauri-plugin-sensorkit';
+import { useEffect } from 'react';
+import { listenTo, SensorKeysMap, type SensorName, type UnlistenFn } from '@satooru65536/tauri-plugin-sensorkit';
 import { splitEntry } from '@/utils';
+import { useStore } from '@tanstack/react-store';
+import { sensorDataStore, setSensorData } from '@/routes/sensing/-stores/sensor-data';
 
 interface SensorValueProps {
   sensorName: SensorName;
 }
 
 export default function SensorValue({ sensorName }: SensorValueProps) {
-  const [data, setData] = useState<SensorEvent | null>(null);
+  const data = useStore(sensorDataStore);
 
   useEffect(() => {
     let unlisten: UnlistenFn | null = null;
 
     const listenStart = async () => {
-      unlisten = await listenTo(sensorName, (event) => setData(event));
+      unlisten = await listenTo(sensorName, (event) => setSensorData(event));
     };
 
     void listenStart();

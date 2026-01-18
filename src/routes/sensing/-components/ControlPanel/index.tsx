@@ -13,6 +13,7 @@ import { sensorListStore } from '../../-stores/sensor-list';
 import AlertDialog from '@/components/AlertDialog';
 import { useTranslation } from 'react-i18next';
 import { sensingStateStore, setState } from '@/routes/sensing/-stores/sensing-state';
+import { setSensorData } from '../../-stores/sensor-data';
 
 export default function ControlPanel() {
   const { t } = useTranslation();
@@ -57,12 +58,14 @@ export default function ControlPanel() {
     timerRef.current?.reset();
     setState('ready');
     resetSensingSettings();
+    setSensorData(null);
     void stopSensors();
   };
 
   const reset = () => {
     timerRef.current?.reset();
     setState('ready');
+    setSensorData(null);
     void stopSensors();
     if (sensorData) void deleteSensorData(sensorData.id);
   };
