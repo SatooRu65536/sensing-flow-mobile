@@ -2,29 +2,31 @@ import { Store } from '@tanstack/store';
 import { type SensorName } from '@satooru65536/tauri-plugin-sensorkit';
 
 export interface SensingSettingsState {
-  sensor?: SensorName | number;
-  groupId?: number;
+  sensor: SensorName | number | null;
+  groupId: number | null;
   dataName: string;
   autoSync: boolean;
   realTimeShare: boolean;
 }
 
-export const sensingSettingsStore = new Store<SensingSettingsState>({
-  sensor: undefined,
-  groupId: undefined,
+const initValue: SensingSettingsState = {
+  sensor: null,
+  groupId: null,
   dataName: '',
   autoSync: false,
   realTimeShare: false,
-});
+};
 
-export const setSensor = (sensor: SensorName | number | undefined) => {
+export const sensingSettingsStore = new Store<SensingSettingsState>(initValue);
+
+export const setSensor = (sensor: SensorName | number | null) => {
   sensingSettingsStore.setState((state) => ({
     ...state,
     sensor,
   }));
 };
 
-export const setGroupId = (groupId: number | undefined) => {
+export const setGroupId = (groupId: number | null) => {
   sensingSettingsStore.setState((state) => ({
     ...state,
     groupId,
@@ -53,11 +55,5 @@ export const setRealTimeShare = (realTimeShare: boolean) => {
 };
 
 export const resetSensingSettings = () => {
-  sensingSettingsStore.setState({
-    sensor: undefined,
-    groupId: undefined,
-    dataName: '',
-    autoSync: false,
-    realTimeShare: false,
-  });
+  sensingSettingsStore.setState(initValue);
 };

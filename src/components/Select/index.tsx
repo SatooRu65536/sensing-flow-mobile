@@ -19,7 +19,7 @@ interface SelectProps<T> extends Omit<SelectRootProps<T, false>, 'items' | 'onVa
   placeholder?: string;
   items: SelectItems | GroupedSelectItems;
   noOptionsMessage?: string;
-  onChange?: (value: T | undefined) => void;
+  onChange?: (value: T | null) => void;
 }
 
 export default function Select<T extends string | number>({
@@ -40,7 +40,7 @@ export default function Select<T extends string | number>({
       {...props}
       items={flatItems}
       onValueChange={(value) => {
-        onChange?.(value ?? undefined);
+        onChange?.(value ?? null);
       }}
       multiple={false}
       disabled={disabled}

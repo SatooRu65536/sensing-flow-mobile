@@ -2,12 +2,15 @@ import styles from './index.module.scss';
 import type { ButtonHTMLAttributes } from 'react';
 import classnames from 'classnames';
 
-type FloatButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+interface FloatButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  as?: React.ElementType;
+}
 
-export default function FloatButton({ children, className, ...props }: FloatButtonProps) {
+export default function FloatButton({ children, className, as = 'button', ...props }: FloatButtonProps) {
+  const Component = as;
   return (
-    <button className={classnames(styles.float_button, className)} {...props}>
+    <Component className={classnames(styles.float_button, className)} {...props}>
       {children}
-    </button>
+    </Component>
   );
 }

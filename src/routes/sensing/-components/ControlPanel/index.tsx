@@ -90,12 +90,12 @@ export default function ControlPanel() {
         <AlertDialog
           title={t('pages.sensing.Reset')}
           trigger={
-            <FloatButton disabled={state !== 'paused'}>
+            <FloatButton disabled={state !== 'paused'} as="div">
               <IconArrowBack />
             </FloatButton>
           }
           triggerClassName={styles.trigger}
-          danger={true}
+          danger
           confirmText={t('pages.sensing.Reset')}
           cancelText={t('pages.sensing.Cancel')}
           onConfirm={reset}
