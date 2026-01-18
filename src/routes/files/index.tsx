@@ -1,4 +1,3 @@
-import styles from './index.module.scss';
 import { createFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { TabSelect } from '@/components/TabBar';
@@ -7,12 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getGroupedSensorData } from '@satooru65536/tauri-plugin-sensorkit';
 import SectionLayout from '@/layout/section';
 import { AccordionRoot, AccordionItem } from '@/components/Accordion';
-import ListItem from '@/components/ListItem';
-import { IconCloudUp, IconCloudOff } from '@tabler/icons-react';
-import { formatDate } from '@/utils/date';
 import AddNewGroupDialog from '@/routes/files/-components/AddNewGroupDialog';
 import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
 import DeleteGroupDialog from '@/routes/files/-components/DeleteGroupDialog';
+import SensorDataLlistItem from './-components/SensorDataLlistItem';
 
 export const Route = createFileRoute('/files/')({
   staticData: {
@@ -30,7 +27,7 @@ function RouteComponent() {
   });
 
   return (
-    <PageLayout className={styles.files}>
+    <PageLayout>
       <SectionLayout title={t('pages.files.SavedData')}>
         <AccordionRoot multiple>
           {groupedSensorData?.map((group) => (
@@ -40,16 +37,7 @@ function RouteComponent() {
               delete={<DeleteGroupDialog groupId={group.groupId} groupName={group.groupName} />}
             >
               {group.sensorData.map((data) => (
-                <ListItem
-                  key={data.id}
-                  className={styles.list_item}
-                  to={`/files/$dataId`}
-                  params={{ dataId: data.id.toString() }}
-                >
-                  {data.synced ? <IconCloudUp /> : <IconCloudOff />}
-                  <span className={styles.data_name}>{data.name}</span>
-                  <span className={styles.created_at}>{formatDate(data.createdAt)}</span>
-                </ListItem>
+                <SensorDataLlistItem data={data} key={data.id} />
               ))}
             </AccordionItem>
           ))}

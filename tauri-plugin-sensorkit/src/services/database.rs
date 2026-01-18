@@ -92,14 +92,12 @@ impl DbService {
         group_id: i32,
         name: String,
         folder_path: String,
-        synced: bool,
         active_sensors: Vec<String>,
     ) -> Result<sensor_data::Model> {
         let record = sensor_data::ActiveModel {
             group_id: Set(group_id),
             name: Set(name),
             folder_path: Set(folder_path),
-            synced: Set(synced),
             active_sensors: Set(ActiveSensors(active_sensors)),
             ..Default::default()
         }

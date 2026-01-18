@@ -32,9 +32,9 @@ impl MigrationTrait for Migration {
                     .col(pk_auto(SensorData::Id))
                     .col(string(SensorData::Name))
                     .col(string(SensorData::FolderPath))
-                    .col(boolean(SensorData::Synced))
                     .col(text(SensorData::ActiveSensors))
                     .col(integer(SensorData::GroupId))
+                    .col(string_null(SensorData::UploadId))
                     .col(
                         ColumnDef::new(SensorData::CreatedAt)
                             .timestamp()
@@ -78,8 +78,8 @@ enum SensorData {
     Id,
     Name,
     FolderPath,
-    Synced,
     ActiveSensors,
     GroupId,
     CreatedAt,
+    UploadId,
 }

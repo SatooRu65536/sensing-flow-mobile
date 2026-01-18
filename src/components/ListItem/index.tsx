@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { IconChevronRight } from '@tabler/icons-react';
 import type { ReactElement } from 'react';
 
-interface ListItemProps extends LinkProps {
+export interface ListItemProps extends LinkProps {
   className?: string;
   icon?: ReactElement;
 }

@@ -1,3 +1,4 @@
+use core::str;
 use std::collections::HashMap;
 
 use chrono::NaiveDateTime;
@@ -34,7 +35,7 @@ pub struct PushSensorLineRequest(pub String);
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CreateSensorData {
+pub struct CreateSensorDataResponse {
     pub id: i32,
     pub name: String,
     pub folder_path: String,
@@ -46,8 +47,20 @@ pub struct CreateSensorData {
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct DeleteSensorDataRequest {
+    pub id: i32,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CreateGroupRequest {
     pub name: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetGroupRequest {
+    pub id: i32,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
@@ -69,6 +82,28 @@ pub struct GetGroupResponse {
 #[serde(rename_all = "camelCase")]
 pub struct GetGroupsResponse {
     pub groups: Vec<sensor_groups::Model>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct DeleteGroupRequest {
+    pub id: i32,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SyncSensorDataRequest {
+    pub id: i32,
+    pub jwt_token: String,
+    pub api_url: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UnsyncSensorDataRequest {
+    pub id: i32,
+    pub jwt_token: String,
+    pub api_url: Option<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

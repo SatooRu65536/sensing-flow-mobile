@@ -451,10 +451,22 @@
           "markdownDescription": "Denies the unregister_listener command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-create-sensor-data`\n- `allow-delete-sensor-data`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`\n- `allow-sync-sensor-data`",
+          "description": "Enables the unsync_sensor_data command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-unsync-sensor-data",
+          "markdownDescription": "Enables the unsync_sensor_data command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the unsync_sensor_data command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-unsync-sensor-data",
+          "markdownDescription": "Denies the unsync_sensor_data command without any pre-configured scope."
+        },
+        {
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-create-sensor-data`\n- `allow-delete-sensor-data`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`\n- `allow-sync-sensor-data`\n- `allow-unsync-sensor-data`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-create-sensor-data`\n- `allow-delete-sensor-data`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`\n- `allow-sync-sensor-data`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-get-available-sensors`\n- `allow-start-sensors`\n- `allow-stop-sensors`\n- `allow-registerListener`\n- `allow-unregister-listener`\n- `allow-create-sensor-data`\n- `allow-delete-sensor-data`\n- `allow-get-grouped-sensor-data`\n- `allow-create-group`\n- `allow-get-group`\n- `allow-get-groups`\n- `allow-delete-group`\n- `allow-sync-sensor-data`\n- `allow-unsync-sensor-data`"
         }
       ]
     }

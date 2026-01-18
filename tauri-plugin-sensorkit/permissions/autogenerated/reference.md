@@ -17,6 +17,7 @@ Default permissions for the plugin
 - `allow-get-groups`
 - `allow-delete-group`
 - `allow-sync-sensor-data`
+- `allow-unsync-sensor-data`
 
 ## Permission Table
 
@@ -361,6 +362,32 @@ Enables the unregister_listener command without any pre-configured scope.
 <td>
 
 Denies the unregister_listener command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:allow-unsync-sensor-data`
+
+</td>
+<td>
+
+Enables the unsync_sensor_data command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`sensorkit:deny-unsync-sensor-data`
+
+</td>
+<td>
+
+Denies the unsync_sensor_data command without any pre-configured scope.
 
 </td>
 </tr>

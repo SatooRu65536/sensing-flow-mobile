@@ -32,6 +32,9 @@ pub enum Error {
 
     #[error("Configuration error: {0}")]
     ConfigurationError(String),
+
+    #[error("Other error: {0}")]
+    Other(String),
 }
 
 impl Serialize for Error {
