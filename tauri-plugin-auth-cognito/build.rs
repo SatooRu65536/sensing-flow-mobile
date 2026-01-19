@@ -1,4 +1,4 @@
-const COMMANDS: &[&str] = &["open_auth"];
+const COMMANDS: &[&str] = &["start_auth", "exchange_code_for_token"];
 
 fn main() {
     tauri_plugin::Builder::new(COMMANDS)

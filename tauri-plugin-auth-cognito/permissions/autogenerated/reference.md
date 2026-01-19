@@ -4,7 +4,7 @@ Default permissions for the plugin
 
 #### This default permission set includes the following:
 
-- `allow-open-auth`
+- `allow-start-auth`
 
 ## Permission Table
 
@@ -14,6 +14,32 @@ Default permissions for the plugin
 <th>Description</th>
 </tr>
 
+
+<tr>
+<td>
+
+`auth-cognito:allow-exchange-code-for-token`
+
+</td>
+<td>
+
+Enables the exchange_code_for_token command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`auth-cognito:deny-exchange-code-for-token`
+
+</td>
+<td>
+
+Denies the exchange_code_for_token command without any pre-configured scope.
+
+</td>
+</tr>
 
 <tr>
 <td>
@@ -37,6 +63,32 @@ Enables the open_auth command without any pre-configured scope.
 <td>
 
 Denies the open_auth command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`auth-cognito:allow-start-auth`
+
+</td>
+<td>
+
+Enables the start_auth command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`auth-cognito:deny-start-auth`
+
+</td>
+<td>
+
+Denies the start_auth command without any pre-configured scope.
 
 </td>
 </tr>

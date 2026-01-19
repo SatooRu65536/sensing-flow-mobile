@@ -2,17 +2,25 @@ use crate::OpenAuthRequest;
 use serde::de::DeserializeOwned;
 use tauri::{
     plugin::{PluginApi, PluginHandle},
-    AppHandle, Runtime,
+    AppHandle, Emitter, Runtime,
 };
+use tauri_plugin_deep_link::DeepLinkExt;
 
 #[cfg(target_os = "ios")]
 tauri::ios_plugin_binding!(init_plugin_auth_cognito);
 
 // initializes the Kotlin or Swift plugin classes
 pub fn init<R: Runtime, C: DeserializeOwned>(
-    _app: &AppHandle<R>,
+    app: &AppHandle<R>,
     api: PluginApi<R, C>,
 ) -> crate::Result<AuthCognito<R>> {
+    let handle = app.clone();
+    app.deep_link().on_open_url(move |event| {
+        handle
+            .emit("auth-callback", event.urls().first().unwrap().as_str())
+            .unwrap();
+    });
+
     #[cfg(target_os = "android")]
     {
         let handle =
@@ -39,7 +47,7 @@ pub struct AuthCognito<R: Runtime> {
 }
 
 impl<R: Runtime> AuthCognito<R> {
-    pub fn open_auth(&self, payload: OpenAuthRequest) -> crate::Result<()> {
+    pub fn start_auth(&self, payload: OpenAuthRequest) -> crate::Result<()> {
         self.handle
             .run_mobile_plugin("openAuth", payload)
             .map_err(Into::into)

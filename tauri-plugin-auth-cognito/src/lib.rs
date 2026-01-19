@@ -26,7 +26,10 @@ impl<R: Runtime, T: Manager<R>> crate::AuthCognitoExt<R> for T {
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("auth-cognito")
-        .invoke_handler(tauri::generate_handler![commands::open_auth])
+        .invoke_handler(tauri::generate_handler![
+            commands::start_auth,
+            commands::exchange_code_for_token
+        ])
         .setup(|app, api| {
             let auth_cognito = mobile::init(app, api)?;
             app.manage(auth_cognito);

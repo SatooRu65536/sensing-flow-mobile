@@ -12,7 +12,12 @@ export default function SignInSection() {
   return (
     <SectionLayout title={t('pages.settings.user.title')}>
       <Card>
-        <LongButton onClick={() => void openAuth(getOpenAuthPayload({ codeChallenge: '12' }))} icon={<IconLogin />}>
+        <LongButton
+          onClick={() =>
+            void openAuth(getOpenAuthPayload({ codeChallenge: 'mxiiIpk-wumpFchpkZFfrYMRJZ6PuombA_HDm8LEKsE' }))
+          }
+          icon={<IconLogin />}
+        >
           {t('pages.settings.user.signUpOrLogIn')}
         </LongButton>
       </Card>

@@ -295,6 +295,18 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the exchange_code_for_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-exchange-code-for-token",
+          "markdownDescription": "Enables the exchange_code_for_token command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the exchange_code_for_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-exchange-code-for-token",
+          "markdownDescription": "Denies the exchange_code_for_token command without any pre-configured scope."
+        },
+        {
           "description": "Enables the open_auth command without any pre-configured scope.",
           "type": "string",
           "const": "allow-open-auth",
@@ -307,10 +319,22 @@
           "markdownDescription": "Denies the open_auth command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-open-auth`",
+          "description": "Enables the start_auth command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-start-auth",
+          "markdownDescription": "Enables the start_auth command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the start_auth command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-start-auth",
+          "markdownDescription": "Denies the start_auth command without any pre-configured scope."
+        },
+        {
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-start-auth`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-open-auth`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-start-auth`"
         }
       ]
     }

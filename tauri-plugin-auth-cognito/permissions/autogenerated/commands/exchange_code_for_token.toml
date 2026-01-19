@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-exchange-code-for-token"
+description = "Enables the exchange_code_for_token command without any pre-configured scope."
+commands.allow = ["exchange_code_for_token"]
+
+[[permission]]
+identifier = "deny-exchange-code-for-token"
+description = "Denies the exchange_code_for_token command without any pre-configured scope."
+commands.deny = ["exchange_code_for_token"]
