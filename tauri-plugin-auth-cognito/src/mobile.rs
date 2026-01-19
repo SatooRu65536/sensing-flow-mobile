@@ -15,7 +15,8 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 ) -> crate::Result<AuthCognito<R>> {
     #[cfg(target_os = "android")]
     {
-        let handle = api.register_android_plugin("dev.satooru.tauripluginauthcognito", "AuthCognitoPlugin")?;
+        let handle =
+            api.register_android_plugin("dev.satooru.tauripluginauthcognito", "AuthCognitoPlugin")?;
         Ok(AuthCognito { handle })
     }
 
