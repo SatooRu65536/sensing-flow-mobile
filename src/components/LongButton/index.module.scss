@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .long_button {
   all: unset;
 
@@ -17,7 +19,7 @@
   gap: 10px;
 
   &:active {
-    background-color: darken($color-primary, 10%);
+    background-color: color.scale($color-primary, $lightness: -10%);
   }
 
   .icon {
