@@ -95,7 +95,7 @@ pub struct DeleteGroupRequest {
 pub struct SyncSensorDataRequest {
     pub id: i32,
     pub jwt_token: String,
-    pub api_url: Option<String>,
+    pub api_url: String,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
@@ -103,7 +103,7 @@ pub struct SyncSensorDataRequest {
 pub struct UnsyncSensorDataRequest {
     pub id: i32,
     pub jwt_token: String,
-    pub api_url: Option<String>,
+    pub api_url: String,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

@@ -50,5 +50,21 @@
     "barometer": "Barometer",
     "location": "Location",
     "light": "Light"
+  },
+  "hooks": {
+    "useJwtToken": {
+      "authError": {
+        "title": "Authentication Error",
+        "message": "Failed to retrieve authentication information. Please log in again.",
+        "confirmText": "Re-login",
+        "cancelText": "Cancel"
+      },
+      "notLoggedIn": {
+        "title": "Not Logged In",
+        "message": "This action requires you to be logged in. Please log in to continue.",
+        "confirmText": "Login",
+        "cancelText": "Cancel"
+      }
+    }
   }
 }

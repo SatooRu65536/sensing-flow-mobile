@@ -17,12 +17,14 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 
+    color: $color-text;
+
     display: flex;
     align-items: center;
-    gap: $text-size-base;
+    gap: 10px;
   }
 
-  &[aria-disabled='true'] {
+  &[data-disabled='true'] {
     opacity: 0.5;
   }
 }

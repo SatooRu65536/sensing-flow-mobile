@@ -16,10 +16,6 @@ const COMMANDS: &[&str] = &[
 ];
 
 fn main() {
-    let api_url =
-        std::env::var("API_URL").expect("API_URL environment variable is required during build");
-    println!("cargo:rustc-env=API_URL={api_url}");
-
     tauri_plugin::Builder::new(COMMANDS)
         .android_path("android")
         .ios_path("ios")

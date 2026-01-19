@@ -72,10 +72,10 @@ export async function deleteGroup(id: number): Promise<void> {
   await invoke('plugin:sensorkit|delete_group', { payload: { id } });
 }
 
-export async function syncSensorData(id: number, jwtToken: string, apiUrl?: string): Promise<void> {
+export async function syncSensorData(id: number, jwtToken: string, apiUrl: string): Promise<void> {
   await invoke('plugin:sensorkit|sync_sensor_data', { payload: { id, jwtToken, apiUrl } });
 }
 
-export async function unsyncSensorData(id: number, jwtToken: string, apiUrl?: string): Promise<void> {
+export async function unsyncSensorData(id: number, jwtToken: string, apiUrl: string): Promise<void> {
   await invoke('plugin:sensorkit|unsync_sensor_data', { payload: { id, jwtToken, apiUrl } });
 }

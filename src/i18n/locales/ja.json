@@ -50,5 +50,11 @@
     "barometer": "気圧センサー",
     "location": "位置情報",
     "light": "光センサー"
+  },
+  "hooks": {
+    "useJwtToken": {
+      "title": "認証エラー",
+      "message": "認証情報の取得に失敗しました。再度ログインしてください。"
+    }
   }
 }

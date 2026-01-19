@@ -28,9 +28,9 @@ export interface SensorData {
   id: number;
   name: string;
   filePath: string;
-  synced: boolean;
   activeSensors: SensorName[];
   groupId: number;
+  uploadId: string | null;
   createdAt: string;
 }
 

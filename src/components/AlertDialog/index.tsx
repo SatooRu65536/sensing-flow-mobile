@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 interface AlertDialogProps extends Omit<AlertDialogRootProps, 'children'> {
   title: string;
-  trigger: ReactElement;
+  trigger?: ReactElement;
   triggerClassName?: string;
   children: ReactNode;
   cancelText?: string;
@@ -35,8 +35,9 @@ export default function AlertDialog({
   const [open, setOpen] = useState(props.open ?? false);
 
   const handleConfirm = async (event: BaseUIEvent<React.MouseEvent<HTMLButtonElement, MouseEvent>>) => {
-    if (!onConfirm) return;
     event.preventDefault();
+
+    if (!onConfirm) return;
 
     try {
       await onConfirm();
@@ -48,9 +49,11 @@ export default function AlertDialog({
 
   return (
     <BAlertDialog.Root open={open} onOpenChange={setOpen} {...props}>
-      <BAlertDialog.Trigger className={classnames(styles.Trigger, triggerClassName)} disabled={disabled}>
-        {trigger}
-      </BAlertDialog.Trigger>
+      {trigger && (
+        <BAlertDialog.Trigger className={classnames(styles.Trigger, triggerClassName)} disabled={disabled}>
+          {trigger}
+        </BAlertDialog.Trigger>
+      )}
 
       <BAlertDialog.Portal>
         <BAlertDialog.Backdrop className={styles.Backdrop} />
