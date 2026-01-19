@@ -1,4 +1,4 @@
-use crate::{AuthCognitoExt, ExchangeTokenRequest, TokenRequest, TokenResponse};
+use crate::{AuthCognitoExt, Error, ExchangeTokenRequest, TokenRequest, TokenResponse};
 use crate::{OpenAuthRequest, Result};
 use tauri::{command, AppHandle, Runtime};
 
@@ -14,9 +14,9 @@ pub(crate) async fn start_auth<R: Runtime>(
 pub async fn exchange_code_for_token<R: Runtime>(
     _app: AppHandle<R>,
     payload: ExchangeTokenRequest,
-) -> Result<TokenResponse> {
+) -> crate::Result<TokenResponse> {
     let client = reqwest::Client::new();
-    let url = format!("https://{}/oauth2/token", payload.domain);
+    let url = format!("{}/oauth2/token", payload.base_url.trim_end_matches('/'));
 
     let form_data = TokenRequest {
         grant_type: "authorization_code",
@@ -31,15 +31,14 @@ pub async fn exchange_code_for_token<R: Runtime>(
         .header("Content-Type", "application/x-www-form-urlencoded")
         .form(&form_data)
         .send()
-        .await
-        .map_err(|e| e.to_string())?;
+        .await?;
 
     if res.status().is_success() {
-        res.json::<TokenResponse>().await.map_err(|e| e.to_string())
+        res.json::<TokenResponse>().await.map_err(Error::Reqwest)
     } else {
-        Err(format!(
+        Err(Error::Other(format!(
             "Exchange failed: {}",
             res.text().await.unwrap_or_default()
-        ))
+        )))
     }
 }

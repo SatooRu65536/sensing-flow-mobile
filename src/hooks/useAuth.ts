@@ -1,22 +1,32 @@
-import { AUTH_SESSION } from '@/consts/query-key';
-import { useQuery } from '@tanstack/react-query';
-import { getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
+import { AuthCognito } from '@satooru65536/tauri-plugin-auth-cognito';
+
+const auth = new AuthCognito({
+  scheme: import.meta.env.VITE_SCHEME,
+  baseUrl: import.meta.env.VITE_COGNITO_DOMAIN,
+  clientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
+  redirectUri: import.meta.env.VITE_REDIRECT_URI,
+});
 
 export const useAuth = () => {
-  return useQuery({
-    queryKey: [AUTH_SESSION],
-    queryFn: async () => {
-      const user = await getCurrentUser();
-      const session = await fetchAuthSession();
+  const login = async () => {
+    try {
+      const unlisten = await auth.watchRedirect(
+        (tokens) => {
+          console.log(tokens);
+          localStorage.setItem('auth_tokens', JSON.stringify(tokens));
+          unlisten();
+        },
+        (error) => {
+          console.error('ログインエラー:', error);
+        },
+      );
 
-      return {
-        user,
-        session,
-        idToken: session.tokens?.idToken?.toString(),
-      };
-    },
-    staleTime: 1000 * 60 * 5, // 5分間
-    retry: false,
-  });
+      await auth.startAuth();
+    } catch (error) {
+      console.error('ログインエラー:', error);
+    }
+  };
+
+  return { login };
 };
 export type AuthResult = ReturnType<typeof useAuth>;

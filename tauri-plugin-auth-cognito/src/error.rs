@@ -10,6 +10,12 @@ pub enum Error {
     #[cfg(mobile)]
     #[error(transparent)]
     PluginInvoke(#[from] tauri::plugin::mobile::PluginInvokeError),
+
+    #[error("HTTP error: {0}")]
+    Reqwest(#[from] reqwest::Error),
+
+    #[error("Other error: {0}")]
+    Other(String),
 }
 
 impl Serialize for Error {

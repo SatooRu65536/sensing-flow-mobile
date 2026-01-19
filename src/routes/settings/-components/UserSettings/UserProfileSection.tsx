@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import Item from '../Item';
 import { formatDateFull } from '@/utils/date';
 import LongButton from '@/components/LongButton';
-import { signOut } from 'aws-amplify/auth';
 
 interface UserProfileSectionProps {
   userProfile: UserProfile;
@@ -21,7 +20,8 @@ export default function UserProfileSection({ userProfile }: UserProfileSectionPr
         <Item label={t('pages.settings.user.userName')} value={userProfile.name} />
         <Item label={t('pages.settings.user.plan')} value={userProfile.plan} />
         <Item label={t('pages.settings.user.registeredAt')} value={formatDateFull(userProfile.createdAt)} />
-        <LongButton onClick={() => void signOut()}>{t('pages.settings.user.signOut')}</LongButton>
+        {/* TODO: サインアウト */}
+        <LongButton>{t('pages.settings.user.signOut')}</LongButton>
       </Card>
     </SectionLayout>
   );

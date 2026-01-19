@@ -14,7 +14,7 @@ pub struct ExchangeTokenRequest {
     pub verifier: String,
     pub client_id: String,
     pub redirect_uri: String,
-    pub domain: String,
+    pub base_url: String,
 }
 
 #[derive(Serialize, Deserialize)]

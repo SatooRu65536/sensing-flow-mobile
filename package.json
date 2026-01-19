@@ -36,7 +36,6 @@
     "@tauri-apps/plugin-deep-link": "~2",
     "@tauri-apps/plugin-opener": "^2.5.3",
     "@tauri-apps/plugin-os": "^2.3.2",
-    "aws-amplify": "^6.15.10",
     "classnames": "^2.5.1",
     "framer-motion": "^12.26.2",
     "i18next": "^25.7.4",
@@ -51,8 +50,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
-    "@satooru65536/tauri-plugin-sensorkit": "./tauri-plugin-sensorkit",
     "@satooru65536/tauri-plugin-auth-cognito": "./tauri-plugin-auth-cognito",
+    "@satooru65536/tauri-plugin-sensorkit": "./tauri-plugin-sensorkit",
     "@tanstack/devtools-event-client": "^0.4.0",
     "@tanstack/devtools-vite": "^0.4.1",
     "@tanstack/eslint-config": "^0.3.4",
