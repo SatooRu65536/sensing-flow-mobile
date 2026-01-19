@@ -113,14 +113,12 @@ impl<R: Runtime> Sensorkit<R> {
     pub fn start_sensors(&self, payload: StartSensorsRequest) -> crate::Result<()> {
         self.handle
             .run_mobile_plugin("startSensors", payload.sensors)
-            .map(|_: ()| ())
             .map_err(Into::into)
     }
 
     pub fn stop_sensors(&self) -> crate::Result<()> {
         self.handle
             .run_mobile_plugin("stopSensors", ())
-            .map(|_: ()| ())
             .map_err(Into::into)
     }
 }
