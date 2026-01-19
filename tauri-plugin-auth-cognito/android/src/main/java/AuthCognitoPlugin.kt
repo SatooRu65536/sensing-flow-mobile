@@ -44,9 +44,8 @@ class AuthCognitoPlugin(
 
             customTabsIntent.launchUrl(activity, Uri.parse(url))
 
-            val ret = JSObject()
-            ret.put("status", "opened")
-            invoke.resolve(ret)
+            // Resolve without a payload so the Rust side can deserialize to `()`
+            invoke.resolve()
         } catch (e: Exception) {
             invoke.reject("Failed to open Custom Tab: ${e.localizedMessage}")
         }

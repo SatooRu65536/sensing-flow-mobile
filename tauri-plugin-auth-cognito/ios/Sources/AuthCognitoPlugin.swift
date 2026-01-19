@@ -32,10 +32,9 @@ class AuthCognitoPlugin: Plugin {
         return
       }
 
-      if let callbackURL = callbackURL {
-        var ret = JSObject()
-        ret["url"] = callbackURL.absoluteString
-        invoke.resolve(ret)
+      if callbackURL != nil {
+        // Resolve without a payload so the Rust side can deserialize to `()`
+        invoke.resolve()
       }
     }
 
