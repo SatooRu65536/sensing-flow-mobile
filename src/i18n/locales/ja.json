@@ -40,6 +40,14 @@
       "Reset": "リセット",
       "Cancel": "キャンセル",
       "ResetSensingData": "センシングデータをリセットします。"
+    },
+    "settings": {
+      "user": {
+        "title": "ユーザー設定",
+        "userId": "ユーザーID",
+        "userName": "ユーザー名",
+        "plan": "プラン"
+      }
     }
   },
   "sensors": {

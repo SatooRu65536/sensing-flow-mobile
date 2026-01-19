@@ -7,7 +7,7 @@ import tslint from 'typescript-eslint';
 
 export default defineConfig(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['eslint.config.mjs', 'src/api.types.gen.ts', 'src/routeTree.gen.ts'],
   },
   eslint.configs.recommended,
   ...tslint.configs.recommendedTypeChecked,

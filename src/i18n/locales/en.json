@@ -40,6 +40,17 @@
       "Reset": "Reset",
       "Cancel": "Cancel",
       "ResetSensingData": "Reset Sensing Data."
+    },
+    "settings": {
+      "user": {
+        "title": "User Settings",
+        "signUpOrLogIn": "Login or Sign up",
+        "userId": "User ID",
+        "userName": "User Name",
+        "plan": "Plan",
+        "registeredAt": "Registered At",
+        "signOut": "Sign Out"
+      }
     }
   },
   "sensors": {

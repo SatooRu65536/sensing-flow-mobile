@@ -1,0 +1,44 @@
+.long_button {
+  all: unset;
+
+  width: 100%;
+  padding: 5px 20px;
+  box-sizing: border-box;
+
+  font-size: $text-size-base;
+  font-weight: $text-weight-medium;
+  color: $color-on-primary;
+  background-color: $color-primary;
+  border-radius: $radius-md;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  &:active {
+    background-color: darken($color-primary, 10%);
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      $size: 30px;
+      width: $size;
+      height: $size;
+    }
+  }
+
+  &[data-danger='true'] {
+    color: $color-on-danger;
+    background-color: $color-danger;
+  }
+
+  &:disabled {
+    color: $color-on-disabled;
+    background-color: $color-disabled;
+  }
+}

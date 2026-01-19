@@ -16,7 +16,8 @@
     "format": "prettier --write src/**/*.ts",
     "check": "prettier --write . && eslint --fix",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "gen:api": "curl http://localhost:5173/docs-json > swagger.json && openapi-typescript ./swagger.json -o src/api.types.gen.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
@@ -38,6 +39,8 @@
     "classnames": "^2.5.1",
     "framer-motion": "^12.26.2",
     "i18next": "^25.7.4",
+    "openapi-fetch": "^0.15.0",
+    "openapi-typescript": "^7.10.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^16.5.2",

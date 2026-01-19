@@ -5,8 +5,12 @@
         "tsconfig.json": "tsconfig.*.json",
         "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
         ".env.example": ".env*",
+        "api.ts": "api.types.gen.ts",
     },
     "files.exclude": {},
+    "files.readonlyInclude": {
+        "**/*.gen.ts": true,
+    },
     "settings.cycle": [
         {
             "id": "rust-target",

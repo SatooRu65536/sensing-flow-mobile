@@ -1,5 +1,7 @@
 import { TabSelect } from '@/components/TabBar';
+import PageLayout from '@/layout/page';
 import { createFileRoute } from '@tanstack/react-router';
+import UserSettings from './-components/UserSettings';
 
 export const Route = createFileRoute('/settings/')({
   staticData: {
@@ -9,5 +11,9 @@ export const Route = createFileRoute('/settings/')({
 });
 
 function RouteComponent() {
-  return <main>Not implemented yet</main>;
+  return (
+    <PageLayout>
+      <UserSettings />
+    </PageLayout>
+  );
 }

@@ -1,6 +1,6 @@
 import styles from './index.module.scss';
 import ListItem, { type ListItemProps } from '@/components/ListItem';
-import { formatDate } from '@/utils/date';
+import { formatDateSimple } from '@/utils/date';
 import { type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
 import UnSyncedIconButton from './UnSyncedIconButton';
 import SyncedIconButton from './SyncedIconButton';
@@ -31,7 +31,7 @@ export default function SensorDataLlistItem({ data, ...props }: SensorDataLlistI
         <UnSyncedIconButton data={data} setState={setState} isLoading={isLoading} />
       )}
       <span className={styles.data_name}>{data.name}</span>
-      <span className={styles.created_at}>{formatDate(data.createdAt)}</span>
+      <span className={styles.created_at}>{formatDateSimple(data.createdAt)}</span>
     </ListItem>
   );
 }
