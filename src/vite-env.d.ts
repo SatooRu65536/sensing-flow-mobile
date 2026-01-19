@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
+  readonly VITE_SCHEME: string;
   readonly VITE_AWS_USER_POOL_ID: string;
   readonly VITE_AWS_USER_POOL_CLIENT_ID: string;
   readonly VITE_REDIRECT_URI: string;

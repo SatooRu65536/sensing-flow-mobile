@@ -1,10 +1,9 @@
+use crate::OpenAuthRequest;
 use serde::de::DeserializeOwned;
 use tauri::{
     plugin::{PluginApi, PluginHandle},
     AppHandle, Runtime,
 };
-
-use crate::models::*;
 
 #[cfg(target_os = "ios")]
 tauri::ios_plugin_binding!(init_plugin_auth_cognito);
@@ -15,13 +14,33 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     api: PluginApi<R, C>,
 ) -> crate::Result<AuthCognito<R>> {
     #[cfg(target_os = "android")]
-    let handle = api.register_android_plugin("", "AuthCognitoPlugin")?;
+    {
+        let handle = api.register_android_plugin("dev.satooru.tauripluginauthcognito", "AuthCognitoPlugin")?;
+        Ok(AuthCognito { handle })
+    }
+
     #[cfg(target_os = "ios")]
-    let handle = api.register_ios_plugin(init_plugin_auth_cognito)?;
-    Ok(AuthCognito(handle))
+    {
+        let handle = api.register_ios_plugin(init_plugin_auth_cognito)?;
+        Ok(AuthCognito { handle })
+    }
+
+    #[cfg(not(any(target_os = "ios", target_os = "android")))]
+    #[allow(unreachable_code)]
+    {
+        unreachable!("The process should have exited already");
+    }
 }
 
 /// Access to the auth-cognito APIs.
-pub struct AuthCognito<R: Runtime>(PluginHandle<R>);
+pub struct AuthCognito<R: Runtime> {
+    pub handle: PluginHandle<R>,
+}
 
-impl<R: Runtime> AuthCognito<R> {}
+impl<R: Runtime> AuthCognito<R> {
+    pub fn open_auth(&self, payload: OpenAuthRequest) -> crate::Result<()> {
+        self.handle
+            .run_mobile_plugin("openAuth", payload)
+            .map_err(Into::into)
+    }
+}

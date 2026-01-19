@@ -52,6 +52,7 @@
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "@satooru65536/tauri-plugin-sensorkit": "./tauri-plugin-sensorkit",
+    "@satooru65536/tauri-plugin-auth-cognito": "./tauri-plugin-auth-cognito",
     "@tanstack/devtools-event-client": "^0.4.0",
     "@tanstack/devtools-vite": "^0.4.1",
     "@tanstack/eslint-config": "^0.3.4",

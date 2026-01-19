@@ -5,6 +5,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_sensorkit::init())
+        .plugin(tauri_plugin_auth_cognito::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

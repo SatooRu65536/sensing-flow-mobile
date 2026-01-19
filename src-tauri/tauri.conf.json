@@ -11,6 +11,7 @@
   },
   "plugins": {
     "tauri-plugin-sensorkit": {},
+    "tauri-plugin-auth-cognito": {},
     "@tauri-apps/plugin-os": {},
     "deep-link": {
       "mobile": [
