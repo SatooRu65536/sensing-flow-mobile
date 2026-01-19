@@ -9,6 +9,7 @@
     "core:default",
     "opener:default",
     "sensorkit:default",
-    "os:default"
+    "os:default",
+    "deep-link:default"
   ]
 }

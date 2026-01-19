@@ -11,7 +11,17 @@
   },
   "plugins": {
     "tauri-plugin-sensorkit": {},
-    "@tauri-apps/plugin-os": {}
+    "@tauri-apps/plugin-os": {},
+    "deep-link": {
+      "mobile": [
+        {
+          "scheme": [
+            "sensing-flow"
+          ],
+          "appLink": false
+        }
+      ]
+    }
   },
   "app": {
     "windows": [
