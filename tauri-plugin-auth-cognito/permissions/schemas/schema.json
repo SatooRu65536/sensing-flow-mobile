@@ -307,6 +307,18 @@
           "markdownDescription": "Denies the exchange_code_for_token command without any pre-configured scope."
         },
         {
+          "description": "Enables the refresh_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-refresh-token",
+          "markdownDescription": "Enables the refresh_token command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the refresh_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-refresh-token",
+          "markdownDescription": "Denies the refresh_token command without any pre-configured scope."
+        },
+        {
           "description": "Enables the start_auth command without any pre-configured scope.",
           "type": "string",
           "const": "allow-start-auth",

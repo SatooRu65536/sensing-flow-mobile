@@ -1,4 +1,7 @@
-use crate::{AuthCognitoExt, Error, ExchangeTokenRequest, TokenRequest, TokenResponse};
+use crate::{
+    AuthCognitoExt, Error, ExchangeTokenRequest, RefreshTokenFormData, RefreshTokenRequest,
+    TokenRequest, TokenResponse,
+};
 use crate::{OpenAuthRequest, Result};
 use tauri::{command, AppHandle, Runtime};
 
@@ -39,9 +42,37 @@ pub async fn exchange_code_for_token<R: Runtime>(
     if status.is_success() {
         serde_json::from_str::<TokenResponse>(&text).map_err(|e| Error::Other(e.to_string()))
     } else {
-        Err(crate::error::Error::Io(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            text,
-        )))
+        Err(crate::error::Error::Io(std::io::Error::other(text)))
+    }
+}
+
+#[command]
+pub async fn refresh_token<R: Runtime>(
+    _app: AppHandle<R>,
+    payload: RefreshTokenRequest,
+) -> crate::Result<TokenResponse> {
+    let client = reqwest::Client::new();
+    let url = format!("{}/oauth2/token", payload.base_url.trim_end_matches('/'));
+
+    let form_data = RefreshTokenFormData {
+        grant_type: "refresh_token",
+        client_id: &payload.client_id,
+        refresh_token: &payload.refresh_token,
+    };
+
+    let res = client
+        .post(&url)
+        .header("Content-Type", "application/x-www-form-urlencoded")
+        .form(&form_data)
+        .send()
+        .await?;
+
+    let status = res.status();
+    let text = res.text().await?;
+
+    if status.is_success() {
+        serde_json::from_str::<TokenResponse>(&text).map_err(|e| Error::Other(e.to_string()))
+    } else {
+        Err(crate::error::Error::Io(std::io::Error::other(text)))
     }
 }

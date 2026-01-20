@@ -28,7 +28,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("auth-cognito")
         .invoke_handler(tauri::generate_handler![
             commands::start_auth,
-            commands::exchange_code_for_token
+            commands::exchange_code_for_token,
+            commands::refresh_token,
         ])
         .setup(|app, api| {
             let auth_cognito = mobile::init(app, api)?;

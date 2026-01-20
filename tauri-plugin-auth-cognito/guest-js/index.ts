@@ -1,12 +1,13 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
-import { AuthConfig, AuthConfigAllRequired, ExchangeCodeForTokenPayload, Tokens } from './types';
+import { AuthConfig, AuthConfigAllRequired, ExchangeCodeForTokenPayload, RefreshTokenPayload, Tokens } from './types';
 
 export * from './types';
 
 export class AuthCognito {
   private config: AuthConfigAllRequired;
   private pkceStorageKey = 'pkce_verifier';
+  private tokens: Tokens | null = null;
 
   constructor(
     {
@@ -68,8 +69,26 @@ export class AuthCognito {
         baseUrl: this.config.baseUrl,
       };
 
-      void invoke<Tokens>('plugin:auth-cognito|exchange_code_for_token', { payload }).then(onUpdate).catch(onError);
+      void invoke<Tokens>('plugin:auth-cognito|exchange_code_for_token', { payload })
+        .then((tokens) => {
+          this.tokens = tokens;
+          onUpdate(tokens);
+        })
+        .catch(onError);
     });
+  }
+
+  async refreshToken(refreshToken?: string): Promise<Tokens> {
+    const refreshTokenValue = refreshToken ?? this.tokens?.refresh_token;
+    if (!refreshTokenValue) throw new Error('No refresh token available');
+
+    const payload: RefreshTokenPayload = {
+      refreshToken: refreshTokenValue,
+      clientId: this.config.clientId,
+      baseUrl: this.config.baseUrl,
+    };
+
+    return await invoke<Tokens>('plugin:auth-cognito|refresh_token', { payload });
   }
 
   private async generatePKCE() {

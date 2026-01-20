@@ -26,6 +26,12 @@ export interface ExchangeCodeForTokenPayload {
   baseUrl: string;
 }
 
+export interface RefreshTokenPayload {
+  refreshToken: string;
+  clientId: string;
+  baseUrl: string;
+}
+
 export interface Tokens {
   id_token: string;
   access_token: string;

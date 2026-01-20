@@ -33,3 +33,18 @@ pub struct TokenRequest<'a> {
     pub code_verifier: &'a str,
     pub redirect_uri: &'a str,
 }
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RefreshTokenRequest {
+    pub refresh_token: String,
+    pub client_id: String,
+    pub base_url: String,
+}
+
+#[derive(Serialize)]
+pub struct RefreshTokenFormData<'a> {
+    pub grant_type: &'static str,
+    pub client_id: &'a str,
+    pub refresh_token: &'a str,
+}
