@@ -27,18 +27,21 @@ pub async fn exchange_code_for_token<R: Runtime>(
     };
 
     let res = client
-        .post(url)
+        .post(&url)
         .header("Content-Type", "application/x-www-form-urlencoded")
         .form(&form_data)
         .send()
         .await?;
 
-    if res.status().is_success() {
-        res.json::<TokenResponse>().await.map_err(Error::Reqwest)
+    let status = res.status();
+    let text = res.text().await?;
+
+    if status.is_success() {
+        serde_json::from_str::<TokenResponse>(&text).map_err(|e| Error::Other(e.to_string()))
     } else {
-        Err(Error::Other(format!(
-            "Exchange failed: {}",
-            res.text().await.unwrap_or_default()
+        Err(crate::error::Error::Io(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            text,
         )))
     }
 }

@@ -12,7 +12,6 @@ export const useAuth = () => {
     try {
       const unlisten = await auth.watchRedirect(
         (tokens) => {
-          console.log(tokens);
           localStorage.setItem('auth_tokens', JSON.stringify(tokens));
           unlisten();
         },

@@ -18,7 +18,7 @@ pub struct ExchangeTokenRequest {
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "snake_case")]
 pub struct TokenResponse {
     pub id_token: String,
     pub access_token: String,

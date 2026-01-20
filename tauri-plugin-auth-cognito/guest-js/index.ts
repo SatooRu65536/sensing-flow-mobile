@@ -46,7 +46,7 @@ export class AuthCognito {
   async watchRedirect(onUpdate: (tokens: Tokens) => void, onError: (error: Error) => void): Promise<UnlistenFn> {
     return await listen<string>('auth-callback', (event) => {
       const urlStr = event.payload;
-      const url = new URL(urlStr.replace(this.config.redirectUri, 'http://localhost/'));
+      const url = new URL(urlStr.replace(this.config.redirectUri, 'http://localhost/')); // URL のパースのため一時的に置換
       const code = url.searchParams.get('code');
 
       const verifier = localStorage.getItem(this.pkceStorageKey);
