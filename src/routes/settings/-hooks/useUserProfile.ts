@@ -4,6 +4,7 @@ import { useJwtToken } from '../../../hooks/useJwtToken';
 import { client } from '@/api';
 import type { components } from '@/api.types.gen';
 import { useAuth } from '../../../hooks/useAuth';
+import { authHeader } from '@/utils/auth-header';
 
 export type UserProfile = components['schemas']['GetUserResponse'];
 
@@ -18,14 +19,12 @@ export function useUserProfile() {
   } = useQuery({
     queryKey: [USER_PROFILE, auth.tokens],
     queryFn: async () => {
-      const token = getToken(false);
+      const token = await getToken(false);
       if (!token) throw new Error('No JWT token found');
 
       try {
         const res = await client.GET('/users/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: authHeader(token),
         });
         if (res.data == undefined) throw new Error('User profile not found');
         return res.data;

@@ -46,7 +46,13 @@
         "title": "ユーザー設定",
         "userId": "ユーザーID",
         "userName": "ユーザー名",
-        "plan": "プラン"
+        "plan": "プラン",
+        "registeredAt": "登録日",
+        "signOut": "サインアウト",
+        "pleaseRegister": "ユーザー登録をしてください。",
+        "register": "登録",
+        "pleaseInputUserName": "ユーザー名を入力してください。",
+        "failedToRegisterUser": "ユーザー登録に失敗しました。もう一度お試しください。"
       }
     }
   },

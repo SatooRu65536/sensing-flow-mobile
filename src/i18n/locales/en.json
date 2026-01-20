@@ -49,7 +49,11 @@
         "userName": "User Name",
         "plan": "Plan",
         "registeredAt": "Registered At",
-        "signOut": "Sign Out"
+        "signOut": "Sign Out",
+        "pleaseRegister": "Please register as a user.",
+        "register": "Register",
+        "pleaseInputUserName": "Please input user name",
+        "failedToRegisterUser": "Failed to register user. Please try again."
       }
     }
   },
