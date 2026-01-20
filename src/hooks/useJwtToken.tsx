@@ -11,7 +11,7 @@ export function useJwtToken() {
   const navigate = useNavigate();
 
   const getToken = (openAlert?: boolean): string | undefined => {
-    if (auth.jwt) return auth.jwt;
+    if (auth.isAuthSuccess) return auth.tokens.access_token;
 
     if (openAlert) setOpen(true);
     return undefined;

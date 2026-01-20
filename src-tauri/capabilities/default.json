@@ -11,6 +11,7 @@
     "sensorkit:default",
     "auth-cognito:default",
     "os:default",
-    "deep-link:default"
+    "deep-link:default",
+    "stronghold:default"
   ]
 }

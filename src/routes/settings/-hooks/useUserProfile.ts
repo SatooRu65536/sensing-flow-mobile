@@ -16,7 +16,7 @@ export function useUserProfile() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: [USER_PROFILE, auth.jwt],
+    queryKey: [USER_PROFILE, auth.tokens],
     queryFn: async () => {
       const token = getToken(false);
       if (!token) throw new Error('No JWT token found');

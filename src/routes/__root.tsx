@@ -2,7 +2,7 @@ import { Outlet, createRootRouteWithContext, useMatches } from '@tanstack/react-
 import type { QueryClient } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import TabBar from '@/components/TabBar';
-import { type AuthStore } from '@/hooks/useAuth';
+import { loadTokens, type AuthStore } from '@/hooks/useAuth';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -10,6 +10,7 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  beforeLoad: loadTokens,
   component: () => {
     const matches = useMatches();
     const selectTab = matches.find((m) => m.staticData?.selectTab !== undefined)?.staticData.selectTab;

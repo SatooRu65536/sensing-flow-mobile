@@ -5,7 +5,6 @@ import UserProfileSection from './UserProfileSection';
 
 export default function UserSettings() {
   const { userProfile, isLoggedIn } = useUserProfile();
-  console.log(userProfile);
 
   // サインイン前
   if (!isLoggedIn) return <SignInSection />;

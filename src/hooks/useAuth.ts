@@ -1,25 +1,26 @@
-import { AuthCognito } from '@satooru65536/tauri-plugin-auth-cognito';
+import { tokenManager } from '@/lib/tokenManager';
+import { AuthCognito, type Tokens } from '@satooru65536/tauri-plugin-auth-cognito';
 import { useStore } from '@tanstack/react-store';
 import { Store } from '@tanstack/store';
 
 interface AuthStoreSuccess {
-  jwt: string;
+  tokens: Tokens;
   isLoading: false;
   isAuthSuccess: true;
 }
 interface AuthStoreLoading {
-  jwt: null;
+  tokens: null;
   isLoading: true;
   isAuthSuccess: false;
 }
 interface AuthStoreFailure {
-  jwt: null;
+  tokens: null;
   isLoading: false;
   isAuthSuccess: false;
 }
 export type AuthStore = AuthStoreSuccess | AuthStoreLoading | AuthStoreFailure;
 
-const authStore = new Store<AuthStore>({ jwt: null, isLoading: false, isAuthSuccess: false });
+const authStore = new Store<AuthStore>({ tokens: null, isLoading: false, isAuthSuccess: false });
 const setJwt = (auth: AuthStore) => {
   authStore.setState(auth);
 };
@@ -38,9 +39,9 @@ export const useAuth = () => {
     try {
       const unlisten = await authCognito.watchRedirect(
         (tokens) => {
-          localStorage.setItem('auth_tokens', tokens.access_token);
-          setJwt({ jwt: tokens.access_token, isLoading: false, isAuthSuccess: true });
+          setJwt({ tokens, isLoading: false, isAuthSuccess: true });
           unlisten();
+          void tokenManager.saveTokens(tokens);
         },
         (error) => {
           console.error('ログインエラー:', error);
@@ -56,3 +57,10 @@ export const useAuth = () => {
   return { auth, login };
 };
 export type AuthResult = ReturnType<typeof useAuth>;
+
+export async function loadTokens() {
+  const storedTokens = await tokenManager.getTokens();
+  if (storedTokens) {
+    setJwt({ tokens: storedTokens, isLoading: false, isAuthSuccess: true });
+  }
+}
