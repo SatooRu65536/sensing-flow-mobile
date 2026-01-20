@@ -12,6 +12,7 @@
     "auth-cognito:default",
     "os:default",
     "deep-link:default",
-    "stronghold:default"
+    "stronghold:default",
+    "stronghold:allow-remove-secret"
   ]
 }
