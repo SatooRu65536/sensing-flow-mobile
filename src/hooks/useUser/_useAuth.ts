@@ -1,29 +1,8 @@
 import { tokenManager } from '@/lib/tokenManager';
-import { AuthCognito, type Tokens } from '@satooru65536/tauri-plugin-auth-cognito';
+import { AuthCognito } from '@satooru65536/tauri-plugin-auth-cognito';
 import { useStore } from '@tanstack/react-store';
-import { Store } from '@tanstack/store';
-
-interface AuthStoreSuccess {
-  tokens: Tokens;
-  isLoading: false;
-  isAuthSuccess: true;
-}
-interface AuthStoreLoading {
-  tokens: null;
-  isLoading: true;
-  isAuthSuccess: false;
-}
-interface AuthStoreFailure {
-  tokens: null;
-  isLoading: false;
-  isAuthSuccess: false;
-}
-export type AuthStore = AuthStoreSuccess | AuthStoreLoading | AuthStoreFailure;
-
-const authStore = new Store<AuthStore>({ tokens: null, isLoading: false, isAuthSuccess: false });
-export const setJwt = (auth: AuthStore) => {
-  authStore.setState(auth);
-};
+import { authStore, resetAuthStore, setTokens } from './stores/auth';
+import type { RefreshResultSuccess, RefreshResultFailure, RefreshResult } from './types/auth';
 
 const authCognito = new AuthCognito({
   scheme: import.meta.env.VITE_SCHEME,
@@ -39,7 +18,7 @@ export const useAuth = () => {
     try {
       const unlisten = await authCognito.watchRedirect(
         (tokens) => {
-          setJwt({ tokens, isLoading: false, isAuthSuccess: true });
+          setTokens(tokens);
           unlisten();
           void tokenManager.saveTokens(tokens);
         },
@@ -55,29 +34,28 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    setJwt({ tokens: null, isLoading: false, isAuthSuccess: false });
+    resetAuthStore();
     await tokenManager.clearTokens();
   };
 
-  const refresh = async () => {
+  const refresh = async (): Promise<RefreshResult> => {
     if (!auth.tokens?.refresh_token) {
-      return { success: false } as const;
+      return { success: false } satisfies RefreshResultFailure;
     }
 
     try {
       const newTokens = await authCognito.refreshToken(auth.tokens.refresh_token);
       if (newTokens) {
-        setJwt({ tokens: newTokens, isLoading: false, isAuthSuccess: true });
+        setTokens(newTokens);
         await tokenManager.saveTokens(newTokens);
-        return { success: true, newTokens } as const;
+        return { success: true, newTokens } satisfies RefreshResultSuccess;
       }
-      return { success: false } as const;
+      return { success: false } satisfies RefreshResultFailure;
     } catch (error) {
       console.error('トークンリフレッシュエラー:', error);
-      return { success: false } as const;
+      return { success: false } satisfies RefreshResultFailure;
     }
   };
 
   return { auth, login, logout, refresh };
 };
-export type AuthResult = ReturnType<typeof useAuth>;

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { USER_PROFILE } from '@/consts/query-key';
-import { type AuthStore } from './_useAuth';
 import { authHeader } from '@/utils/auth-header';
 import { client } from '@/api';
+import type { AuthStore } from './types/auth';
 
 interface UseProfileProps {
   auth: AuthStore;

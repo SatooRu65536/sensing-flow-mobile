@@ -1,6 +1,6 @@
 import { useAuth } from './_useAuth';
 import { useProfile } from './_useProfile';
-import { AuthErrorAlert, NotLoggedInAlert, NotRegisteredAlert, RefreshFailedAlert } from './alert';
+import { AuthErrorAlert, NotLoggedInAlert, NotRegisteredAlert, RefreshFailedAlert } from './render';
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { isTokenExpiringSoon } from '@/utils/jwt';
