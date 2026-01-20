@@ -1,4 +1,7 @@
-use crate::error::{Error, Result};
+use crate::{
+    error::{Error, Result},
+    services::UploadSensorDataResponse,
+};
 use entity::sensor_data;
 use reqwest::multipart::{Form, Part};
 use std::path::Path;
@@ -16,7 +19,7 @@ impl CloudSyncService {
         sensor_data: sensor_data::Model,
         jwt_token: String,
         api_url: String,
-    ) -> Result<()> {
+    ) -> Result<UploadSensorDataResponse> {
         let url = self.get_url("/sensor-data", api_url);
         let mut form = Form::new()
             .text("createdAt", sensor_data.created_at.to_string())
@@ -60,7 +63,19 @@ impl CloudSyncService {
             )));
         }
 
-        Ok(())
+        let text = resp
+            .text()
+            .await
+            .map_err(|e| Error::HttpError(e.to_string()))?;
+
+        let response_data: UploadSensorDataResponse = serde_json::from_str(&text).map_err(|e| {
+            Error::HttpError(format!(
+                "Failed to parse response JSON: {}. Body: {}",
+                e, text
+            ))
+        })?;
+
+        Ok(response_data)
     }
 
     pub async fn remove_sensor_data(

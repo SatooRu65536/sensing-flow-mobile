@@ -1,42 +1,44 @@
 import styles from './index.module.scss';
 import type { Dispatch, SetStateAction } from 'react';
 import type { SyncState } from '.';
-import { IconCloudOff } from '@tabler/icons-react';
-import { syncSensorData, type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
+import { IconCloudUp } from '@tabler/icons-react';
+import { unsyncSensorData, type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
 import { useJwtToken } from '@/hooks/useJwtToken';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
 
-interface SyncIconButtonProps {
+interface UnSyncIconButtonProps {
   data: SensorData;
   isLoading: boolean;
   setState: Dispatch<SetStateAction<SyncState>>;
 }
 
-export default function SyncedIconButton({ data, setState, isLoading, ...props }: SyncIconButtonProps) {
+export default function SyncedIconButton({ data, setState, isLoading, ...props }: UnSyncIconButtonProps) {
   const [getToken, alertDialog] = useJwtToken();
 
-  const sync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const queryClient = useQueryClient();
+  const unsync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();
 
-    if (isLoading) return;
-
-    const token = getToken();
+    const token = await getToken();
     // token がない場合は getToken が alertDialog を表示するので何もしない
     if (token) {
-      setState('syncing');
+      setState('unsyncing');
 
       try {
-        await syncSensorData(data.id, token, import.meta.env.VITE_API_URL);
-        setState('synced');
+        await unsyncSensorData(data.id, token, import.meta.env.VITE_API_URL);
+        setState('unsynced');
+        await queryClient.invalidateQueries({ queryKey: [GET_GROUPED_SENSOR_DATA] });
       } catch (e) {
         console.error(e);
-        setState('unsynced');
+        setState('synced');
       }
     }
   };
 
   return (
     <>
-      <IconCloudOff className={styles.icon_button} onClick={(e) => void sync(e)} data-loading={isLoading} {...props} />
+      <IconCloudUp className={styles.icon_button} onClick={(e) => void unsync(e)} data-loading={isLoading} {...props} />
       {alertDialog}
     </>
   );

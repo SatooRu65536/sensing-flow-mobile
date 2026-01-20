@@ -179,4 +179,26 @@ impl DbService {
 
         Ok(records)
     }
+
+    pub async fn mark_sensor_data_as_synced(&self, data_id: i32, upload_id: String) -> Result<()> {
+        let active_model = sensor_data::ActiveModel {
+            id: Set(data_id),
+            upload_id: Set(Some(upload_id)),
+            ..Default::default()
+        };
+        active_model.update(&self.db).await?;
+
+        Ok(())
+    }
+
+    pub async fn mark_sensor_data_as_unsynced(&self, data_id: i32) -> Result<()> {
+        let active_model = sensor_data::ActiveModel {
+            id: Set(data_id),
+            upload_id: Set(None),
+            ..Default::default()
+        };
+        active_model.update(&self.db).await?;
+
+        Ok(())
+    }
 }

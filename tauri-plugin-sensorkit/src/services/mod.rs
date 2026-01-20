@@ -9,3 +9,6 @@ pub use database::DbService;
 
 pub mod sensor_batch;
 pub use sensor_batch::SensorBatchService;
+
+pub mod model;
+pub use model::*;
