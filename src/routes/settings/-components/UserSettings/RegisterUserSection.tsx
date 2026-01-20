@@ -11,7 +11,7 @@ import { USER_PROFILE } from '@/consts/query-key';
 import Input from '@/components/Input';
 import LongButton from '@/components/LongButton';
 import { authHeader } from '@/utils/auth-header';
-import { useJwtToken } from '@/hooks/useJwtToken';
+import { useUser } from '@/hooks/useUser';
 
 type CreateUserRequest = components['schemas']['CreateUserRequest'];
 const initValue: CreateUserRequest = {
@@ -26,7 +26,7 @@ const setFormValue = (value: Partial<CreateUserRequest>) => {
 export default function RegisterUserSection() {
   const { t } = useTranslation();
   const formValue = useStore(formStore);
-  const [getToken] = useJwtToken();
+  const { getToken } = useUser({ requireRegisteredUser: false });
 
   const queryClient = useQueryClient();
   const {
@@ -37,7 +37,7 @@ export default function RegisterUserSection() {
     mutationFn: async () => {
       try {
         if (formValue.name === '') throw new Error(t('pages.settings.user.pleaseInputUserName'));
-        const token = await getToken(true);
+        const token = await getToken();
         if (!token) throw new Error('No JWT token found');
 
         const res = await client.POST('/users', {

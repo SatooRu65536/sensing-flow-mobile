@@ -3,9 +3,9 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { SyncState } from '.';
 import { IconCloudUp } from '@tabler/icons-react';
 import { unsyncSensorData, type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
-import { useJwtToken } from '@/hooks/useJwtToken';
 import { useQueryClient } from '@tanstack/react-query';
 import { GET_GROUPED_SENSOR_DATA } from '@/consts/query-key';
+import { useUser } from '@/hooks/useUser';
 
 interface UnSyncIconButtonProps {
   data: SensorData;
@@ -14,7 +14,7 @@ interface UnSyncIconButtonProps {
 }
 
 export default function SyncedIconButton({ data, setState, isLoading, ...props }: UnSyncIconButtonProps) {
-  const [getToken, alertDialog] = useJwtToken();
+  const { getToken, alertDialog } = useUser();
 
   const queryClient = useQueryClient();
   const unsync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {

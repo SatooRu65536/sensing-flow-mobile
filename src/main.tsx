@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createRouter } from '@tanstack/react-router';
-import { AuthProvider, TanStackQueryProvider, getTanStackQueryContext } from './root-provider';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { TanStackQueryProvider, getTanStackQueryContext } from './root-provider';
 import { routeTree } from './routeTree.gen';
 import './styles/globals.scss';
 import './i18n';
@@ -11,7 +11,6 @@ const router = createRouter({
   routeTree,
   context: {
     ...TanStackQueryProviderContext,
-    auth: undefined!,
   },
   defaultPreload: 'intent',
   scrollRestoration: true,
@@ -31,7 +30,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanStackQueryProvider {...TanStackQueryProviderContext}>
-        <AuthProvider router={router} queryClient={TanStackQueryProviderContext.queryClient} />
+        <RouterProvider router={router} {...TanStackQueryProviderContext.queryClient} />
       </TanStackQueryProvider>
     </StrictMode>,
   );

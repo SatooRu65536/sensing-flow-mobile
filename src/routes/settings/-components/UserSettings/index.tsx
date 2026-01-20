@@ -1,15 +1,15 @@
-import { useUserProfile } from '@/routes/settings/-hooks/useUserProfile';
 import SignInSection from './SignInSection';
 import RegisterUserSection from './RegisterUserSection';
 import UserProfileSection from './UserProfileSection';
+import { useUser } from '@/hooks/useUser';
 
 export default function UserSettings() {
-  const { userProfile, isLoggedIn } = useUserProfile();
+  const { userProfile, isSignedIn } = useUser({ requireRegisteredUser: false });
 
   // サインイン前
-  if (!isLoggedIn) return <SignInSection />;
+  if (!isSignedIn) return <SignInSection />;
   // ユーザー登録前
-  if (!userProfile) return <RegisterUserSection />;
+  if (!userProfile.isSuccess) return <RegisterUserSection />;
   // ログイン済み
-  return <UserProfileSection userProfile={userProfile} />;
+  return <UserProfileSection userProfile={userProfile.data} />;
 }

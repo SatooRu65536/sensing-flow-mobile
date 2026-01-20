@@ -21,7 +21,7 @@ interface AuthStoreFailure {
 export type AuthStore = AuthStoreSuccess | AuthStoreLoading | AuthStoreFailure;
 
 const authStore = new Store<AuthStore>({ tokens: null, isLoading: false, isAuthSuccess: false });
-const setJwt = (auth: AuthStore) => {
+export const setJwt = (auth: AuthStore) => {
   authStore.setState(auth);
 };
 
@@ -59,9 +59,9 @@ export const useAuth = () => {
     await tokenManager.clearTokens();
   };
 
-  const refreshToken = async (): Promise<boolean> => {
+  const refresh = async () => {
     if (!auth.tokens?.refresh_token) {
-      return false;
+      return { success: false } as const;
     }
 
     try {
@@ -69,22 +69,15 @@ export const useAuth = () => {
       if (newTokens) {
         setJwt({ tokens: newTokens, isLoading: false, isAuthSuccess: true });
         await tokenManager.saveTokens(newTokens);
-        return true;
+        return { success: true, newTokens } as const;
       }
-      return false;
+      return { success: false } as const;
     } catch (error) {
       console.error('トークンリフレッシュエラー:', error);
-      return false;
+      return { success: false } as const;
     }
   };
 
-  return { auth, login, logout, refreshToken };
+  return { auth, login, logout, refresh };
 };
 export type AuthResult = ReturnType<typeof useAuth>;
-
-export async function loadTokens() {
-  const storedTokens = await tokenManager.getTokens();
-  if (storedTokens) {
-    setJwt({ tokens: storedTokens, isLoading: false, isAuthSuccess: true });
-  }
-}

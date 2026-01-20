@@ -85,6 +85,12 @@
         "message": "Your session has expired. Please log in again to continue.",
         "confirmText": "Re-login",
         "cancelText": "Cancel"
+      },
+      "notRegistered": {
+        "title": "Not Registered",
+        "message": "You need to register as a user to perform this action. Please register to continue.",
+        "confirmText": "Register",
+        "cancelText": "Cancel"
       }
     }
   }

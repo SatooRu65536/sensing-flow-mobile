@@ -1,13 +1,13 @@
 import styles from './index.module.scss';
-import type { UserProfile } from '@/routes/settings/-hooks/useUserProfile';
 import Card from '@/layout/card';
 import SectionLayout from '@/layout/section';
 import { useTranslation } from 'react-i18next';
 import Item from '../Item';
 import { formatDateFull } from '@/utils/date';
 import LongButton from '@/components/LongButton';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useUser/_useAuth';
 import { IconLogout } from '@tabler/icons-react';
+import type { UserProfile } from '@/hooks/useUser';
 
 interface UserProfileSectionProps {
   userProfile: UserProfile;

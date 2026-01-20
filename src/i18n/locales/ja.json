@@ -67,13 +67,13 @@
   },
   "hooks": {
     "useJwtToken": {
-      "title": "認証エラー",
+      "title": "認証に失敗しました",
       "message": "認証情報の取得に失敗しました。再度ログインしてください。",
       "confirmText": "再ログイン",
       "cancelText": "キャンセル"
     },
     "notLoggedIn": {
-      "title": "未ログイン",
+      "title": "ログインが必要です",
       "message": "この操作を行うにはログインが必要です。続行するにはログインしてください。",
       "confirmText": "ログイン",
       "cancelText": "キャンセル"
@@ -82,6 +82,12 @@
       "title": "再ログインが必要です",
       "message": "セッションの有効期限が切れました。続行するには再度ログインしてください。",
       "confirmText": "再ログイン",
+      "cancelText": "キャンセル"
+    },
+    "notRegistered": {
+      "title": "ユーザー登録が必要です",
+      "message": "この操作を行うにはユーザー登録が必要です。続行するには登録してください。",
+      "confirmText": "登録",
       "cancelText": "キャンセル"
     }
   }
