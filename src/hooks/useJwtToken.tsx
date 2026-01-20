@@ -1,20 +1,43 @@
 import AlertDialog from '@/components/AlertDialog';
+import { isTokenExpiringSoon } from '@/utils/jwt';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './useAuth';
 
 export function useJwtToken() {
   const { t } = useTranslation();
-  const { auth } = useAuth();
+  const { auth, refreshToken } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const refreshingRef = useRef(false);
 
-  const getToken = (openAlert?: boolean): string | undefined => {
-    if (auth.isAuthSuccess) return auth.tokens.access_token;
+  const getToken = async (openAlert?: boolean): Promise<string | undefined> => {
+    if (!auth.isAuthSuccess || !auth.tokens) {
+      if (openAlert) setOpen(true);
+      return undefined;
+    }
 
-    if (openAlert) setOpen(true);
-    return undefined;
+    const token = auth.tokens.access_token;
+
+    if (!isTokenExpiringSoon(token)) return token;
+    if (refreshingRef.current) return token;
+
+    // トークンの有効期限が5分以内の場合
+    refreshingRef.current = true;
+    try {
+      const success = await refreshToken();
+      if (success && auth.isAuthSuccess && auth.tokens) return auth.tokens.access_token;
+      // TODO: リフレッシュ失敗時の処理
+      if (openAlert) setOpen(true);
+      return undefined;
+    } catch (error) {
+      console.error('トークンリフレッシュエラー:', error);
+      if (openAlert) setOpen(true);
+      return undefined;
+    } finally {
+      refreshingRef.current = false;
+    }
   };
 
   const onConfirm = () => {

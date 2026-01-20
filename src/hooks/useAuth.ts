@@ -54,7 +54,26 @@ export const useAuth = () => {
     }
   };
 
-  return { auth, login };
+  const refreshToken = async (): Promise<boolean> => {
+    if (!auth.tokens?.refresh_token) {
+      return false;
+    }
+
+    try {
+      const newTokens = await authCognito.refreshToken(auth.tokens.refresh_token);
+      if (newTokens) {
+        setJwt({ tokens: newTokens, isLoading: false, isAuthSuccess: true });
+        await tokenManager.saveTokens(newTokens);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('トークンリフレッシュエラー:', error);
+      return false;
+    }
+  };
+
+  return { auth, login, refreshToken };
 };
 export type AuthResult = ReturnType<typeof useAuth>;
 
