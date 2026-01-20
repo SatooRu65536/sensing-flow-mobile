@@ -54,6 +54,11 @@ export const useAuth = () => {
     }
   };
 
+  const logout = async () => {
+    setJwt({ tokens: null, isLoading: false, isAuthSuccess: false });
+    await tokenManager.clearTokens();
+  };
+
   const refreshToken = async (): Promise<boolean> => {
     if (!auth.tokens?.refresh_token) {
       return false;
@@ -73,7 +78,7 @@ export const useAuth = () => {
     }
   };
 
-  return { auth, login, refreshToken };
+  return { auth, login, logout, refreshToken };
 };
 export type AuthResult = ReturnType<typeof useAuth>;
 

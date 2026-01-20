@@ -7,7 +7,6 @@ export * from './types';
 export class AuthCognito {
   private config: AuthConfigAllRequired;
   private pkceStorageKey = 'pkce_verifier';
-  private tokens: Tokens | null = null;
 
   constructor(
     {
@@ -69,21 +68,13 @@ export class AuthCognito {
         baseUrl: this.config.baseUrl,
       };
 
-      void invoke<Tokens>('plugin:auth-cognito|exchange_code_for_token', { payload })
-        .then((tokens) => {
-          this.tokens = tokens;
-          onUpdate(tokens);
-        })
-        .catch(onError);
+      void invoke<Tokens>('plugin:auth-cognito|exchange_code_for_token', { payload }).then(onUpdate).catch(onError);
     });
   }
 
-  async refreshToken(refreshToken?: string): Promise<Tokens> {
-    const refreshTokenValue = refreshToken ?? this.tokens?.refresh_token;
-    if (!refreshTokenValue) throw new Error('No refresh token available');
-
+  async refreshToken(refreshToken: string): Promise<Tokens> {
     const payload: RefreshTokenPayload = {
-      refreshToken: refreshTokenValue,
+      refreshToken,
       clientId: this.config.clientId,
       baseUrl: this.config.baseUrl,
     };

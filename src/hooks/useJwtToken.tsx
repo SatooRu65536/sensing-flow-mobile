@@ -10,7 +10,7 @@ type AlertType = 'authError' | 'notLoggedIn' | 'refreshFailed';
 
 export function useJwtToken() {
   const { t } = useTranslation();
-  const { auth, refreshToken } = useAuth();
+  const { auth, logout, refreshToken } = useAuth();
   const navigate = useNavigate();
   const refreshingRef = useRef(false);
   const [alert, setAlert] = useState<AlertType | null>(null);
@@ -45,6 +45,7 @@ export function useJwtToken() {
 
   const redirectToLogin = () => {
     // TODO: ログイン画面へ遷移
+    void logout();
     setAlert(null);
     void navigate({ to: '/settings' });
   };

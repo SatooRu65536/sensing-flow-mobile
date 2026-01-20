@@ -76,6 +76,19 @@ class TokenManager {
       return null;
     }
   }
+
+  async clearTokens() {
+    await this.init();
+    if (!this.client || !this.stronghold) return;
+
+    const store = this.client.getStore();
+
+    await store.remove('id_token');
+    await store.remove('access_token');
+    await store.remove('refresh_token');
+
+    await this.stronghold.save();
+  }
 }
 
 export const tokenManager = new TokenManager();
