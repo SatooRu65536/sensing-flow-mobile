@@ -1,31 +1,24 @@
 import { USER_PROFILE } from '@/consts/query-key';
 import { useQuery } from '@tanstack/react-query';
-import { useJwtToken } from './useJwtToken';
+import { useJwtToken } from '../../../hooks/useJwtToken';
 import { client } from '@/api';
-import type { FileRouteTypes } from '@/routeTree.gen';
 import type { components } from '@/api.types.gen';
-import { useRouteContext } from '@tanstack/react-router';
-
-interface UseUserInfoProps {
-  from: FileRouteTypes['id'];
-}
+import { useAuth } from '../../../hooks/useAuth';
 
 export type UserProfile = components['schemas']['GetUserResponse'];
 
-export function useUserProfile({ from }: UseUserInfoProps) {
-  const [getToken, alertDialog] = useJwtToken({ from });
-  const { auth } = useRouteContext({ from });
-
-  const isLoggedIn = auth.data !== undefined;
+export function useUserProfile() {
+  const [getToken, alertDialog] = useJwtToken();
+  const { auth } = useAuth();
 
   const {
     data: userProfile,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: [USER_PROFILE],
+    queryKey: [USER_PROFILE, auth.jwt],
     queryFn: async () => {
-      const token = getToken();
+      const token = getToken(false);
       if (!token) throw new Error('No JWT token found');
 
       try {
@@ -45,5 +38,6 @@ export function useUserProfile({ from }: UseUserInfoProps) {
     retry: false,
   });
 
+  const isLoggedIn = auth.isAuthSuccess;
   return { userProfile, isLoggedIn, isLoading, refetchUser: refetch, alertDialog };
 }

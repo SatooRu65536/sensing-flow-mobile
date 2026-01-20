@@ -1,10 +1,11 @@
-import { useUserProfile } from '@/hooks/useUserProfile';
+import { useUserProfile } from '@/routes/settings/-hooks/useUserProfile';
 import SignInSection from './SignInSection';
 import RegisterUserSection from './RegisterUserSection';
 import UserProfileSection from './UserProfileSection';
 
 export default function UserSettings() {
-  const { userProfile, isLoggedIn } = useUserProfile({ from: '/settings/' });
+  const { userProfile, isLoggedIn } = useUserProfile();
+  console.log(userProfile);
 
   // サインイン前
   if (!isLoggedIn) return <SignInSection />;

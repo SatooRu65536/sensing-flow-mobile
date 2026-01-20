@@ -25,7 +25,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ router, queryClient }: AuthProviderProps) {
-  const auth = useAuth();
+  const { auth } = useAuth();
 
   if (auth.isLoading) {
     return null;

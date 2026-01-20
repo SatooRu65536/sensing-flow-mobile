@@ -1,23 +1,19 @@
 import AlertDialog from '@/components/AlertDialog';
-import type { FileRouteTypes } from '@/routeTree.gen';
-import { useNavigate, useRouteContext } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from './useAuth';
 
-interface UseJwtTokenProps {
-  from: FileRouteTypes['id'];
-}
-
-export function useJwtToken({ from }: UseJwtTokenProps) {
+export function useJwtToken() {
   const { t } = useTranslation();
-  const { auth } = useRouteContext({ from });
+  const { auth } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const getToken = (): string | undefined => {
-    if (auth.data?.idToken) return auth.data.idToken;
+  const getToken = (openAlert?: boolean): string | undefined => {
+    if (auth.jwt) return auth.jwt;
 
-    setOpen(true);
+    if (openAlert) setOpen(true);
     return undefined;
   };
 
@@ -31,13 +27,18 @@ export function useJwtToken({ from }: UseJwtTokenProps) {
     setOpen(false);
   };
 
-  const isNotLoggedIn = auth.data === undefined;
-  const title = isNotLoggedIn ? t('hooks.useJwtToken.notLoggedIn.title') : t('hooks.useJwtToken.authError.title');
-  const message = isNotLoggedIn ? t('hooks.useJwtToken.notLoggedIn.message') : t('hooks.useJwtToken.authError.message');
-  const confirmText = isNotLoggedIn
+  const onOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+  };
+
+  const title = auth.isAuthSuccess ? t('hooks.useJwtToken.notLoggedIn.title') : t('hooks.useJwtToken.authError.title');
+  const message = auth.isAuthSuccess
+    ? t('hooks.useJwtToken.notLoggedIn.message')
+    : t('hooks.useJwtToken.authError.message');
+  const confirmText = auth.isAuthSuccess
     ? t('hooks.useJwtToken.notLoggedIn.confirmText')
     : t('hooks.useJwtToken.authError.confirmText');
-  const cancelText = isNotLoggedIn
+  const cancelText = auth.isAuthSuccess
     ? t('hooks.useJwtToken.notLoggedIn.cancelText')
     : t('hooks.useJwtToken.authError.cancelText');
 
@@ -48,6 +49,7 @@ export function useJwtToken({ from }: UseJwtTokenProps) {
       onCancel={onCancel}
       confirmText={confirmText}
       cancelText={cancelText}
+      onOpenChange={onOpenChange}
       open={open}
     >
       <p>{message}</p>

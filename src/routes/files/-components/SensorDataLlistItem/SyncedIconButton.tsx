@@ -12,7 +12,7 @@ interface SyncIconButtonProps {
 }
 
 export default function SyncedIconButton({ data, setState, isLoading, ...props }: SyncIconButtonProps) {
-  const [getToken, alertDialog] = useJwtToken({ from: '/files/' });
+  const [getToken, alertDialog] = useJwtToken();
 
   const sync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();

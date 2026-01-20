@@ -12,7 +12,7 @@ interface UnSyncIconButtonProps {
 }
 
 export default function UnSyncedIconButton({ data, setState, isLoading, ...props }: UnSyncIconButtonProps) {
-  const [getToken, alertDialog] = useJwtToken({ from: '/files/' });
+  const [getToken, alertDialog] = useJwtToken();
 
   const unsync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();

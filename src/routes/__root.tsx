@@ -2,11 +2,11 @@ import { Outlet, createRootRouteWithContext, useMatches } from '@tanstack/react-
 import type { QueryClient } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import TabBar from '@/components/TabBar';
-import type { AuthResult } from '@/hooks/useAuth';
+import { type AuthStore } from '@/hooks/useAuth';
 
 interface MyRouterContext {
   queryClient: QueryClient;
-  auth: AuthResult;
+  auth: AuthStore;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

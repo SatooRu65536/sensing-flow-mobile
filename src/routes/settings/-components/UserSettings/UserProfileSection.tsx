@@ -1,4 +1,4 @@
-import type { UserProfile } from '@/hooks/useUserProfile';
+import type { UserProfile } from '@/routes/settings/-hooks/useUserProfile';
 import Card from '@/layout/card';
 import SectionLayout from '@/layout/section';
 import { useTranslation } from 'react-i18next';
