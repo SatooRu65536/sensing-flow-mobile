@@ -62,7 +62,21 @@
   "hooks": {
     "useJwtToken": {
       "title": "認証エラー",
-      "message": "認証情報の取得に失敗しました。再度ログインしてください。"
+      "message": "認証情報の取得に失敗しました。再度ログインしてください。",
+      "confirmText": "再ログイン",
+      "cancelText": "キャンセル"
+    },
+    "notLoggedIn": {
+      "title": "未ログイン",
+      "message": "この操作を行うにはログインが必要です。続行するにはログインしてください。",
+      "confirmText": "ログイン",
+      "cancelText": "キャンセル"
+    },
+    "refreshFailed": {
+      "title": "再ログインが必要です",
+      "message": "セッションの有効期限が切れました。続行するには再度ログインしてください。",
+      "confirmText": "再ログイン",
+      "cancelText": "キャンセル"
     }
   }
 }

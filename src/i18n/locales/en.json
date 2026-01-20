@@ -75,6 +75,12 @@
         "message": "This action requires you to be logged in. Please log in to continue.",
         "confirmText": "Login",
         "cancelText": "Cancel"
+      },
+      "refreshFailed": {
+        "title": "Re-login Required",
+        "message": "Your session has expired. Please log in again to continue.",
+        "confirmText": "Re-login",
+        "cancelText": "Cancel"
       }
     }
   }

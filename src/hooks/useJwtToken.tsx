@@ -4,17 +4,20 @@ import { useNavigate } from '@tanstack/react-router';
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from './useAuth';
+import type { TFunction } from 'i18next';
+
+type AlertType = 'authError' | 'notLoggedIn' | 'refreshFailed';
 
 export function useJwtToken() {
   const { t } = useTranslation();
   const { auth, refreshToken } = useAuth();
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const refreshingRef = useRef(false);
+  const [alert, setAlert] = useState<AlertType | null>(null);
 
   const getToken = async (openAlert?: boolean): Promise<string | undefined> => {
     if (!auth.isAuthSuccess || !auth.tokens) {
-      if (openAlert) setOpen(true);
+      if (openAlert) setAlert('notLoggedIn');
       return undefined;
     }
 
@@ -29,55 +32,86 @@ export function useJwtToken() {
       const success = await refreshToken();
       if (success && auth.isAuthSuccess && auth.tokens) return auth.tokens.access_token;
       // TODO: リフレッシュ失敗時の処理
-      if (openAlert) setOpen(true);
+      if (openAlert) setAlert('refreshFailed');
       return undefined;
     } catch (error) {
       console.error('トークンリフレッシュエラー:', error);
-      if (openAlert) setOpen(true);
+      if (openAlert) setAlert('refreshFailed');
       return undefined;
     } finally {
       refreshingRef.current = false;
     }
   };
 
-  const onConfirm = () => {
+  const redirectToLogin = () => {
     // TODO: ログイン画面へ遷移
-    setOpen(false);
+    setAlert(null);
     void navigate({ to: '/settings' });
   };
 
   const onCancel = () => {
-    setOpen(false);
+    setAlert(null);
   };
 
-  const onOpenChange = (isOpen: boolean) => {
-    setOpen(isOpen);
-  };
-
-  const title = auth.isAuthSuccess ? t('hooks.useJwtToken.notLoggedIn.title') : t('hooks.useJwtToken.authError.title');
-  const message = auth.isAuthSuccess
-    ? t('hooks.useJwtToken.notLoggedIn.message')
-    : t('hooks.useJwtToken.authError.message');
-  const confirmText = auth.isAuthSuccess
-    ? t('hooks.useJwtToken.notLoggedIn.confirmText')
-    : t('hooks.useJwtToken.authError.confirmText');
-  const cancelText = auth.isAuthSuccess
-    ? t('hooks.useJwtToken.notLoggedIn.cancelText')
-    : t('hooks.useJwtToken.authError.cancelText');
-
-  const alertDialog = (
-    <AlertDialog
-      title={title}
-      onConfirm={onConfirm}
-      onCancel={onCancel}
-      confirmText={confirmText}
-      cancelText={cancelText}
-      onOpenChange={onOpenChange}
-      open={open}
-    >
-      <p>{message}</p>
-    </AlertDialog>
-  );
+  const alertDialog =
+    alert === 'authError' ? (
+      <AuthErrorAlert t={t} redirectToLogin={redirectToLogin} closeAlert={onCancel} />
+    ) : alert === 'notLoggedIn' ? (
+      <NotLoggedInAlert t={t} redirectToLogin={redirectToLogin} closeAlert={onCancel} />
+    ) : alert === 'refreshFailed' ? (
+      <RefreshFailedAlert t={t} redirectToLogin={redirectToLogin} closeAlert={onCancel} />
+    ) : null;
 
   return [getToken, alertDialog] as const;
+}
+
+interface AlertProps {
+  t: TFunction;
+  redirectToLogin: () => void;
+  closeAlert: () => void;
+}
+
+function AuthErrorAlert({ t, redirectToLogin, closeAlert }: AlertProps) {
+  return (
+    <AlertDialog
+      title={t('hooks.useJwtToken.notLoggedIn.title')}
+      onConfirm={redirectToLogin}
+      onCancel={closeAlert}
+      confirmText={t('hooks.useJwtToken.notLoggedIn.confirmText')}
+      cancelText={t('hooks.useJwtToken.notLoggedIn.cancelText')}
+      open
+    >
+      <p>{t('hooks.useJwtToken.notLoggedIn.message')}</p>
+    </AlertDialog>
+  );
+}
+
+function NotLoggedInAlert({ t, redirectToLogin, closeAlert }: AlertProps) {
+  return (
+    <AlertDialog
+      title={t('hooks.useJwtToken.authError.title')}
+      onConfirm={redirectToLogin}
+      onCancel={closeAlert}
+      confirmText={t('hooks.useJwtToken.authError.confirmText')}
+      cancelText={t('hooks.useJwtToken.authError.cancelText')}
+      open
+    >
+      <p>{t('hooks.useJwtToken.authError.message')}</p>
+    </AlertDialog>
+  );
+}
+
+function RefreshFailedAlert({ t, redirectToLogin, closeAlert }: AlertProps) {
+  return (
+    <AlertDialog
+      title={t('hooks.useJwtToken.refreshFailed.title')}
+      onConfirm={redirectToLogin}
+      onCancel={closeAlert}
+      confirmText={t('hooks.useJwtToken.refreshFailed.confirmText')}
+      cancelText={t('hooks.useJwtToken.refreshFailed.cancelText')}
+      open
+    >
+      <p>{t('hooks.useJwtToken.refreshFailed.message')}</p>
+    </AlertDialog>
+  );
 }
