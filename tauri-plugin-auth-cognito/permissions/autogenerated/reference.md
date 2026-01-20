@@ -6,6 +6,7 @@ Default permissions for the plugin
 
 - `allow-start-auth`
 - `allow-exchange-code-for-token`
+- `allow-refresh-token`
 
 ## Permission Table
 

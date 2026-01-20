@@ -1,3 +1,7 @@
 [default]
 description = "Default permissions for the plugin"
-permissions = ["allow-start-auth", "allow-exchange-code-for-token"]
+permissions = [
+    "allow-start-auth",
+    "allow-exchange-code-for-token",
+    "allow-refresh-token",
+]
