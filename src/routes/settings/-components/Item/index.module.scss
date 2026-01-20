@@ -1,3 +1,20 @@
 .item {
-  
+  width: 100%;
+  font-size: $text-size-base;
+  display: grid;
+  grid-template-columns: auto 1fr;
+
+  .label {
+    padding-right: 5px;
+    font-weight: $text-weight-bold;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .value {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

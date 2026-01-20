@@ -9,9 +9,9 @@ interface ItemProps extends ComponentProps<'p'> {
 
 export default function Item({ label, value, className, ...props }: ItemProps) {
   return (
-    <p className={classnames(styles.item, className)} {...props}>
-      <span>{label}</span>
-      <span>{value}</span>
-    </p>
+    <div className={classnames(styles.item, className)} {...props}>
+      <span className={styles.label}>{label}:</span>
+      <span className={styles.value}>{value}</span>
+    </div>
   );
 }
