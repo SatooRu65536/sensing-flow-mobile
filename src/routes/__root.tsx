@@ -3,7 +3,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import TabBar from '@/components/TabBar';
 import { tokenManager } from '@/lib/tokenManager';
-import { setJwt } from '@/hooks/useUser/_useAuth';
+import { setTokens } from '@/hooks/useUser/stores/auth';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -12,7 +12,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async () => {
     const storedTokens = await tokenManager.getTokens();
-    if (storedTokens) setJwt({ tokens: storedTokens, isLoading: false, isAuthSuccess: true });
+    if (storedTokens) setTokens(storedTokens);
   },
   component: () => {
     const matches = useMatches();
