@@ -6,8 +6,12 @@
 
     .reset_button {
       all: unset;
-
       font-size: 30px;
+      color: $color-text;
+
+      &:disabled {
+        color: $color-disabled;
+      }
     }
   }
 

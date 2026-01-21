@@ -69,7 +69,7 @@ export default function SensingSettings(props: SensingConfigProps) {
           disabled={state !== 'ready'}
         />
 
-        <button className={styles.reset_button} onClick={resetAllSensingSettings}>
+        <button className={styles.reset_button} onClick={resetAllSensingSettings} disabled={state !== 'ready'}>
           <IconReload />
         </button>
       </div>
