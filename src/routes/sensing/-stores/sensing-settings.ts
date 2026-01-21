@@ -67,6 +67,10 @@ export const resetSensingSettings = () => {
   sensingSettingsStore.setState((state) => ({ ...initValue, save: state.save }));
 };
 
+export const resetAllSensingSettings = () => {
+  sensingSettingsStore.setState({ ...initValue });
+};
+
 export const setSensingSettings = (settings: Partial<SensingSettingsState>) => {
   sensingSettingsStore.setState((state) => ({
     ...state,
