@@ -24,7 +24,20 @@
     gap: 10px;
   }
 
+  .link {
+    color: $color-text;
+  }
+
   &[data-disabled='true'] {
-    opacity: 0.5;
+    color: $color-on-disabled;
+    background-color: $color-disabled;
+
+    .content {
+      color: $color-on-disabled;
+    }
+
+    .link {
+      color: $color-on-disabled;
+    }
   }
 }
