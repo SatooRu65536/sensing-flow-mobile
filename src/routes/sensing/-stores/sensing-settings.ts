@@ -66,3 +66,10 @@ export const setRealTimeShare = (realTimeShare: boolean) => {
 export const resetSensingSettings = () => {
   sensingSettingsStore.setState((state) => ({ ...initValue, save: state.save }));
 };
+
+export const setSensingSettings = (settings: Partial<SensingSettingsState>) => {
+  sensingSettingsStore.setState((state) => ({
+    ...state,
+    ...settings,
+  }));
+};

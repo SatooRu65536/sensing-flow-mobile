@@ -20,20 +20,9 @@ import {
 } from '@/routes/sensing/-stores/sensing-settings';
 import { sensingStateStore } from '@/stores/sensing-state';
 
-interface SensingConfigProps extends React.ComponentProps<'div'> {
-  defaultSensor?: SensorName | number;
-  defaultGroupId?: number;
-  defaultSync?: boolean;
-  defaultRealTime?: boolean;
-}
+type SensingConfigProps = React.ComponentProps<'div'>;
 
-export default function SensingSettings({
-  defaultSensor,
-  defaultGroupId,
-  defaultSync = false,
-  defaultRealTime = false,
-  ...props
-}: SensingConfigProps) {
+export default function SensingSettings(props: SensingConfigProps) {
   const { t } = useTranslation();
   const settings = useStore(sensingSettingsStore);
   const state = useStore(sensingStateStore);
@@ -81,7 +70,6 @@ export default function SensingSettings({
 
       <Select<SensorName | number> // string: sensorId, number: sensorSetId
         items={sensorItems}
-        defaultValue={defaultSensor}
         placeholder={t('pages.sensing.SelectSensors')}
         onChange={(value) => {
           setSensor(value);
@@ -93,7 +81,6 @@ export default function SensingSettings({
         items={groupItems}
         placeholder={t('pages.sensing.SelectGroup')}
         onChange={(value) => setGroupId(value)}
-        defaultValue={defaultGroupId}
         value={settings.groupId}
         disabled={state !== 'ready' || settings.save === false}
       />
@@ -105,14 +92,12 @@ export default function SensingSettings({
       />
       <Checkbox
         label={t('pages.sensing.AutoSyncToCloud')}
-        defaultChecked={defaultSync}
         onCheckedChange={(checked) => setAutoSync(checked)}
         // disabled={state !== 'ready' || settings.save === false} // TODO: 未実装
         disabled={true}
       />
       <Checkbox
         label={t('pages.sensing.RealTimeShare')}
-        defaultChecked={defaultRealTime}
         onCheckedChange={(checked) => setRealTimeShare(checked)}
         checked={settings.realTimeShare}
         // disabled={state !== 'ready'} // TODO: 未実装
