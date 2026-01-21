@@ -1,7 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
-import { SensorEventMap, SensorNameMap } from './sensorEvent';
-import {
+import { type SensorEventMap, SensorNameMap } from './sensorEvent';
+import type {
   CreateGroupRequest,
   CreateGroupResponse,
   CreateSensorDataRequest,
@@ -15,7 +15,7 @@ import {
 
 export * from './type';
 export * from './sensorEvent';
-export { UnlistenFn } from '@tauri-apps/api/event';
+export type { UnlistenFn } from '@tauri-apps/api/event';
 
 export async function getAvailableSensors(): Promise<GetAvailableSensorsResponse> {
   const res = await invoke<GetAvailableSensorsResponse>('plugin:sensorkit|get_available_sensors');

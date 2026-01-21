@@ -1,4 +1,4 @@
-import { SensorName } from './sensorEvent';
+import type { SensorName } from './sensorEvent';
 
 export type GetAvailableSensorsResponse = {
   [key in SensorName]: boolean;

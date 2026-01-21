@@ -30,7 +30,8 @@ export default function Select<T extends string | number>({
   onChange,
   ...props
 }: SelectProps<T>) {
-  const isGrouped = Array.isArray(items) && items.length > 0 && 'items' in items[0];
+  const firstItem = items?.at(0);
+  const isGrouped = Array.isArray(items) && firstItem != undefined && 'items' in firstItem;
   const flatItems: SelectItem[] = isGrouped
     ? ((items as GroupedSelectItems)?.flatMap((i) => i.items ?? []) ?? [])
     : ((items as SelectItems) ?? []);

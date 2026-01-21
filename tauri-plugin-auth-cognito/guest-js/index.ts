@@ -1,6 +1,12 @@
 import { invoke } from '@tauri-apps/api/core';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
-import { AuthConfig, AuthConfigAllRequired, ExchangeCodeForTokenPayload, RefreshTokenPayload, Tokens } from './types';
+import type {
+  AuthConfig,
+  AuthConfigAllRequired,
+  ExchangeCodeForTokenPayload,
+  RefreshTokenPayload,
+  Tokens,
+} from './types';
 
 export * from './types';
 

@@ -8,14 +8,15 @@ import SensorSelector from './SensorSelector';
 
 export default function SensorValueSelector() {
   const sensors = useStore(sensorListStore);
-  const [sensor, setSensor] = useState<SensorName>(sensors[0]);
+  const [sensor, setSensor] = useState<SensorName>(sensors[0] ?? 'accelerometer');
 
   const prevSensorsRef = useRef(sensors);
 
   if (prevSensorsRef.current !== sensors) {
     prevSensorsRef.current = sensors;
-    if (sensors.length > 0) {
-      setSensor(sensors[0]);
+    const firstSensor = sensors[0];
+    if (firstSensor) {
+      setSensor(firstSensor);
     }
   }
 
