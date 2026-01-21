@@ -17,8 +17,10 @@ import {
   setAutoSync,
   setRealTimeShare,
   setSave,
+  resetSensingSettings,
 } from '@/routes/sensing/-stores/sensing-settings';
 import { sensingStateStore } from '@/stores/sensing-state';
+import { IconReload } from '@tabler/icons-react';
 
 type SensingConfigProps = React.ComponentProps<'div'>;
 
@@ -59,12 +61,18 @@ export default function SensingSettings(props: SensingConfigProps) {
 
   return (
     <Card className={styles.sensing_config} {...props}>
-      <Checkbox
-        label={t('pages.sensing.Save')}
-        defaultChecked={true}
-        onCheckedChange={(checked) => setSave(checked)}
-        disabled={state !== 'ready'}
-      />
+      <div className={styles.setting_header}>
+        <Checkbox
+          label={t('pages.sensing.Save')}
+          defaultChecked={true}
+          onCheckedChange={(checked) => setSave(checked)}
+          disabled={state !== 'ready'}
+        />
+
+        <button className={styles.reset_button} onClick={resetSensingSettings}>
+          <IconReload />
+        </button>
+      </div>
 
       <div className={styles.line}></div>
 

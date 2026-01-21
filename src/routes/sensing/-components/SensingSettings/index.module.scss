@@ -1,4 +1,16 @@
 .sensing_config {
+  .setting_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .reset_button {
+      all: unset;
+
+      font-size: 30px;
+    }
+  }
+
   .line {
     height: 1px;
     background-color: $color-primary;
