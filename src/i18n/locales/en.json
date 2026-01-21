@@ -39,7 +39,7 @@
       "SensorSets": "Sensor Sets",
       "Reset": "Reset",
       "Cancel": "Cancel",
-      "ResetSensingData": "Reset Sensing Data."
+      "ResetSensingData": "Reset Sensing Data. This action cannot be undone."
     },
     "settings": {
       "user": {
