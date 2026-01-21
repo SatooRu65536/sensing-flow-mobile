@@ -75,7 +75,7 @@ export default function SensingSettings(props: SensingConfigProps) {
           setSensor(value);
         }}
         value={settings.sensor}
-        disabled={state !== 'ready' || settings.save === false}
+        disabled={state !== 'ready'}
       />
       <Select<number>
         items={groupItems}

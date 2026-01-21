@@ -14,6 +14,7 @@ export const sensingSettingsSchema = z
   .or(
     z.object({
       save: z.literal(false),
+      sensor: z.number().or(z.string().min(1, 'センサーを選択してください')),
     }),
   );
 export type SensingSettingsSchema = z.infer<typeof sensingSettingsSchema>;
