@@ -1,1 +1,1 @@
-# Tauri Plugin auth-cognito
+# Tauri Plugin AuthCognito

@@ -1,1 +1,1 @@
-# Tauri Plugin sensorkit
+# Tauri Plugin SensorKit
