@@ -13,6 +13,15 @@
     "os:default",
     "deep-link:default",
     "stronghold:default",
-    "stronghold:allow-remove-secret"
+    "stronghold:allow-remove-secret",
+    "http:default",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://sensing-flow-api*.satooru.dev"
+        }
+      ]
+    }
   ]
 }

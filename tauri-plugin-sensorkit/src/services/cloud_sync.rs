@@ -3,8 +3,11 @@ use crate::{
     services::UploadSensorDataResponse,
 };
 use entity::sensor_data;
-use reqwest::multipart::{Form, Part};
 use std::path::Path;
+use tauri_plugin_http::{
+    reqwest,
+    reqwest::multipart::{Form, Part},
+};
 
 #[derive(Clone)]
 pub struct CloudSyncService {}
