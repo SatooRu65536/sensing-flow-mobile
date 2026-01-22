@@ -2,6 +2,7 @@ use crate::{
     error::{Error, Result},
     services::UploadSensorDataResponse,
 };
+use chrono::NaiveDateTime;
 use entity::sensor_data;
 use std::path::Path;
 use tauri_plugin_http::{
@@ -24,8 +25,12 @@ impl CloudSyncService {
         api_url: String,
     ) -> Result<UploadSensorDataResponse> {
         let url = self.get_url("/sensor-data", api_url);
+        let datetime_utc =
+            NaiveDateTime::parse_from_str(&sensor_data.created_at.to_string(), "%Y-%m-%d %H:%M:%S")
+                .unwrap()
+                .and_utc();
         let mut form = Form::new()
-            .text("createdAt", sensor_data.created_at.to_string())
+            .text("createdAt", datetime_utc.to_rfc3339())
             .text("dataName", sensor_data.name.clone());
 
         for sensor in sensor_data.active_sensors.0.iter() {
