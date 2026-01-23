@@ -3,7 +3,7 @@ use crate::services::database::GroupedSensorFiles;
 use crate::{
     CreateGroupRequest, CreateGroupResponse, CreateSensorDataRequest, CreateSensorDataResponse,
     DeleteGroupRequest, DeleteSensorDataRequest, GetGroupRequest, GetGroupResponse,
-    GetGroupsResponse, SensorkitExt, SyncSensorDataRequest, UnsyncSensorDataRequest,
+    GetGroupsResponse, SensorkitExt,
 };
 use std::sync::Arc;
 use tauri::{command, AppHandle, Runtime};
@@ -134,71 +134,5 @@ pub(crate) async fn delete_group<R: Runtime>(
     app.sensorkit()
         .db_service
         .delete_sensor_group(&app.sensorkit().storage_service, payload.id)
-        .await
-}
-
-#[command]
-pub(crate) async fn sync_sensor_data<R: Runtime>(
-    app: AppHandle<R>,
-    payload: SyncSensorDataRequest,
-) -> crate::Result<()> {
-    let sensor_data = app
-        .sensorkit()
-        .db_service
-        .get_sensor_data(payload.id)
-        .await?;
-
-    if sensor_data.upload_id.is_some() {
-        return Err(crate::Error::Other("Sensor data is already synced".into()));
-    }
-
-    let resp = app
-        .sensorkit()
-        .cloud_sync_service
-        .upload_sensor_data(sensor_data.clone(), payload.jwt_token, payload.api_url)
-        .await;
-
-    let data = resp?;
-    if !data.failed_sensors.is_empty() {
-        return Err(crate::Error::Other(format!(
-            "Some sensors failed to upload: {:?}",
-            data.failed_sensors
-        )));
-    }
-
-    app.sensorkit()
-        .db_service
-        .mark_sensor_data_as_synced(payload.id, data.id)
-        .await
-}
-
-#[command]
-pub(crate) async fn unsync_sensor_data<R: Runtime>(
-    app: AppHandle<R>,
-    payload: UnsyncSensorDataRequest,
-) -> crate::Result<()> {
-    let sensor_data = app
-        .sensorkit()
-        .db_service
-        .get_sensor_data(payload.id)
-        .await?;
-
-    if sensor_data.upload_id.is_none() {
-        return Err(crate::Error::Other("Sensor data is not synced".into()));
-    }
-
-    let upload_id = sensor_data
-        .upload_id
-        .ok_or_else(|| crate::Error::Other("Sensor data is not synced".into()))?;
-
-    let _ = app
-        .sensorkit()
-        .cloud_sync_service
-        .remove_sensor_data(upload_id, payload.jwt_token, payload.api_url)
-        .await;
-
-    app.sensorkit()
-        .db_service
-        .mark_sensor_data_as_unsynced(payload.id)
         .await
 }

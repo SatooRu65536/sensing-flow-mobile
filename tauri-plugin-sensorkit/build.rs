@@ -9,8 +9,6 @@ const COMMANDS: &[&str] = &[
     "get_group",
     "get_groups",
     "delete_group",
-    "sync_sensor_data",
-    "unsync_sensor_data",
     "registerListener",
     "unregister_listener",
 ];

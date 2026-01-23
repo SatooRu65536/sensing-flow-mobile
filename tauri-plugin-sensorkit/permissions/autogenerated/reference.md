@@ -16,8 +16,6 @@ Default permissions for the plugin
 - `allow-get-group`
 - `allow-get-groups`
 - `allow-delete-group`
-- `allow-sync-sensor-data`
-- `allow-unsync-sensor-data`
 
 ## Permission Table
 
