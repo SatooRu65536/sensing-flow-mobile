@@ -58,7 +58,6 @@ pub(crate) async fn create_sensor_data<R: Runtime>(
             id: record.id,
             name: record.name,
             folder_path: record.folder_path,
-            synced: record.upload_id.is_some(),
             active_sensors: record.active_sensors.0,
             group_id: record.group_id,
             created_at: record.created_at,

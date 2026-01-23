@@ -1,19 +1,17 @@
 import styles from './index.module.scss';
 import { useStore } from '@tanstack/react-store';
-import type { components } from '@/api.types.gen';
 import Card from '@/layout/card';
 import SectionLayout from '@/layout/section';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Store } from '@tanstack/store';
 import { useTranslation } from 'react-i18next';
-import { client } from '@/api';
+import { client, type CreateUserRequest } from '@/api';
 import { USER_PROFILE } from '@/consts/query-key';
 import Input from '@/components/Input';
 import LongButton from '@/components/LongButton';
 import { authHeader } from '@/utils/auth-header';
 import { useUser } from '@/hooks/useUser';
 
-type CreateUserRequest = components['schemas']['CreateUserRequest'];
 const initValue: CreateUserRequest = {
   name: '',
   plan: 'guest',

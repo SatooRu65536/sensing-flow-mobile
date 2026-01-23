@@ -27,10 +27,9 @@ export interface CreateSensorDataResponse {
 export interface SensorData {
   id: number;
   name: string;
-  filePath: string;
+  folderPath: string;
   activeSensors: SensorName[];
   groupId: number;
-  uploadId: string | null;
   createdAt: string;
 }
 

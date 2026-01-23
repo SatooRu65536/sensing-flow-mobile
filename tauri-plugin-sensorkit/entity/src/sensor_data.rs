@@ -16,8 +16,6 @@ pub struct Model {
     pub active_sensors: ActiveSensors,
     pub group_id: i32,
     pub created_at: DateTime,
-    #[sea_orm(nullable)]
-    pub upload_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter)]

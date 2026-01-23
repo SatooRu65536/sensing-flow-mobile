@@ -84,36 +84,20 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/multipart-upload": {
+    "/rate-limit/test": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["MultipartUploadController_listMultipartUploads"];
+        get: operations["RateLimitController_testRateLimit"];
         put?: never;
-        post: operations["MultipartUploadController_startMultipartUpload"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/multipart-upload/{uploadId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["MultipartUploadController_uploadMultipartUpload"];
-        post?: never;
-        delete: operations["MultipartUploadController_abortMultipartUpload"];
-        options?: never;
-        head?: never;
-        patch: operations["MultipartUploadController_completeMultipartUpload"];
         trace?: never;
     };
     "/sensor-data": {
@@ -125,7 +109,7 @@ export interface paths {
         };
         get: operations["SensorDataController_listSensorData"];
         put?: never;
-        post: operations["SensorDataController_uploadSensorDataFiles"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -148,30 +132,30 @@ export interface paths {
         patch: operations["SensorDataController_updateSensorData"];
         trace?: never;
     };
-    "/sensor-data/{id}/presigned-url": {
+    "/sensor-data/presigned-urls": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["SensorDataController_getSensorDataPresignedUrl"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: operations["SensorDataController_getPresignedUrlsForUpload"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/rate-limit/test": {
+    "/sensor-data/presigned-urls/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["RateLimitController_testRateLimit"];
+        get: operations["SensorDataController_getPresignedUrlsForDownload"];
         put?: never;
         post?: never;
         delete?: never;
@@ -232,64 +216,16 @@ export interface components {
              */
             plan: "guest" | "trial" | "basic" | "pro" | "admin" | "developer";
         };
-        MultiPartUpload: {
-            /** @description センサデータのアップロードID */
-            uploadId: string;
-            /** @description センサデータ名 */
-            dataName: string;
-            /**
-             * @description ステータス
-             * @enum {string}
-             */
-            status: "in_progress" | "completed" | "aborted";
-            /**
-             * Format: date-time
-             * @description 作成日時
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description 更新日時
-             */
-            updatedAt: string;
-        };
-        ListMultipartUploadResponse: {
-            /** @description センサデータアップロード一覧 */
-            multipartUploads: components["schemas"]["MultiPartUpload"][];
-        };
-        StartMultipartUploadRequest: {
-            /** @description センサデータ名 */
-            dataName: string;
-        };
-        StartMultipartUploadResponse: {
-            /** @description センサデータのアップロードID */
-            uploadId: string;
-            /** @description センサデータ名 */
-            dataName: string;
-        };
-        PostMultipartUploadResponse: {
-            /** @description センサデータのアップロードID */
-            uploadId: string;
-            /** @description センサデータ名 */
-            dataName: string;
-        };
-        CompleteMultipartUploadResponse: {
-            /** @description センサデータのアップロードID */
-            uploadId: string;
-            /** @description センサデータ名 */
-            dataName: string;
-        };
-        AbortMultipartUploadResponse: {
-            /** @description センサデータのアップロードID */
-            uploadId: string;
-            /** @description センサデータ名 */
-            dataName: string;
-        };
         SensorData: {
             /** @description センサデータID */
             id: string;
             /** @description センサデータ名 */
             dataName: string;
+            /**
+             * @description 有効なセンサ
+             * @enum {string}
+             */
+            activeSensors: "accelerometer" | "linear_acceleration" | "gyroscope" | "barometer" | "magnetometer" | "location" | "light";
             /**
              * Format: date-time
              * @description 作成日時
@@ -305,20 +241,16 @@ export interface components {
             /** @description センサデータ一覧 */
             sensorData: components["schemas"]["SensorData"][];
         };
-        UploadSensorDataRequest: {
-            /** @description センサデータ名 */
-            dataName: string;
-            /**
-             * Format: date-time
-             * @description 作成日時
-             */
-            createdAt: string;
-        };
         GetSensorDataResponse: {
             /** @description センサデータID */
             id: string;
             /** @description センサデータ名 */
             dataName: string;
+            /**
+             * @description 有効なセンサ
+             * @enum {string}
+             */
+            activeSensors: "accelerometer" | "linear_acceleration" | "gyroscope" | "barometer" | "magnetometer" | "location" | "light";
             /**
              * Format: date-time
              * @description 作成日時
@@ -340,6 +272,11 @@ export interface components {
             /** @description センサデータ名 */
             dataName: string;
             /**
+             * @description 有効なセンサ
+             * @enum {string}
+             */
+            activeSensors: "accelerometer" | "linear_acceleration" | "gyroscope" | "barometer" | "magnetometer" | "location" | "light";
+            /**
              * Format: date-time
              * @description 作成日時
              */
@@ -350,7 +287,27 @@ export interface components {
              */
             updatedAt: string;
         };
-        GetSensorDataPresignedUrlResponse: {
+        UploadSensorDataRequest: {
+            /** @description センサデータ名 */
+            dataName: string;
+            /**
+             * Format: date-time
+             * @description 作成日時
+             */
+            createdAt: string;
+            /** @description アップロードするセンサ */
+            sensors: ("accelerometer" | "linear_acceleration" | "gyroscope" | "barometer" | "magnetometer" | "location" | "light")[];
+        };
+        PresignedUrl: {
+            /**
+             * @description センサ名
+             * @enum {string}
+             */
+            sensor: "accelerometer" | "linear_acceleration" | "gyroscope" | "barometer" | "magnetometer" | "location" | "light";
+            /** @description presigned URL */
+            presignedUrl: string;
+        };
+        GetSensorDataPresignedUrlForUploadResponse: {
             /** @description センサデータID */
             id: string;
             /** @description センサデータ名 */
@@ -365,8 +322,31 @@ export interface components {
              * @description 更新日時
              */
             updatedAt: string;
-            /** @description presigned URL */
-            presignedUrl: string;
+            /** @description presigned URLs */
+            urls: components["schemas"]["PresignedUrl"][];
+        };
+        GetSensorDataPresignedUrlForDownloadResponse: {
+            /** @description センサデータID */
+            id: string;
+            /** @description センサデータ名 */
+            dataName: string;
+            /**
+             * @description 有効なセンサ
+             * @enum {string}
+             */
+            activeSensors: "accelerometer" | "linear_acceleration" | "gyroscope" | "barometer" | "magnetometer" | "location" | "light";
+            /**
+             * Format: date-time
+             * @description 作成日時
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description 更新日時
+             */
+            updatedAt: string;
+            /** @description presigned URLs */
+            urls: string[];
         };
     };
     responses: never;
@@ -472,7 +452,7 @@ export interface operations {
             };
         };
     };
-    MultipartUploadController_listMultipartUploads: {
+    RateLimitController_testRateLimit: {
         parameters: {
             query?: never;
             header?: never;
@@ -486,98 +466,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ListMultipartUploadResponse"];
-                };
-            };
-        };
-    };
-    MultipartUploadController_startMultipartUpload: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["StartMultipartUploadRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StartMultipartUploadResponse"];
-                };
-            };
-        };
-    };
-    MultipartUploadController_uploadMultipartUpload: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                uploadId: string;
-            };
-            cookie?: never;
-        };
-        /** @description CSVデータ */
-        requestBody: {
-            content: {
-                "text/csv": string;
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PostMultipartUploadResponse"];
-                };
-            };
-        };
-    };
-    MultipartUploadController_abortMultipartUpload: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                uploadId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AbortMultipartUploadResponse"];
-                };
-            };
-        };
-    };
-    MultipartUploadController_completeMultipartUpload: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                uploadId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CompleteMultipartUploadResponse"];
+                    "application/json": string;
                 };
             };
         };
@@ -603,27 +492,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ListSensorDataResponse"];
                 };
-            };
-        };
-    };
-    SensorDataController_uploadSensorDataFiles: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["UploadSensorDataRequest"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
@@ -692,7 +560,30 @@ export interface operations {
             };
         };
     };
-    SensorDataController_getSensorDataPresignedUrl: {
+    SensorDataController_getPresignedUrlsForUpload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadSensorDataRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSensorDataPresignedUrlForUploadResponse"];
+                };
+            };
+        };
+    };
+    SensorDataController_getPresignedUrlsForDownload: {
         parameters: {
             query?: never;
             header?: never;
@@ -708,26 +599,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GetSensorDataPresignedUrlResponse"];
-                };
-            };
-        };
-    };
-    RateLimitController_testRateLimit: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
+                    "application/json": components["schemas"]["GetSensorDataPresignedUrlForDownloadResponse"];
                 };
             };
         };

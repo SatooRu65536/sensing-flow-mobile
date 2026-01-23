@@ -22,6 +22,15 @@
           "url": "https://sensing-flow-api*.satooru.dev"
         }
       ]
+    },
+    "fs:default",
+    {
+      "identifier": "fs:read-files",
+      "allow": [
+        {
+          "path": "$APPLOCALDATA/sensor_data/**/*"
+        }
+      ]
     }
   ]
 }

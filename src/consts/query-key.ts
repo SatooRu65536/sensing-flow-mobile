@@ -4,3 +4,6 @@ export const GET_GROUPS = 'getGroups';
 export const AVAILABLE_SENSORS = 'availableSensors';
 export const AUTH_SESSION = 'authSession';
 export const USER_PROFILE = 'userProfile';
+export const GET_UPLOAD_PRESIGNED_URLS = 'getUploadPresignedUrls';
+export const DELETE_SENSOR_DATA = 'deleteSensorData';
+export const GET_SYNC_STATE = 'getSyncState';

@@ -39,7 +39,6 @@ pub struct CreateSensorDataResponse {
     pub id: i32,
     pub name: String,
     pub folder_path: String,
-    pub synced: bool,
     pub active_sensors: Vec<String>,
     pub group_id: i32,
     pub created_at: NaiveDateTime,

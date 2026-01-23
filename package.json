@@ -17,7 +17,8 @@
     "check": "prettier --write . && eslint --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "gen:api": "curl http://localhost:5173/docs-json > swagger.json && openapi-typescript ./swagger.json -o src/api.types.gen.ts"
+    "gen:api": "curl http://localhost:5173/docs-json > swagger.json && openapi-typescript ./swagger.json -o src/api.types.gen.ts",
+    "build:plugins": "cd tauri-plugin-auth-cognito && pnpm build && cd ../tauri-plugin-sensorkit && pnpm build"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
@@ -34,6 +35,7 @@
     "@tanstack/zod-adapter": "^1.150.0",
     "@tauri-apps/api": "^2.9.1",
     "@tauri-apps/plugin-deep-link": "~2",
+    "@tauri-apps/plugin-fs": "~2",
     "@tauri-apps/plugin-http": "~2",
     "@tauri-apps/plugin-opener": "^2.5.3",
     "@tauri-apps/plugin-os": "^2.3.2",

@@ -80,3 +80,4 @@ export type UserResult = ReturnType<typeof useUser>;
 export type LoginFunction = UserResult['login'];
 export type LogoutFunction = UserResult['logout'];
 export type UserProfile = NonNullable<ReturnType<typeof useUser>['userProfile']['data']>;
+export type GetTokenFunction = UserResult['getToken'];
