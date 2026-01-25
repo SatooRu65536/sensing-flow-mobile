@@ -8,6 +8,7 @@ export interface ListItemProps extends Omit<LinkProps, 'children'> {
   className?: string;
   icon?: ReactElement;
   children: ReactNode;
+  style?: React.CSSProperties;
 }
 
 export default function ListItem({
@@ -15,10 +16,11 @@ export default function ListItem({
   children,
   disabled = false,
   icon = <IconChevronRight />,
+  style,
   ...props
 }: ListItemProps) {
   return (
-    <div className={classnames(styles.list_item, className)} data-disabled={disabled}>
+    <div className={classnames(styles.list_item, className)} data-disabled={disabled} style={style}>
       <span className={styles.content}>{children}</span>
       <Link {...props} disabled={disabled} className={styles.link}>
         {icon}

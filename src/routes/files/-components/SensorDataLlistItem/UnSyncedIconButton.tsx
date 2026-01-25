@@ -6,16 +6,20 @@ import { GET_SYNC_STATE, GET_UPLOAD_PRESIGNED_URLS } from '@/consts/query-key';
 import { type GetTokenFunction } from '@/hooks/useUser';
 import { authHeader } from '@/utils/auth-header';
 import { client } from '@/api';
-import { readSensorDataFile } from '@/utils/file';
 import { fetch } from '@tauri-apps/plugin-http';
+import { open, stat } from '@tauri-apps/plugin-fs';
+import { useUploadProgress } from '../../-hooks/useUploadProgress';
 
 interface UnSyncIconButtonProps {
   data: SensorData;
   getToken: GetTokenFunction;
+  onProgress?: (progress: number) => void;
 }
 
-export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncIconButtonProps) {
+export default function UnSyncedIconButton({ data, getToken, onProgress, ...props }: UnSyncIconButtonProps) {
   const queryClient = useQueryClient();
+  const { setFolderSize, addUploadedSize, resetProgress } = useUploadProgress(onProgress);
+
   const { mutateAsync: putToS3 } = useMutation({
     mutationFn: async ({
       presignedUrl,
@@ -26,14 +30,33 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncI
       folderPath: string;
       sensor: SensorName;
     }) => {
-      const file = await readSensorDataFile(folderPath, sensor);
       try {
+        const path = `${folderPath}/${sensor}.csv`;
+        const file = await open(path, { read: true });
+
+        const stream = new ReadableStream<Uint8Array>({
+          async pull(controller) {
+            const buffer = new Uint8Array(64 * 1024);
+            const bytesRead = await file.read(buffer);
+            if (!bytesRead) {
+              await file.close();
+              controller.close();
+              return;
+            }
+            controller.enqueue(buffer.subarray(0, bytesRead));
+            addUploadedSize(bytesRead);
+          },
+          async cancel() {
+            await file.close();
+          },
+        });
+
         const res = await fetch(presignedUrl, {
           method: 'PUT',
           headers: {
             'Content-Type': 'text/csv',
           },
-          body: file.data,
+          body: stream,
         });
         if (!res.ok) {
           const text = await res.text();
@@ -45,7 +68,6 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncI
         return { sensor, success: false };
       }
     },
-    retry: 1, // 1回リトライ
   });
   const { mutateAsync: getPresignedUrls, isPending } = useMutation({
     mutationKey: [GET_UPLOAD_PRESIGNED_URLS, data.id],
@@ -67,6 +89,9 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncI
       return res.data;
     },
     onSuccess: async (presignedUrlsRes) => {
+      const folderSize = await stat(data.folderPath);
+      setFolderSize(folderSize.size);
+
       const results = await Promise.all(
         presignedUrlsRes.urls.map(async ({ sensor, presignedUrl }) =>
           putToS3({ sensor, presignedUrl, folderPath: data.folderPath }),
@@ -84,6 +109,7 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncI
       });
 
       await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
+      resetProgress();
     },
     onError: async () => {
       await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
