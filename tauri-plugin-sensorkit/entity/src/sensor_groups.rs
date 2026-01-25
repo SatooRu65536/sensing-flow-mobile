@@ -8,7 +8,7 @@ pub struct Model {
     pub id: i32,
     pub name: String,
     pub sorted: i32,
-    pub created_at: DateTime,
+    pub created_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter)]

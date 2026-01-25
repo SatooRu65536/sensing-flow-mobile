@@ -16,7 +16,7 @@ impl MigrationTrait for Migration {
                     .col(integer(SensorGroups::Sorted))
                     .col(
                         ColumnDef::new(SensorGroups::CreatedAt)
-                            .timestamp()
+                            .timestamp_with_time_zone()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )
@@ -37,7 +37,7 @@ impl MigrationTrait for Migration {
                     .col(string_null(SensorData::UploadId))
                     .col(
                         ColumnDef::new(SensorData::CreatedAt)
-                            .timestamp()
+                            .timestamp_with_time_zone()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )
@@ -62,7 +62,7 @@ impl MigrationTrait for Migration {
                     .col(text(SyncState::FailedSensorNames))
                     .col(
                         ColumnDef::new(SyncState::CreatedAt)
-                            .timestamp()
+                            .timestamp_with_time_zone()
                             .not_null()
                             .default(Expr::current_timestamp()),
                     )

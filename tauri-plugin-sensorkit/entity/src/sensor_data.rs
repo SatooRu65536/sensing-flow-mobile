@@ -15,7 +15,7 @@ pub struct Model {
     pub folder_path: String,
     pub active_sensors: ActiveSensors,
     pub group_id: i32,
-    pub created_at: DateTime,
+    pub created_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter)]

@@ -1,8 +1,8 @@
 use core::str;
 use std::collections::HashMap;
 
-use chrono::NaiveDateTime;
 use entity::{sensor_data, sensor_groups};
+use sea_orm::entity::prelude::DateTimeWithTimeZone;
 use sea_orm::prelude::Uuid;
 use serde::{Deserialize, Serialize};
 #[cfg(target_os = "android")]
@@ -42,7 +42,7 @@ pub struct CreateSensorDataResponse {
     pub folder_path: String,
     pub active_sensors: Vec<String>,
     pub group_id: i32,
-    pub created_at: NaiveDateTime,
+    pub created_at: DateTimeWithTimeZone,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
@@ -78,7 +78,7 @@ pub struct CreateGroupResponse {
     pub id: i32,
     pub name: String,
     pub sorted: i32,
-    pub created_at: NaiveDateTime,
+    pub created_at: DateTimeWithTimeZone,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

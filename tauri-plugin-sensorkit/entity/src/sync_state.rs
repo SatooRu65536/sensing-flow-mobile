@@ -15,7 +15,7 @@ pub struct Model {
     pub upload_id: Uuid, // UUID
     pub synced_sensor_names: Sensors,
     pub failed_sensor_names: Sensors,
-    pub created_at: DateTimeUtc,
+    pub created_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter)]

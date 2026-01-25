@@ -52,7 +52,7 @@ impl DbService {
             .map(|(group, data_list)| GroupedSensorFiles {
                 group_id: group.id,
                 group_name: group.name,
-                created_at: group.created_at.to_string(),
+                created_at: group.created_at.to_utc().to_string(),
                 sensor_data: data_list,
             })
             .collect();
