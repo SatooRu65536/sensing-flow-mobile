@@ -2,7 +2,7 @@ import styles from './index.module.scss';
 import { IconCloudOff, IconCloudUp } from '@tabler/icons-react';
 import { syncSensorData, type SensorData, type SensorName } from '@satooru65536/tauri-plugin-sensorkit';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { GET_GROUPED_SENSOR_DATA, GET_SYNC_STATE, GET_UPLOAD_PRESIGNED_URLS } from '@/consts/query-key';
+import { GET_SYNC_STATE, GET_UPLOAD_PRESIGNED_URLS } from '@/consts/query-key';
 import { type GetTokenFunction } from '@/hooks/useUser';
 import { authHeader } from '@/utils/auth-header';
 import { client } from '@/api';
@@ -83,9 +83,9 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncI
         failedSensorNames,
       });
 
-      await queryClient.invalidateQueries({ queryKey: [GET_GROUPED_SENSOR_DATA] });
+      await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
     },
-    onSettled: async () => {
+    onError: async () => {
       await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
     },
     gcTime: 1000 * 60 * 55, // 55分(presigned URL 有効期限内)

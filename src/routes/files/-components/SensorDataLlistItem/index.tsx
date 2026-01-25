@@ -14,10 +14,15 @@ interface SensorDataLlistItemProps extends Omit<ListItemProps, 'children'> {
 
 export default function SensorDataLlistItem({ data, ...props }: SensorDataLlistItemProps) {
   const { getToken, alertDialog } = useUser();
-
   const { data: syncState } = useQuery({
     queryKey: [GET_SYNC_STATE, data.id],
-    queryFn: () => getSensorDataSyncState(data.id),
+    queryFn: async () => {
+      try {
+        return await getSensorDataSyncState(data.id);
+      } catch {
+        return null;
+      }
+    },
   });
 
   return (

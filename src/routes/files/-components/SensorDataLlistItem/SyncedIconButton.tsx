@@ -3,7 +3,7 @@ import { IconCloudOff, IconCloudUp } from '@tabler/icons-react';
 import { unsyncSensorData, type SensorData, type SensorDataSyncState } from '@satooru65536/tauri-plugin-sensorkit';
 import { type GetTokenFunction } from '@/hooks/useUser';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DELETE_SENSOR_DATA, GET_GROUPED_SENSOR_DATA, GET_SYNC_STATE } from '@/consts/query-key';
+import { DELETE_SENSOR_DATA, GET_SYNC_STATE } from '@/consts/query-key';
 import { client } from '@/api';
 import { authHeader } from '@/utils/auth-header';
 
@@ -27,28 +27,23 @@ export default function SyncedIconButton({ data, syncState, getToken, ...props }
         headers: authHeader(token),
       });
 
-      if (res.data == undefined) throw new Error('Failed to get presigned URLs');
+      if (res.response.status === 404) return null; // 既に削除されている場合も成功とみなす
+      if (!res.response.ok) throw new Error('Failed to delete sensor data on server');
 
-      return res.data;
+      return null;
     },
     onSuccess: async () => {
       await unsyncSensorData(data.id);
-      await queryClient.invalidateQueries({ queryKey: [GET_GROUPED_SENSOR_DATA] });
-    },
-    onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
     },
-    gcTime: 1000 * 60 * 55, // 55分(presigned URL 有効期限内)
+    onError: async () => {
+      await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
+    },
   });
 
   const unsync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();
-    try {
-      await deleteSensorData(syncState.uploadId);
-      await unsyncSensorData(data.id);
-    } catch (e) {
-      console.error(e);
-    }
+    await deleteSensorData(syncState.uploadId);
   };
 
   return isPending ? (
