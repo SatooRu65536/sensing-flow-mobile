@@ -54,7 +54,7 @@ export default function Select<T extends string | number>({
       </BSelect.Trigger>
 
       <BSelect.Portal>
-        <BSelect.Positioner className={styles.Positioner}>
+        <BSelect.Positioner className={styles.Positioner} align="start">
           <BSelect.Popup className={styles.Popup}>
             <BSelect.List className={styles.List}>
               {isGrouped ? (
@@ -105,11 +105,11 @@ function Items({ items, noOptionsMessage }: ItemsProps) {
     <>
       {items?.map(({ label, value }) => (
         <BSelect.Item key={value} value={value} className={styles.Item}>
+          <BSelect.ItemText className={styles.ItemText}>{label}</BSelect.ItemText>
+
           <BSelect.ItemIndicator className={styles.ItemIndicator}>
             <IconCheck className={styles.ItemIndicatorIcon} />
           </BSelect.ItemIndicator>
-
-          <BSelect.ItemText className={styles.ItemText}>{label}</BSelect.ItemText>
         </BSelect.Item>
       ))}
       {!items?.length && (

@@ -136,12 +136,12 @@ $available-height: 200px;
 .Item {
   font-size: $text-size-sm;
   line-height: $text-size-sm * 1.5;
-  padding: calc(calc($text-size-sm / 2)) $text-size-sm;
-  display: grid;
+  padding: calc($text-size-sm / 2) $text-size-sm;
+  display: flex;
   gap: calc($text-size-sm / 2);
   align-items: center;
-  grid-template-columns: $text-size-sm 1fr;
   font-size: $text-size-sm;
+  border-radius: $radius-md;
 
   [data-side='none'] & {
     font-size: $text-size-sm;
@@ -149,17 +149,7 @@ $available-height: 200px;
 
   &[data-highlighted] {
     z-index: 0;
-    position: relative;
     color: $color-sky-50;
-  }
-
-  &[data-highlighted]::before {
-    content: '';
-    z-index: -1;
-    position: absolute;
-    inset-block: 0;
-    inset-inline: $text-size-sm;
-    border-radius: $radius-md;
     background-color: $color-text;
   }
 }
@@ -181,6 +171,8 @@ $available-height: 200px;
 }
 
 .ItemIndicatorIcon {
+  box-sizing: content-box;
+
   display: block;
   width: $text-size-sm;
   height: $text-size-sm;
