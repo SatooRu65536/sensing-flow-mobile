@@ -11,6 +11,8 @@ import type {
   GetGroupResponse,
   GetGroupsResponse,
   StartSensorsRequest,
+  SyncStateRequest,
+  SyncStateResponse,
 } from './type';
 
 export * from './type';
@@ -70,4 +72,16 @@ export async function getGroups(): Promise<GetGroupsResponse> {
 
 export async function deleteGroup(id: number): Promise<void> {
   await invoke('plugin:sensorkit|delete_group', { payload: { id } });
+}
+
+export async function syncSensorData(payload: SyncStateRequest): Promise<SyncStateResponse> {
+  return await invoke<SyncStateResponse>('plugin:sensorkit|sync_sensor_data', { payload });
+}
+
+export async function unsyncSensorData(dataId: number): Promise<void> {
+  await invoke('plugin:sensorkit|unsync_sensor_data', { payload: { dataId } });
+}
+
+export async function getSensorDataSyncState(dataId: number): Promise<SyncStateResponse> {
+  return await invoke<SyncStateResponse>('plugin:sensorkit|get_sensor_data_sync_state', { payload: { dataId } });
 }

@@ -1,25 +1,22 @@
 import styles from './index.module.scss';
-import type { SyncStateData } from '.';
-import { IconCloudUp } from '@tabler/icons-react';
-import { type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
+import { IconCloudOff, IconCloudUp } from '@tabler/icons-react';
+import { unsyncSensorData, type SensorData, type SensorDataSyncState } from '@satooru65536/tauri-plugin-sensorkit';
 import { type GetTokenFunction } from '@/hooks/useUser';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DELETE_SENSOR_DATA, GET_GROUPED_SENSOR_DATA, GET_SYNC_STATE } from '@/consts/query-key';
 import { client } from '@/api';
 import { authHeader } from '@/utils/auth-header';
-import { useState } from 'react';
 
-interface UnSyncIconButtonProps {
+interface SyncIconButtonProps {
   data: SensorData;
-  syncStateData: SyncStateData;
+  syncState: SensorDataSyncState;
   getToken: GetTokenFunction;
 }
 
-export default function SyncedIconButton({ data, syncStateData, getToken, ...props }: UnSyncIconButtonProps) {
+export default function SyncedIconButton({ data, syncState, getToken, ...props }: SyncIconButtonProps) {
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { mutateAsync: deleteSensorData } = useMutation({
+  const { mutateAsync: deleteSensorData, isPending } = useMutation({
     mutationKey: [DELETE_SENSOR_DATA, data.id],
     mutationFn: async (uploadId: string) => {
       const token = await getToken();
@@ -34,15 +31,11 @@ export default function SyncedIconButton({ data, syncStateData, getToken, ...pro
 
       return res.data;
     },
-    onMutate: () => {
-      setIsLoading(true);
-    },
     onSuccess: async () => {
-      // TODO: DBから削除コマンドの呼び出し
+      await unsyncSensorData(data.id);
       await queryClient.invalidateQueries({ queryKey: [GET_GROUPED_SENSOR_DATA] });
     },
     onSettled: async () => {
-      setIsLoading(false);
       await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
     },
     gcTime: 1000 * 60 * 55, // 55分(presigned URL 有効期限内)
@@ -51,14 +44,16 @@ export default function SyncedIconButton({ data, syncStateData, getToken, ...pro
   const unsync = async (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.preventDefault();
     try {
-      await deleteSensorData(syncStateData.uploadId);
-      // TODO
+      await deleteSensorData(syncState.uploadId);
+      await unsyncSensorData(data.id);
     } catch (e) {
       console.error(e);
     }
   };
 
-  return (
-    <IconCloudUp className={styles.icon_button} onClick={(e) => void unsync(e)} data-loading={isLoading} {...props} />
+  return isPending ? (
+    <IconCloudOff className={styles.icon_button} {...props} data-loading />
+  ) : (
+    <IconCloudUp className={styles.icon_button} onClick={(e) => void unsync(e)} {...props} />
   );
 }

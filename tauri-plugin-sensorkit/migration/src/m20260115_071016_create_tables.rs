@@ -50,10 +50,38 @@ impl MigrationTrait for Migration {
             )
             .await?;
 
+        manager
+            .create_table(
+                Table::create()
+                    .table(SyncState::Table)
+                    .if_not_exists()
+                    .col(pk_auto(SyncState::Id))
+                    .col(integer(SyncState::SensorDataId))
+                    .col(uuid(SyncState::UploadId))
+                    .col(text(SyncState::SyncedSensorNames))
+                    .col(text(SyncState::FailedSensorNames))
+                    .col(
+                        ColumnDef::new(SyncState::CreatedAt)
+                            .timestamp()
+                            .not_null()
+                            .default(Expr::current_timestamp()),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(SyncState::Table, SyncState::SensorDataId)
+                            .to(SensorData::Table, SensorData::Id),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
         Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        manager
+            .drop_table(Table::drop().table(SyncState::Table).to_owned())
+            .await?;
         manager
             .drop_table(Table::drop().table(SensorData::Table).to_owned())
             .await?;
@@ -82,4 +110,15 @@ enum SensorData {
     GroupId,
     CreatedAt,
     UploadId,
+}
+
+#[derive(DeriveIden)]
+enum SyncState {
+    Table,
+    Id,
+    SensorDataId,
+    UploadId,
+    SyncedSensorNames,
+    FailedSensorNames,
+    CreatedAt,
 }

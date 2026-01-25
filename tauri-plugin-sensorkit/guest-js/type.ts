@@ -58,3 +58,28 @@ export type CreateGroupResponse = Group;
 export type GetGroupResponse = Group;
 
 export type GetGroupsResponse = Group[];
+
+export interface SensorDataSyncState {
+  syncId: number;
+  dataId: number;
+  uploadId: string;
+  syncedSensorNames: SensorName[];
+  failedSensorNames: SensorName[];
+}
+
+export type SyncStateRequest = Omit<SensorDataSyncState, 'syncId'>;
+
+export const SyncStates = ['synced', 'unsynced', 'partially_synced'] as const;
+export type SyncState = (typeof SyncStates)[number];
+
+export interface SyncStateResponse extends SensorDataSyncState {
+  state: SyncState;
+}
+
+export interface GetSensorDataSyncStateRequest {
+  dataId: number;
+}
+
+export interface GetSensorDataSyncStateResponse extends SensorDataSyncState {
+  state: SyncState;
+}

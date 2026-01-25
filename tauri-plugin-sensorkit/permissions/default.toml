@@ -13,4 +13,7 @@ permissions = [
     "allow-get-group",
     "allow-get-groups",
     "allow-delete-group",
+    "allow-sync-sensor-data",
+    "allow-unsync-sensor-data",
+    "allow-get-sensor-data-sync-state",
 ]

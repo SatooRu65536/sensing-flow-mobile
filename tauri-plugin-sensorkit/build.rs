@@ -11,6 +11,9 @@ const COMMANDS: &[&str] = &[
     "delete_group",
     "registerListener",
     "unregister_listener",
+    "sync_sensor_data",
+    "unsync_sensor_data",
+    "get_sensor_data_sync_state",
 ];
 
 fn main() {

@@ -1,7 +1,7 @@
 import styles from './index.module.scss';
 import ListItem, { type ListItemProps } from '@/components/ListItem';
 import { formatDateSimple } from '@/utils/date';
-import { type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
+import { getSensorDataSyncState, type SensorData } from '@satooru65536/tauri-plugin-sensorkit';
 import SyncedIconButton from './SyncedIconButton';
 import UnSyncedIconButton from './UnSyncedIconButton';
 import { useUser } from '@/hooks/useUser';
@@ -12,31 +12,18 @@ interface SensorDataLlistItemProps extends Omit<ListItemProps, 'children'> {
   data: SensorData;
 }
 
-export interface SyncStateData {
-  uploadId: string;
-  syncedSensorNames: string[];
-  failedSensorNames: string[];
-}
-
 export default function SensorDataLlistItem({ data, ...props }: SensorDataLlistItemProps) {
   const { getToken, alertDialog } = useUser();
 
-  const { data: syncStateData } = useQuery({
+  const { data: syncState } = useQuery({
     queryKey: [GET_SYNC_STATE, data.id],
-    queryFn: () => {
-      // TODO: 取得 API 呼び出し
-      return {
-        uploadId: 'dummy-upload-id',
-        syncedSensorNames: ['accelerometer', 'gyroscope'],
-        failedSensorNames: [],
-      } satisfies SyncStateData;
-    },
+    queryFn: () => getSensorDataSyncState(data.id),
   });
 
   return (
     <ListItem className={styles.list_item} to={`/files/$dataId`} params={{ dataId: data.id.toString() }} {...props}>
-      {syncStateData ? (
-        <SyncedIconButton data={data} syncStateData={syncStateData} getToken={getToken} />
+      {syncState ? (
+        <SyncedIconButton data={data} syncState={syncState} getToken={getToken} />
       ) : (
         <UnSyncedIconButton data={data} getToken={getToken} />
       )}

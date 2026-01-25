@@ -1,22 +1,20 @@
 import styles from './index.module.scss';
-import { useState } from 'react';
-import { IconCloudOff } from '@tabler/icons-react';
-import { type SensorData, type SensorName } from '@satooru65536/tauri-plugin-sensorkit';
+import { IconCloudOff, IconCloudUp } from '@tabler/icons-react';
+import { syncSensorData, type SensorData, type SensorName } from '@satooru65536/tauri-plugin-sensorkit';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GET_GROUPED_SENSOR_DATA, GET_SYNC_STATE, GET_UPLOAD_PRESIGNED_URLS } from '@/consts/query-key';
 import { type GetTokenFunction } from '@/hooks/useUser';
 import { authHeader } from '@/utils/auth-header';
 import { client } from '@/api';
 import { readSensorDataFile } from '@/utils/file';
+import { fetch } from '@tauri-apps/plugin-http';
 
-interface SyncIconButtonProps {
+interface UnSyncIconButtonProps {
   data: SensorData;
   getToken: GetTokenFunction;
 }
 
-export default function UnSyncedIconButton({ data, getToken, ...props }: SyncIconButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
+export default function UnSyncedIconButton({ data, getToken, ...props }: UnSyncIconButtonProps) {
   const queryClient = useQueryClient();
   const { mutateAsync: putToS3 } = useMutation({
     mutationFn: async ({
@@ -41,15 +39,15 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: SyncIco
           const text = await res.text();
           throw new Error(`Upload failed: ${res.status} ${text}`);
         }
-        return { sensor };
+        return { sensor, success: true };
       } catch (e) {
         console.error(`Failed to upload sensor data for sensor ${sensor} to S3:`, e);
-        throw e;
+        return { sensor, success: false };
       }
     },
     retry: 1, // 1回リトライ
   });
-  const { mutateAsync: getPresignedUrls } = useMutation({
+  const { mutateAsync: getPresignedUrls, isPending } = useMutation({
     mutationKey: [GET_UPLOAD_PRESIGNED_URLS, data.id],
     mutationFn: async () => {
       const token = await getToken();
@@ -68,23 +66,26 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: SyncIco
 
       return res.data;
     },
-    onMutate: () => {
-      setIsLoading(true);
-    },
     onSuccess: async (presignedUrlsRes) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const results = await Promise.allSettled(
+      const results = await Promise.all(
         presignedUrlsRes.urls.map(async ({ sensor, presignedUrl }) =>
           putToS3({ sensor, presignedUrl, folderPath: data.folderPath }),
         ),
       );
 
-      // TODO: results を DB に反映するコマンドの呼び出し
+      const syncedSensorNames = results.filter(({ success }) => success).map(({ sensor }) => sensor);
+      const failedSensorNames = results.filter(({ success }) => !success).map(({ sensor }) => sensor);
+
+      await syncSensorData({
+        dataId: data.id,
+        uploadId: presignedUrlsRes.id,
+        syncedSensorNames,
+        failedSensorNames,
+      });
 
       await queryClient.invalidateQueries({ queryKey: [GET_GROUPED_SENSOR_DATA] });
     },
     onSettled: async () => {
-      setIsLoading(false);
       await queryClient.invalidateQueries({ queryKey: [GET_SYNC_STATE, data.id] });
     },
     gcTime: 1000 * 60 * 55, // 55分(presigned URL 有効期限内)
@@ -95,7 +96,9 @@ export default function UnSyncedIconButton({ data, getToken, ...props }: SyncIco
     await getPresignedUrls();
   };
 
-  return (
-    <IconCloudOff className={styles.icon_button} onClick={(e) => void sync(e)} data-loading={isLoading} {...props} />
+  return isPending ? (
+    <IconCloudUp className={styles.icon_button} {...props} data-loading />
+  ) : (
+    <IconCloudOff className={styles.icon_button} onClick={(e) => void sync(e)} {...props} />
   );
 }

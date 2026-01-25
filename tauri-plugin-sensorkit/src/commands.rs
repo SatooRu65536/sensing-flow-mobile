@@ -1,9 +1,9 @@
 use crate::models::{GetAvailableSensorsResponse, StartSensorsRequest};
-use crate::services::database::GroupedSensorFiles;
 use crate::{
     CreateGroupRequest, CreateGroupResponse, CreateSensorDataRequest, CreateSensorDataResponse,
     DeleteGroupRequest, DeleteSensorDataRequest, GetGroupRequest, GetGroupResponse,
-    GetGroupsResponse, SensorkitExt,
+    GetGroupsResponse, GetSensorDataSyncStateRequest, GroupedSensorFiles, SensorkitExt,
+    SyncStateRequest, SyncStateResponse, UnsyncSensorDataRequest,
 };
 use std::sync::Arc;
 use tauri::{command, AppHandle, Runtime};
@@ -134,4 +134,56 @@ pub(crate) async fn delete_group<R: Runtime>(
         .db_service
         .delete_sensor_group(&app.sensorkit().storage_service, payload.id)
         .await
+}
+
+#[command]
+pub(crate) async fn sync_sensor_data<R: Runtime>(
+    app: AppHandle<R>,
+    payload: SyncStateRequest,
+) -> crate::Result<SyncStateResponse> {
+    app.sensorkit()
+        .db_service
+        .create_sync_state(
+            payload.data_id,
+            payload.upload_id,
+            payload.synced_sensor_names,
+            payload.failed_sensor_names,
+        )
+        .await
+        .map(|record| SyncStateResponse {
+            sync_id: record.id,
+            data_id: record.sensor_data_id,
+            upload_id: record.upload_id,
+            synced_sensor_names: record.synced_sensor_names.0,
+            failed_sensor_names: record.failed_sensor_names.0,
+        })
+}
+
+#[command]
+pub(crate) async fn unsync_sensor_data<R: Runtime>(
+    app: AppHandle<R>,
+    payload: UnsyncSensorDataRequest,
+) -> crate::Result<()> {
+    app.sensorkit()
+        .db_service
+        .delete_sync_states_by_data_id(payload.data_id)
+        .await
+}
+
+#[command]
+pub(crate) async fn get_sensor_data_sync_state<R: Runtime>(
+    app: AppHandle<R>,
+    payload: GetSensorDataSyncStateRequest,
+) -> crate::Result<SyncStateResponse> {
+    app.sensorkit()
+        .db_service
+        .get_sync_states_by_data_id(payload.data_id)
+        .await
+        .map(|record| SyncStateResponse {
+            sync_id: record.id,
+            data_id: record.sensor_data_id,
+            upload_id: record.upload_id,
+            synced_sensor_names: record.synced_sensor_names.0,
+            failed_sensor_names: record.failed_sensor_names.0,
+        })
 }

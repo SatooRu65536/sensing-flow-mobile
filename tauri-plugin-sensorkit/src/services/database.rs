@@ -1,27 +1,18 @@
 use std::path::Path;
 
 use crate::services::StorageService;
-use crate::Result;
+use crate::{GroupedSensorFiles, Result};
 use entity::sensor_data::ActiveSensors;
-use entity::{sensor_data, sensor_groups};
+use entity::{sensor_data, sensor_groups, sync_state};
 use migration::{Migrator, MigratorTrait};
+use sea_orm::prelude::Uuid;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, ConnectOptions, Database, DatabaseConnection, EntityTrait,
     QueryFilter, QueryOrder, Set,
 };
-use serde::Serialize;
 
 pub struct DbService {
     db: DatabaseConnection,
-}
-
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct GroupedSensorFiles {
-    pub group_id: i32,
-    pub group_name: String,
-    pub created_at: String,
-    pub sensor_data: Vec<sensor_data::Model>,
 }
 
 impl DbService {
@@ -178,5 +169,43 @@ impl DbService {
             .await?;
 
         Ok(records)
+    }
+
+    pub async fn create_sync_state(
+        &self,
+        data_id: i32,
+        upload_id: Uuid,
+        synced_sensor_names: Vec<String>,
+        failed_sensor_names: Vec<String>,
+    ) -> Result<sync_state::Model> {
+        let model = sync_state::ActiveModel {
+            sensor_data_id: Set(data_id),
+            upload_id: Set(upload_id),
+            synced_sensor_names: Set(sync_state::Sensors(synced_sensor_names)),
+            failed_sensor_names: Set(sync_state::Sensors(failed_sensor_names)),
+            ..Default::default()
+        }
+        .insert(&self.db)
+        .await?;
+
+        Ok(model)
+    }
+
+    pub async fn delete_sync_states_by_data_id(&self, data_id: i32) -> Result<()> {
+        sync_state::Entity::delete_many()
+            .filter(sync_state::Column::SensorDataId.eq(data_id))
+            .exec(&self.db)
+            .await?;
+
+        Ok(())
+    }
+
+    pub async fn get_sync_states_by_data_id(&self, data_id: i32) -> Result<sync_state::Model> {
+        let record = sync_state::Entity::find()
+            .filter(sync_state::Column::SensorDataId.eq(data_id))
+            .one(&self.db)
+            .await?;
+
+        record.ok_or_else(|| crate::Error::NotFound("Sync state not found".into()))
     }
 }
